@@ -2,6 +2,8 @@
 
 PORT=${PORT}
 
+./manage.py makemigrations users
+
 python manage.py makemigrations
 
 python manage.py migrate

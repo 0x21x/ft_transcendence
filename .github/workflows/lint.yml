@@ -3,11 +3,25 @@ name: Lint
 on: [pull_request]
 
 jobs:
-  ruff:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Ruff Linter for python
       - uses: chartboost/ruff-action@v1
         with:
           args: check
-          config: ruff.toml
+          config: backend/ruff.toml
+
+      # ESLint for JavaScript
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+      - name: Lint with ESLint for JavaScript
+        working-directory: ./frontend
+        run: npm run lint

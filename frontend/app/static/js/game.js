@@ -1,4 +1,5 @@
-const scale = ((window.innerWidth * 0.7) * 0.75 <= window.innerHeight * 0.5) ? window.innerWidth * 0.7 / 400 : window.innerHeight * 0.5 / 300;
+const scale = ((window.innerWidth * 0.7) * 0.75 <= window.innerHeight * 0.5)
+    ? window.innerWidth * 0.7 / 400 : window.innerHeight * 0.5 / 300;
 
 const GAME = {
     maxScore: 5,
@@ -32,14 +33,14 @@ const GAME = {
             shadowPaddle: '#ff5722',
         }
     }
-}
+};
 
 Array.prototype.sample = function(){
   return this[Math.floor(Math.random()*this.length)];
-}
+};
 
 export class Game {
-    constructor(canvasName) {
+    constructor() {
         this.canvas = document.getElementById('pong');
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = GAME.size.width;
@@ -75,10 +76,15 @@ export class Game {
             vy: [-GAME.ball.speed, GAME.ball.speed].sample(),
         };
         if (scoreReset) {
-            const game = {player1:this.player.name,score1:this.player.score,player2:this.player2.name,score2:this.player2.score};
+            const game = {
+                player1:this.player.name,
+                score1:this.player.score,
+                player2:this.player2.name,
+                score2:this.player2.score
+            };
             const data = JSON.parse(localStorage.getItem('history')) || [];
             if (data.length >= GAME.maxGameSaved ) { data.splice(0, 1); }
-            data.push(game)
+            data.push(game);
             localStorage.setItem('history', JSON.stringify(data));
         }
         this.player = {
@@ -141,12 +147,15 @@ export class Game {
         this.ctx.fillText(`${this.player2.score}`, this.canvas.width / 4 * 3 - (textWidth / 2),60 * scale);
 
         this.ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.ball : GAME.color.dark.ball;
-        this.ctx.fillRect(this.ball.x - GAME.ball.width / 2, this.ball.y - GAME.ball.height / 2, GAME.ball.width, GAME.ball.height);
+        this.ctx.fillRect(this.ball.x - GAME.ball.width / 2, this.ball.y - GAME.ball.height / 2,
+            GAME.ball.width, GAME.ball.height);
         this.ctx.shadowBlur = 20;
         this.ctx.shadowColor = (colorTheme === 'light') ? GAME.color.light.shadowPaddle : GAME.color.dark.shadowPaddle;
         this.ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.paddle : GAME.color.dark.paddle;
-        this.ctx.fillRect(this.player.x, this.player.y - GAME.paddle.height / 2, GAME.paddle.width, GAME.paddle.height);
-        this.ctx.fillRect(this.player2.x, this.player2.y - GAME.paddle.height / 2, GAME.paddle.width, GAME.paddle.height);
+        this.ctx.fillRect(this.player.x, this.player.y - GAME.paddle.height / 2, GAME.paddle.width,
+            GAME.paddle.height);
+        this.ctx.fillRect(this.player2.x, this.player2.y - GAME.paddle.height / 2, GAME.paddle.width,
+            GAME.paddle.height);
         this.ctx.shadowBlur = 0;
         this.ctx.shadowColor = 0;
     };
@@ -156,9 +165,7 @@ export class Game {
         this.player2.name = name2;
     };
 
-    namesHasSet = () => {
-        return !(this.player.name === undefined || this.player2.name === undefined);
-    }
+    namesHasSet = () => !(this.player.name === undefined || this.player2.name === undefined);
 
     loop = (first=false) => {
         if (first) { this.reset(); }
@@ -168,10 +175,14 @@ export class Game {
         this.ball.x += this.ball.vx;
         this.ball.y += this.ball.vy;
 
-        if (this.ball.x <= GAME.ball.width && this.player.y <= this.ball.y + GAME.ball.height && this.player.y + GAME.paddle.height >= this.ball.y && this.ball.vx < 0) {
+        if (this.ball.x <= GAME.ball.width && this.player.y <= this.ball.y + GAME.ball.height
+            && this.player.y + GAME.paddle.height >= this.ball.y && this.ball.vx < 0) {
             this.ball.vx *= -1;
         }
-        else if (this.ball.x >= GAME.size.width - GAME.ball.width && this.player2.y <= this.ball.y + GAME.ball.height && this.player2.y + GAME.paddle.height >= this.ball.y && this.ball.vx > 0) {
+        else if (this.ball.x >= GAME.size.width - GAME.ball.width
+            && this.player2.y <= this.ball.y + GAME.ball.height
+            && this.player2.y + GAME.paddle.height >= this.ball.y
+            && this.ball.vx > 0) {
             this.ball.vx *= -1;
         } else if (this.ball.y <= 0 || this.ball.y + GAME.ball.height >= this.canvas.height) {
             this.ball.vy *= -1;
