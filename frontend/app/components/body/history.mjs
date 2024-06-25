@@ -56,6 +56,7 @@ export const history =  async (render, div) => {
 
     clearButton.addEventListener('click', () => {
         localStorage.removeItem('history');
+        table.innerHTML = '';
         history(render, div);
     });
     if (historyStorage) {

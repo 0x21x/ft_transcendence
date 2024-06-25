@@ -26,10 +26,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "0.0.0.0",
-    "10.18.207.215"
+    "0.0.0.0"
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    ]
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'daphne',
     'rest_framework',
     'rest_framework_simplejwt',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,11 +52,22 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = "users.Users"
 
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    # ...
+}
+
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -88,6 +102,9 @@ WSGI_APPLICATION = 'app.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     )
 }
 

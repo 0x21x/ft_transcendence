@@ -41,7 +41,7 @@ export const createTournament = (render, div, data, tournament) => {
                 <button type="button" class="btn button w-25" id="createTournamentButton">${data.create}</button>
             </form>
         </div>
-    `)
+    `);
 
     const createTournamentButton = document.getElementById('createTournamentButton');
     const form = {

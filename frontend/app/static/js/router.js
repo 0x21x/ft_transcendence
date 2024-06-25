@@ -1,10 +1,12 @@
+import { a, routes } from './routes.mjs';
 import { renderBody, renderHeader } from './render.mjs';
 import { languageHandler } from './language.mjs';
-import { routes } from './routes.mjs';
+import { loggedIn } from './tokens.js';
 import { themeHandler } from './theme.mjs';
+import { updateIcon } from './navbar.js';
 
 const body = document.getElementById('app');
-const theme = document.querySelector('input[name=dark-mode]');
+const theme = document.querySelector('input[name=themeSwitcher]');
 const language = document.getElementById('languageSwitcher');
 
 const router = async () => {
@@ -13,9 +15,19 @@ const router = async () => {
             route: route,
         }));
 
-    const isMatch = (potentialMatch) => potentialMatch.isMatch;
-    const match = potentialMatches.find(isMatch);
-
+    let isMatch = (potentialMatch) => potentialMatch.isMatch;
+    if (potentialMatches.find(isMatch) === undefined) {
+        isMatch = (potentialMatch) => potentialMatch.route.path === '/error/404';
+    }
+    if (!loggedIn() && potentialMatches.find(isMatch).route.authorization === a.Logged) {
+        isMatch = (potentialMatch) => potentialMatch.route.path === '/welcome';
+        history.replaceState({urlPath: '/welcome'}, '', '/welcome');
+    }
+    let match = potentialMatches.find(isMatch);
+    if (match.route.authorization === a.Unlogged && loggedIn()) {
+        match = potentialMatches.find(potentialMatch => potentialMatch.route.path === '/');
+        history.replaceState({urlPath: '/'}, '', '/');
+    }
     await renderHeader();
     await renderBody(body, match);
 };
@@ -36,11 +48,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (theme) {
         theme.addEventListener('change', function () {
             themeHandler(document.body, this);
+            updateIcon();
+            router();
         });
     } if (language) {
         language.addEventListener('change', function() {
             languageHandler(this);
             router();
+
         });
     }
     router();

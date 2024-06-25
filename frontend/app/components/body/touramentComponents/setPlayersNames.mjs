@@ -29,7 +29,7 @@ export const setPlayersNames = (render, div, data, tournament) => {
                 <button type="button" class="btn button w-25" id="setPlayersNamesButton">${data.add}</button>
             </form>
         </div>
-    `)
+    `);
 
     let formPlayers = document.getElementById('formPlayers');
     for (let i = 0; i < tournament.nbPlayers - (tournament.players) ? tournament.players.length : 0; i++) {

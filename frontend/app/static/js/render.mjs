@@ -1,6 +1,10 @@
 import { routes } from './routes.mjs';
 
-export const render = (div, html) => {
+export const render = (div, html, append=false) => {
+    if (append){
+        div.innerHTML += html;
+        return;
+    }
     div.innerHTML = html;
 };
 
@@ -15,7 +19,7 @@ export const renderHeader = async () => {
         if (page) { page.innerHTML = data[route.name]; }
     }
 
-    // document.getElementById("home").innerHTML = data.home;
+    // document.getElementById("game").innerHTML = data.game;
     // document.getElementById("history").innerHTML = data.history;
 };
 

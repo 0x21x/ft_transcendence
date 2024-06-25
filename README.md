@@ -40,7 +40,7 @@ Player 2 (right):
 ├── docker-compose.yml
 ├── docker-compose-dev.yml
 ├── backend
-│   ├── Dockerfile
+│   ├── postgres.Dockerfile
 │   └── app
 │       ├── app
 │       │   ├── __init__.py
@@ -70,12 +70,12 @@ Player 2 (right):
 │           ├── urls.py
 │           └── views.py
 └── frontend
-    ├── Dockerfile
+    ├── postgres.Dockerfile
     ├── app
     │   ├── components
     │   │   ├── body
     │   │   │   ├── history.mjs
-    │   │   │   ├── home.mjs
+    │   │   │   ├── game.mjs
     │   │   │   ├── touramentComponents
     │   │   │   │   ├── createTournament.mjs
     │   │   │   │   └── setPlayersNames.mjs
@@ -85,12 +85,12 @@ Player 2 (right):
     │   ├── languages
     │   │   ├── en
     │   │   │   ├── history.json
-    │   │   │   ├── home.json
+    │   │   │   ├── game.json
     │   │   │   ├── navbar.json
     │   │   │   └── tournament.json
     │   │   └── fr
     │   │       ├── history.json
-    │   │       ├── home.json
+    │   │       ├── game.json
     │   │       ├── navbar.json
     │   │       └── tournament.json
     │   ├── server.js

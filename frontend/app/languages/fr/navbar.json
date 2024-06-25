@@ -1,5 +1,8 @@
 {
   "history": "Historique",
   "home": "Acceuil",
-  "tournament": "Tournoi"
+  "game": "Jeu",
+  "tournament": "Tournoi",
+  "login": "Connexion",
+  "register": "Inscription"
 }

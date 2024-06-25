@@ -1,5 +1,8 @@
 {
   "history": "History",
   "home": "Home",
-  "tournament": "Tournament"
+  "game": "Game",
+  "tournament": "Tournament",
+  "login": "Login",
+  "register": "Register"
 }

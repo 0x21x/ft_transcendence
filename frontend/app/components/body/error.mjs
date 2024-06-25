@@ -1,9 +1,4 @@
-export const home = async (render, div) => {
-    const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/welcome.json`;
-    const response = await fetch(url);
-    const data = await response.json();
-
+export const error = async (render, div, errorCode) => {
     render(div, `
         <style>
             .container-fluid {
@@ -20,7 +15,7 @@ export const home = async (render, div) => {
             
         </style>
         <div class="container-fluid">
-            <h1>${data.welcome}</h1>
+            <h1>ERROR ${errorCode}</h1>
         </div>
     `);
 };

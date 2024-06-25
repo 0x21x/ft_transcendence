@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Transcendence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
     <style>
         :root {
             --font-color: #000;
@@ -25,11 +26,12 @@
         }
 
         body {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
             margin: 0;
             padding: 0;
             color:var(--font-color);
             background:var(--bg-color);
-            transition: background 0.3s, color 0.3s;
         }
 
         .bg-table {
@@ -39,7 +41,7 @@
 
         h1:hover {
             color:var(--link-color);
-            transition: color 0.3s;
+            transition: color 0.2s;
         }
 
         .nav-link {
@@ -71,38 +73,14 @@
             outline: 0 !important;
             box-shadow: none !important;
         }
+
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <div class="collapse  navbar-collapse justify-content-center align-items-center">
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/" id="home" data-link></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/history" id="history" data-link></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tournament" id="tournament" data-link></a>
-                    </li>
-                    <li class="nav-item">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" role="switch" type="checkbox" name="dark-mode"/>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <select data-width="fit" id="languageSwitcher">
-                            <option id="en">English</option>
-                            <option id="fr">Francais</option>
-                        </select>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div id="navbar"></div>
     <div id="app"></div>
+    <script src="static/js/navbar.js" type="module"></script>
     <script src="static/js/router.js" type="module"></script>
 </body>
 </html>
+
