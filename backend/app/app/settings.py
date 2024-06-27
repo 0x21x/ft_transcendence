@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+# Utiliser les variables d'environnement
+API42_UID = os.environ.get('API42_UID')
+API42_SECRET = os.environ.get('API42_SECRET')
+API42_REDIRECT_URI = os.environ.get('API42_REDIRECT_URI')
+API42_BASE_URL = os.environ.get('API42_BASE_URL')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
-    'game.apps.GameConfig',
+    'game.apps.GameConfig'
 ]
 
 AUTH_USER_MODEL = "users.Users"

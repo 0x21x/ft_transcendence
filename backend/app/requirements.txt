@@ -34,3 +34,7 @@ typing_extensions==4.12.1
 uuid==1.30
 wheel==0.43.0
 zope.interface==6.4.post2
+
+requests==2.32.3
+requests-oauthlib==2.0.0
+oauthlib==3.2.2
