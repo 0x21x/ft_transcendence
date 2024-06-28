@@ -53,7 +53,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
-    'game.apps.GameConfig'
+    'game.apps.GameConfig',
+    'channels',
+    'app',
+    
 ]
 
 AUTH_USER_MODEL = "users.Users"
@@ -103,6 +106,16 @@ TEMPLATES = [
 ]
 
 ASGI_APPLICATION = 'app.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'app': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis', 6379)],
+        },
+    },
+}
+
 WSGI_APPLICATION = 'app.wsgi.application'
 
 REST_FRAMEWORK = {
