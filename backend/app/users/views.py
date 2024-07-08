@@ -70,4 +70,4 @@ def profile_view(request):
         return render(request, 'profile.html', {'profil': donnees_profil})
     except Exception as e:
         messages.error(request, f"Erreur lors de la récupération des données de profil: {e}")
-        return redirect('index')
+        return redirect('profile')
