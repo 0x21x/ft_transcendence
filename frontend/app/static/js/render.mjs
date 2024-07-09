@@ -18,9 +18,6 @@ export const renderHeader = async () => {
         const page = document.getElementById(route.name);
         if (page) { page.innerHTML = data[route.name]; }
     }
-
-    // document.getElementById("game").innerHTML = data.game;
-    // document.getElementById("history").innerHTML = data.history;
 };
 
 export const renderBody = async (div, match) => {
@@ -36,6 +33,6 @@ export const renderBody = async (div, match) => {
         render(div, unknown);
         return ;
     }
-    await match.route.view(div)
+    match.route.view(div)
 };
 

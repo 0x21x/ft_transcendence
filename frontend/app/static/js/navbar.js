@@ -1,4 +1,3 @@
-import { loggedIn } from './tokens.js';
 import { render } from './render.mjs';
 
 export const updateIcon = () => {
@@ -166,11 +165,7 @@ const notLoggedNavbarRender = () => {
     `);
 };
 
-const navbarRender = () => {
-    const logged = loggedIn();
-
+export const navbarRender = (logged) => {
     if (logged) { loggedNavbarRender(); }
     else { notLoggedNavbarRender(); }
 };
-
-navbarRender();

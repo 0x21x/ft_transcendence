@@ -16,11 +16,11 @@ export const register = async (render, div) => {
             <div class="row registerForm">
                 <div class="mb-3">
                     <label for="username" class="form-label">${data.username}</label>
-                    <input type="text" class="form-control" id="username">
+                    <input type="text" class="form-control" id="usernameValue">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">${data.password}</label>
-                    <input type="password" class="form-control" id="password">
+                    <input type="password" class="form-control" id="passwordValue">
                 </div>
                 <div class="col text-center">
                     <button type="button" class="btn button w-100" id="toRegisterButton">${data.register}</button>
@@ -31,8 +31,8 @@ export const register = async (render, div) => {
 
     const toRegisterButton = document.getElementById('toRegisterButton');
     toRegisterButton.addEventListener('click', async () => {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const username = document.getElementById('usernameValue').value;
+        const password = document.getElementById('passwordValue').value;
         const user = {
             username: username,
             password: password

@@ -1,4 +1,4 @@
-const scale = ((window.innerWidth * 0.7) * 0.75 <= window.innerHeight * 0.5)
+const scale = ((window.innerWidth * 0.6) * 0.75 <= window.innerHeight * 0.5)
     ? window.innerWidth * 0.7 / 400 : window.innerHeight * 0.5 / 300;
 
 const GAME = {
