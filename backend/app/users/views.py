@@ -8,7 +8,7 @@ from requests_oauthlib import OAuth2Session
 from django.contrib import messages
 from django.urls import reverse
 from .models import Users
-from .serializers import UserSerializer
+from .serlializers import UserSerializer
 
 class RegisterView(APIView):
     permission_classes = []
