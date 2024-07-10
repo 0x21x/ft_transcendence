@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link href="../front/css/pong.css" rel="stylesheet"> -->
+    <title>Pong</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        #scoreboard {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: Arial, sans-serif;
+            font-size: 40px;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div id="scoreboard">
+        <span id="playerScore">Player 1: 0</span> - <span id="computerScore">Player 2: 0</span>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="./pong.js"></script>
+    
+</body>
+</html>
