@@ -1,6 +1,19 @@
-export const loggedNavbar = (render, div) => {
+const getAvatarUrl = async () => {
+    let avatar = await fetch('http://localhost:5002/api/avatars/', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    avatar = await avatar.json();
+    return 'http://localhost:5002/api/' + avatar.avatar_url;
+};
+
+export const loggedNavbar = async (render, div) => {
     const theme = localStorage.getItem('theme') || 'light';
     const icon = theme === 'light' ? 'light_mode' : 'dark_mode';
+    const avatar_url = await getAvatarUrl();
 
     render(div, `
         <style>
@@ -55,7 +68,6 @@ export const loggedNavbar = (render, div) => {
                         <a class="nav-link nav-item" href="/history" id="history" data-link></a>
                         <a class="nav-link nav-item" href="/tournament" id="tournament" data-link></a>
                     </div>
-                    <buttun class="btn button" id="logoutButton">Logout</buttun>
                     <div class="checkbox">
                         <input type="checkbox" name="themeSwitcher" id="themeSwitcher"/>
                         <label for="themeSwitcher">
@@ -68,24 +80,11 @@ export const loggedNavbar = (render, div) => {
                             <option id="fr">🇫🇷</option>
                         </select>
                     </div>
+                    <a class="nav-link nav-item" href="/profile" data-link>
+                        <img src="${avatar_url}" alt="Avatar" class="avatar rounded-circle" width="40px" height="40px">
+                    </a>
                 </div>
             </div>
         </nav>
     `);
-
-    const logoutButton = document.getElementById('logoutButton');
-    logoutButton.addEventListener('click', async () => {
-        const response = await fetch('http://localhost:5002/api/auth/logout/', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        if (response.status !== 200) {
-            return ;
-        }
-        window.location.href = '/';
-    });
-
 };

@@ -37,24 +37,11 @@ export const register = async (render, div) => {
             username: username,
             password: password
         }
-        const response = await fetch('http://localhost:5002/api/auth/register/', {
+        await fetch('http://localhost:5002/api/auth/register/', {
            method: "POST",
             body: JSON.stringify(user),
             headers: {'Content-Type': 'application/json',}
         });
-        if (response.status === 200) {
-            fetch('http://localhost:5002/api/auth/login/', {
-                method: "POST",
-                body: JSON.stringify(user),
-                headers: {'Content-Type': 'application/json',}
-            }).then(response => {
-                if (response.status === 200) {
-                    response.json().then(data => {
-                        localStorage.setItem('access', data.access);
-                        localStorage.setItem('refresh', data.refresh);
-                    });
-                }
-            })
-        }
+
     });
 }

@@ -9,8 +9,8 @@ export const updateIcon = () => {
     icon.textContent = theme === 'light' ? 'light_mode' : 'dark_mode';
 };
 
-export const navbarRender = (logged) => {
+export const navbarRender = async (logged) => {
     const navbar = document.getElementById('navbar');
-    if (logged) { loggedNavbar(render, navbar); }
+    if (logged) { await loggedNavbar(render, navbar); }
     else { notLoggedNavbar(render, navbar); }
 };

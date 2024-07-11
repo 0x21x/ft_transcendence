@@ -54,6 +54,8 @@ services:
         timeout: 10s
         retries: 3
         start_period: 10s
+    volumes:
+      - /tmp/avatars:/app/avatars/
     restart: on-failure
     depends_on:
       - postgres

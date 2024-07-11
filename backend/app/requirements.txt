@@ -23,6 +23,7 @@ pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
 PyJWT==2.8.0
+Pillow==10.4.0
 pyOpenSSL==24.1.0
 service-identity==24.1.0
 setuptools==70.0.0

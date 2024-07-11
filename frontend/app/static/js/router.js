@@ -8,7 +8,7 @@ import { themeHandler } from './theme.mjs';
 let logged = await loggedIn();
 const body = document.getElementById('app');
 
-const router = async (logged) => {
+export const router = async (logged) => {
     const potentialMatches = routes.map(route => ({
             isMatch: location.pathname === route.path,
             route: route,
