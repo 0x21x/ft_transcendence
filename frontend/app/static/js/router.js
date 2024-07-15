@@ -8,43 +8,9 @@ import { themeHandler } from './theme.mjs';
 let logged = await loggedIn();
 const body = document.getElementById('app');
 
-const getAllFolders = (path) => {
-    const folders = path.split('/');
-    return folders.filter(folder => folder !== '');
-};
-
-const getPathArgs = (actualPath, routePath) => {
-    const routeFolders = getAllFolders(routePath);
-    if (routeFolders.length === routeFolders.filter(folder => folder !== '*').length)
-        return [];
-
-    const args = [];
-    const actualFolders = getAllFolders(actualPath);
-    for (let i = 0; routeFolders[i]; i++) {
-        if (routeFolders[i] === '*')
-            args.push(actualFolders[i]);
-    }
-    return args;
-};
-
-const isAMatch = (actualPath, routePath) => {
-    const routeFolders = getAllFolders(routePath);
-    if (routeFolders.length === routeFolders.filter(folder => folder !== '*').length)
-        return actualPath === routePath;
-
-    const actualFolders = getAllFolders(actualPath);
-
-    for (let i = 0; routeFolders[i] && actualFolders[i]; i++) {
-        if (routeFolders[i] !== '*' && actualFolders[i] !== routeFolders[i])
-            return false;
-    }
-    return routeFolders.length === actualFolders.length;
-};
-
 export const router = async (logged) => {
     const potentialMatches = routes.map(route => ({
-            isMatch: isAMatch(location.pathname, route.path),
-            args: getPathArgs(location.pathname, route.path),
+            isMatch: location.pathname === route.path,
             route: route,
         }));
 

@@ -10,10 +10,10 @@ class NewJWTAuthentication(JWTAuthentication):
 
     def authenticate(self: JWTAuthentication, request: any) -> tuple[AuthUser, Token]: # noqa: F821
 
-        access_token = request.COOKIES.get('access')
-        if access_token is None:
+        cookie = request.COOKIES.get('access')
+        if cookie is None:
             return None
 
-        validated_token = self.get_validated_token(access_token)
+        validated_token = self.get_validated_token(cookie)
 
         return self.get_user(validated_token), validated_token

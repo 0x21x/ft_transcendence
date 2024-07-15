@@ -1,12 +1,14 @@
 const uploadAvatar = async (avatar) => {
     let formData = new FormData();
     formData.append('avatar', avatar);
-    const response = await fetch('http://localhost:5002/api/avatars/', {
+    await fetch('http://localhost:5002/api/avatars/', {
         method: 'PUT',
         credentials: 'include',
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
         body: formData,
     });
-    return response.status === 200;
 };
 
 const setUsername = async (username) => {
@@ -17,17 +19,6 @@ const setUsername = async (username) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({username: username}),
-    });
-};
-
-const setPassword = async (oldPass, newPass) => {
-    await fetch('http://localhost:5002/api/passwords/', {
-        method: 'PUT',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({old_password: oldPass, new_password: newPass}),
     });
 }
 
@@ -41,7 +32,7 @@ const getUsername = async () => {
     });
     username = await username.json();
     return username.username;
-};
+}
 
 const getAvatarUrl = async () => {
     let avatar = await fetch('http://localhost:5002/api/avatars/', {
@@ -99,11 +90,6 @@ export const profile = async (render, div) => {
                     <input type="file" id="newAvatarField" accept="image/jpg">
                     <button class="btn button" id="setNewAvatarButton">${data.change_avatar}</button>
                 </div>
-                <div class="col">
-                    <input type="text" id="oldPassValue" placeholder="${data.old_password}">
-                    <input type="text" id="newPassValue" placeholder="${data.new_password}">
-                    <button class="btn button" id="setNewPassButton">${data.change_password}</button>
-                </div>
             </div>
             <button class="btn button-primary" id="logoutButton">${data.logout}</button>
         </div>
@@ -112,12 +98,8 @@ export const profile = async (render, div) => {
     const setNewAvatarButton = document.getElementById('newAvatarField');
     setNewAvatarButton.addEventListener('change', async () => {
         const avatar = document.getElementById('newAvatarField').files[0];
-        if (!avatar) {
-            return ;
-        }
-        if (await uploadAvatar(avatar)) {
-            window.location.reload();
-        }
+        await uploadAvatar(avatar);
+        window.location.reload();
     });
 
     const usernameProfile = document.getElementById('username');
@@ -132,10 +114,4 @@ export const profile = async (render, div) => {
     const logoutButton = document.getElementById('logoutButton');
     logoutButton.addEventListener('click', await logout);
 
-    const setNewPassButton = document.getElementById('setNewPassButton');
-    setNewPassButton.addEventListener('click', async () => {
-        const oldPass = document.getElementById('oldPassValue').value;
-        const newPass = document.getElementById('newPassValue').value;
-        await setPassword(oldPass, newPass);
-    });
 };
