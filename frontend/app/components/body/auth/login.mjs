@@ -22,15 +22,10 @@ export const login = async (render, div) => {
             <div class="col text-center">
                 <button type="button" class="btn button w-100" id="toLoginButton">${data.login}</button>
             </div>
-            <br>
-            <div class="col text-center">
-                <button type="button" class="btn button w-100" id="toOAuthLoginButton">${data.Ologin}</button>
-            </div>
         </div>
     `);
 
     const toLoginButton = document.getElementById('toLoginButton');
-    const toOAuthLoginButton = document.getElementById('toOAuthLoginButton');
     toLoginButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
@@ -50,8 +45,5 @@ export const login = async (render, div) => {
         }
         window.location.href = '/';
 
-    });
-    toOAuthLoginButton.addEventListener('click', async () => {
-        // do AOuth login behavior
     });
 }

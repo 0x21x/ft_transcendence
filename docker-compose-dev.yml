@@ -55,7 +55,7 @@ services:
         retries: 3
         start_period: 10s
     volumes:
-      - ${AVATARS_PATH}:/app/avatars/
+      - /tmp/avatars:/app/avatars/
     restart: on-failure
     depends_on:
       - postgres

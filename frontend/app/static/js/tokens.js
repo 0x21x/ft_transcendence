@@ -6,7 +6,7 @@ const refresh = async () => {
             'Content-Type': 'application/json',
         },
     });
-    console.log(response);
+
     return response.status === 200;
 };
 
