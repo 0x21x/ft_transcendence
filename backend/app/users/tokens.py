@@ -1,6 +1,5 @@
 from rest_framework_simplejwt.views import (TokenViewBase,
                                             InvalidToken,
-                                            TokenError,
                                             Response,
                                             api_settings,
                                             status)
@@ -10,12 +9,14 @@ class MyTokenViewBase(TokenViewBase):
         refresh = request.COOKIES.get('refresh')
         if refresh is None:
             raise InvalidToken('No refresh token found in request')
+
         serializer = self.get_serializer(data={'refresh': refresh})
 
-        try:
-            serializer.is_valid(raise_exception=True)
-        except TokenError as e:
-            raise InvalidToken(e.args[0])
+        if not serializer.is_valid():
+            response = Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+            response.delete_cookie('refresh')
+            response.delete_cookie('access')
+            return response
 
         response = Response(serializer.validated_data, status=status.HTTP_200_OK)
         if api_settings.ACCESS_TOKEN_LIFETIME is not None:
@@ -28,4 +29,3 @@ class MyTokenViewBase(TokenViewBase):
                             serializer.validated_data['access'],
                             httponly=True)
         return response
-

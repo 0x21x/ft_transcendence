@@ -10,7 +10,7 @@ export const render = (div, html, append=false) => {
 
 export const renderHeader = async () => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/navbar.json`;
+    const url = `/languages/${language}/navbar.json`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -33,6 +33,6 @@ export const renderBody = async (div, match) => {
         render(div, unknown);
         return ;
     }
-    match.route.view(div)
+    match.route.view(div, match.args)
 };
 
