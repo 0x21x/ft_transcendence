@@ -25,11 +25,15 @@ export const register = async (render, div) => {
                 <div class="col text-center">
                     <button type="button" class="btn button w-100" id="toRegisterButton">${data.register}</button>
                 </div>
+                <br>
+                <div class="col text-center">
+                    <button type="button" class="btn button w-100" id="toOAuthRegisterButton">${data.Oregister}</button>
+                </div>
             </div>
-        
     `);
 
     const toRegisterButton = document.getElementById('toRegisterButton');
+    const toOAuthRegisterButton = document.getElementById('toOAuthRegisterButton');
     toRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
@@ -43,5 +47,8 @@ export const register = async (render, div) => {
             headers: {'Content-Type': 'application/json',}
         });
 
+    });
+    toOAuthRegisterButton.addEventListener('click', async () => {
+        // do AOuth register behavior
     });
 }

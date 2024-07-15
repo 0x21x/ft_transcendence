@@ -59,7 +59,7 @@ Player 2 (right):
 │       │   └── views.py
 │       ├── manage.py
 │       ├── requirements.txt
-│       ├── templates
+│       ├── static
 │       └── users
 │           ├── __init__.py
 │           ├── admin.py

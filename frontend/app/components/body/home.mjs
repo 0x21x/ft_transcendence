@@ -23,5 +23,4 @@ export const home = async (render, div) => {
             <h1>${data.welcome}</h1>
         </div>
     `);
-    // console.log(localStorage.getItem('access'));
 };
