@@ -15,7 +15,7 @@ export const error = async (render, div, errorCode) => {
             
         </style>
         <div class="container-fluid">
-            <h1>ERROR ${errorCode}</h1>
+            <h1>ERROR: ${errorCode}</h1>
         </div>
     `);
 };

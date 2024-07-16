@@ -28,7 +28,10 @@ class UsernameView(APIView):
     def put(self: APIView, request: any) -> Response:
         if Users.objects.filter(username=request.data['username']).exists():
             return Response(status=status.HTTP_409_CONFLICT)
-        instance = Users.objects.get(username=request.user.username)
+        try:
+            instance = Users.objects.get(username=request.user.username)
+        except Users.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         user = UserSerializer(instance, data={'username': request.data['username']}, partial=True)
         if not user.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -40,12 +43,18 @@ class AvatarView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self:APIView, request: any) -> Response:
-        instance = Users.objects.get(username=request.user.username)
+        try:
+            instance = Users.objects.get(username=request.user.username)
+        except Users.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         message = {'avatar_url': instance.avatar.name}
         return Response(message, status=status.HTTP_200_OK)
 
     def put(self:APIView, request: any) -> Response:
-        instance = Users.objects.get(username=request.user.username)
+        try:
+            instance = Users.objects.get(username=request.user.username)
+        except Users.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         instance.avatar = request.data['avatar']
         instance.save()
         message = {'avatar_url': instance.avatar.name}
@@ -68,7 +77,10 @@ class GetUserInfoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self:APIView, request: any, username: str) -> Response:
-        instance = Users.objects.get(username=str)
+        try:
+            instance = Users.objects.get(username=username)
+        except Users.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         user = UserSerializer(instance)
         return Response(user.data, status=status.HTTP_200_OK)
 
@@ -76,7 +88,10 @@ class PasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
     def put(self:APIView, request: any) -> Response:
-        instance = Users.objects.get(username=request.user.username)
+        try:
+            instance = Users.objects.get(username=request.user.username)
+        except Users.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         if not instance.check_password(request.data['old_password']):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         if request.data['old_password'] == request.data['new_password']:

@@ -27,5 +27,5 @@ export const routes = [
     { path: "/profile", view: (app, args) => profile(render, app, args), authorization: a.Logged, name: "profile" },
     { path: "/user/*", view: (app, args) => user(render, app, args), authorization: a.Logged, name: "user" },
     { path: "/welcome", view: (app, args) => welcome(render, app, args), authorization: a.Unlogged, name: "welcome"},
-    { path: "/error/404", view: (app, args) => error(render, app, args, 404), authorization: a.Everyone, name: "404"}
+    { path: "/error/404", view: (app) => error(render, app, '404'), authorization: a.Everyone, name: "error"}
     ];
