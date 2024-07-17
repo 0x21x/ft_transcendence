@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 AUTH_USER_MODEL = "users.Users"
+OTP_USER_MODEL = "users.OTP"
 
 from datetime import timedelta
 

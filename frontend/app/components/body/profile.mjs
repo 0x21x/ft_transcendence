@@ -1,4 +1,11 @@
+import { registerOTP } from './otp/registerOTP.mjs';
+import { logoutOTP } from './otp/logoutOTP.mjs';
+import { getUserInfo } from './user.mjs';
+
+
 const uploadAvatar = async (avatar) => {
+    if (!avatar)
+        return false;
     let formData = new FormData();
     formData.append('avatar', avatar);
     const response = await fetch('http://localhost:5002/api/avatars/', {
@@ -43,18 +50,6 @@ const getUsername = async () => {
     return username.username;
 };
 
-const getAvatarUrl = async () => {
-    let avatar = await fetch('http://localhost:5002/api/avatars/', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
-    avatar = await avatar.json();
-    return 'http://localhost:5002/api/' + avatar.avatar_url;
-};
-
 const logout = async () => {
     const response = await fetch('http://localhost:5002/api/auth/logout/', {
         method: 'POST',
@@ -63,9 +58,8 @@ const logout = async () => {
             'Content-Type': 'application/json',
         },
     });
-    if (response.status !== 200) {
+    if (response.status !== 200)
         return ;
-    }
     window.location.href = '/';
 }
 
@@ -74,7 +68,8 @@ export const profile = async (render, div) => {
     const url = `languages/${language}/profile.json`;
     const response = await fetch(url);
     const data = await response.json();
-    const avatar_url = await getAvatarUrl();
+    const userInfo = await getUserInfo([await getUsername()]);
+    const avatar_url = 'http://localhost:5002/api' + userInfo.avatar;
 
     render(div, `
         <style>
@@ -89,39 +84,38 @@ export const profile = async (render, div) => {
         </style>
         <div class="container profileContainer">
             <img src="${avatar_url}" alt="img" class="avatar rounded-circle" width="50px" height="50px">
-            <h2 id="username"></h2>
+            <h2 id="username">${userInfo.username}</h2>
             <div class="row row-cols-2">
                 <div class="col">
-                    <input type="text" id="usernameValue" placeholder="${data.username}">
-                    <button class="btn button" id="setNewUsernameButton">${data.change_username}</button>
+                    <input class="w-100 form-control" type="text" id="usernameValue" placeholder="${data.username}">
+                    <button class="btn button w-100" id="setNewUsernameButton">${data.change_username}</button>
                 </div>
                 <div class="col">
-                    <input type="file" id="newAvatarField" accept="image/jpg">
-                    <button class="btn button" id="setNewAvatarButton">${data.change_avatar}</button>
+                    <input class="w-100 form-control" type="file" id="newAvatarField" accept="image/jpg">
+                    <button class="btn button w-100" id="setNewAvatarButton">${data.change_avatar}</button>
                 </div>
                 <div class="col">
-                    <input type="text" id="oldPassValue" placeholder="${data.old_password}">
-                    <input type="text" id="newPassValue" placeholder="${data.new_password}">
-                    <button class="btn button" id="setNewPassButton">${data.change_password}</button>
+                    <input class="w-100 form-control" type="password" id="oldPassValue" placeholder="${data.old_password}">
+                    <input class="w-100 form-control" type="password" id="newPassValue" placeholder="${data.new_password}">
+                    <button class="btn button w-100" id="setNewPassButton">${data.change_password}</button>
                 </div>
+                <div class="col otp"></div>
             </div>
             <button class="btn button-primary" id="logoutButton">${data.logout}</button>
         </div>
     `);
 
+    const otpDiv = document.querySelector('.otp');
+    if (!userInfo.otp_enabled)
+        await registerOTP(render, otpDiv);
+    else
+        await logoutOTP(render, otpDiv);
+
     const setNewAvatarButton = document.getElementById('newAvatarField');
     setNewAvatarButton.addEventListener('change', async () => {
-        const avatar = document.getElementById('newAvatarField').files[0];
-        if (!avatar) {
-            return ;
-        }
-        if (await uploadAvatar(avatar)) {
+        if (await uploadAvatar(setNewAvatarButton.files[0]))
             window.location.reload();
-        }
     });
-
-    const usernameProfile = document.getElementById('username');
-    usernameProfile.innerText = await getUsername();
 
     const setNewUsernameButton = document.getElementById('setNewUsernameButton');
     setNewUsernameButton.addEventListener('click', async () => {

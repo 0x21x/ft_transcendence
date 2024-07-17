@@ -1,3 +1,18 @@
+const registerRequest = async (username, password) => {
+    if (!username || !password) {
+        return;
+    }
+    const user = {
+        username: username,
+        password: password
+    }
+    await fetch('http://localhost:5002/api/auth/register/', {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {'Content-Type': 'application/json',}
+    });
+}
+
 export const register = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const url = `languages/${language}/auth.json`;
@@ -37,16 +52,7 @@ export const register = async (render, div) => {
     toRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
-        const user = {
-            username: username,
-            password: password
-        }
-        await fetch('http://localhost:5002/api/auth/register/', {
-           method: "POST",
-            body: JSON.stringify(user),
-            headers: {'Content-Type': 'application/json',}
-        });
-
+        await registerRequest(username, password);
     });
     toOAuthRegisterButton.addEventListener('click', async () => {
         // do AOuth register behavior

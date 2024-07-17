@@ -18,13 +18,14 @@ hyperlink==21.0.0
 idna==3.7
 incremental==22.10.0
 Markdown==3.6
+pillow==10.4.0
 psycopg2-binary==2.9.9
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
 PyJWT==2.8.0
-Pillow==10.4.0
 pyOpenSSL==24.1.0
+pyotp==2.9.0
 service-identity==24.1.0
 setuptools==70.0.0
 six==1.16.0

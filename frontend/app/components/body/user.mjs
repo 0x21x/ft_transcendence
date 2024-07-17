@@ -1,6 +1,6 @@
 import { error } from "./error.mjs";
 
-const getUserInfo = async (args) => {
+export const getUserInfo = async (args) => {
     if (args.length !== 1)
         throw new Error('Invalid number of arguments');
     let response = await fetch(`http://localhost:5002/api/users/${args[0]}/`, {

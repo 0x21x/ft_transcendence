@@ -1,6 +1,6 @@
-from .views import LoginView, RegisterView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .auth import LoginView, RegisterView
 
 ### Ajouter les fonctions pour recuperer les prenoms, noms, emails (enlever le commenteaire une fois fait)
 
