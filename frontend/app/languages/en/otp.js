@@ -4,4 +4,4 @@ export const data = {
   'login': 'Login',
   'removeOTP': 'Remove OTP',
   'password': 'Password'
-}
+};
