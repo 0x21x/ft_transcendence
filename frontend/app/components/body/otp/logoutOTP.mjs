@@ -1,4 +1,6 @@
 import { registerOTP } from './registerOTP.mjs';
+import { data as enData } from '../../../languages/en/otp.js'
+import { data as frData } from '../../../languages/fr/otp.js'
 
 const logoutOTPRequest = async (password) => {
     if (!password)
@@ -16,9 +18,7 @@ const logoutOTPRequest = async (password) => {
 
 export const logoutOTP = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/otp.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
 
     render(div, `
         <style>

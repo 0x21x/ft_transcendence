@@ -1,4 +1,7 @@
 import { loginOTP } from '../otp/loginOTP.mjs'
+import { data as enData } from '../../../languages/en/auth.js'
+import { data as frData } from '../../../languages/fr/auth.js'
+
 
 const loginRequest = async (username, password, render, div) => {
     if (!username || !password) {
@@ -21,9 +24,7 @@ const loginRequest = async (username, password, render, div) => {
 
 export const login = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/auth.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
 
     render(div, `
     <style>

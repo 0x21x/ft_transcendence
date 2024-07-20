@@ -1,4 +1,6 @@
 import { routes } from './routes.mjs';
+import { data as enData } from '../../languages/en/navbar.js'
+import { data as frData } from '../../languages/fr/navbar.js'
 
 export const render = (div, html, append=false) => {
     if (append){
@@ -10,9 +12,7 @@ export const render = (div, html, append=false) => {
 
 export const renderHeader = async () => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `/languages/${language}/navbar.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
 
     for (let route of routes) {
         const page = document.getElementById(route.name);

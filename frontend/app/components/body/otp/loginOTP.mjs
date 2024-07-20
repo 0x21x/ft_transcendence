@@ -1,3 +1,6 @@
+import { data as enData } from '../../../languages/en/otp.js'
+import { data as frData } from '../../../languages/fr/otp.js'
+
 const loginOTPRequest = async (otp, username, password) => {
     if (!otp)
         return false;
@@ -14,9 +17,7 @@ const loginOTPRequest = async (otp, username, password) => {
 
 export const loginOTP = async (render, div, username, password) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/otp.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
 
     render(div, `
         <style>

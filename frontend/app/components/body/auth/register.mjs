@@ -1,3 +1,7 @@
+import { data as enData } from '../../../languages/en/auth.js'
+import { data as frData } from '../../../languages/fr/auth.js'
+
+
 const registerRequest = async (username, password) => {
     if (!username || !password) {
         return;
@@ -15,9 +19,8 @@ const registerRequest = async (username, password) => {
 
 export const register = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/auth.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
+
 
     render(div, `
         <style>

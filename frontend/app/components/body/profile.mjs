@@ -1,6 +1,8 @@
 import { registerOTP } from './otp/registerOTP.mjs';
 import { logoutOTP } from './otp/logoutOTP.mjs';
 import { getUserInfo } from './user.mjs';
+import { data as enData } from '../../languages/en/profile.js'
+import { data as frData } from '../../languages/fr/profile.js'
 
 
 const uploadAvatar = async (avatar) => {
@@ -65,9 +67,7 @@ const logout = async () => {
 
 export const profile = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/profile.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
     const userInfo = await getUserInfo([await getUsername()]);
     const avatar_url = 'http://localhost:5002/api' + userInfo.avatar;
 

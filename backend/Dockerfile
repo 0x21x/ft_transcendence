@@ -33,6 +33,7 @@ RUN apk add --no-cache curl
 RUN mkdir -p /app
 ADD app /app
 WORKDIR /app
+RUN mkdir -p avatars
 
 COPY --from=build /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
 

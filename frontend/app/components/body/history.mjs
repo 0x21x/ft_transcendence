@@ -1,3 +1,7 @@
+import { data as enData } from '../../languages/en/history.js'
+import { data as frData } from '../../languages/fr/history.js'
+
+
 const fillTableWithHistory = (table, history) => {
     for (let i = 0; i < history.length; i++) {
 	    let tr = document.createElement('tr');
@@ -12,9 +16,7 @@ const fillTableWithHistory = (table, history) => {
 
 export const history =  async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const url = `languages/${language}/history.json`;
-    const response = await fetch(url);
-    const data = await response.json();
+    const data = language === 'en' ? enData : frData;
 
     render (div, `
         <style>
