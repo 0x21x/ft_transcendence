@@ -66,7 +66,15 @@ class OAuthRegisterView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         user.save()
-        return Response(user.data, status=status.HTTP_200_OK)
+        
+        user = User.objects.get(username=username)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_201_CREATED)
+        
+        # return Response(user.data, status=status.HTTP_200_OK)
 
 
 # class OAuthRegisterView(APIView):
