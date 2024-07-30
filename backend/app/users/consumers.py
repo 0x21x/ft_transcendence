@@ -3,12 +3,14 @@ from channels.db import database_sync_to_async
 
 class StatusConsumer(AsyncWebsocketConsumer):
     async def connect(self: AsyncWebsocketConsumer) -> None:
-        if self.scope['user'].is_anonymous:
-            await self.close()
+        if not self.scope['user'].is_authenticated:
+            return await self.close()
         await self.set_user_status(self.scope['user'], True)
         await self.accept()
 
-    async def disconnect(self: AsyncWebsocketConsumer) -> None:
+    async def disconnect(self: AsyncWebsocketConsumer, code: any) -> None:
+        if not self.scope['user'].is_authenticated:
+            return await self.close()
         self.scope['user'].is_online = False
         await self.set_user_status(self.scope['user'], False)
         return await super().close()
