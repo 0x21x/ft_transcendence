@@ -5,6 +5,7 @@ import { languageHandler } from './language.mjs';
 import { loggedIn } from './tokens.js';
 import { themeHandler } from './theme.mjs';
 
+let ws = new WebSocket('ws://localhost:5002/status/');
 let logged = await loggedIn();
 const body = document.getElementById('app');
 
@@ -77,6 +78,8 @@ document.addEventListener('click', async e => {
         e.preventDefault();
         if (await loggedIn() !== logged) {
             logged = !logged;
+            ws.close();
+            ws = new WebSocket('ws://localhost:5002/status/');
             await navbarRender(logged);
         }
         if (e.target.href === location.href)

@@ -32,6 +32,8 @@ export const game = async (render, div) => {
                 </div>
                 <button type="button" class="btn button" id="startButton">${data.play}</button>
             </div>
+            
+            <button type="button" class="btn button" id="sendButton">Send Message</button>
         </div>
     `);
 
@@ -53,4 +55,15 @@ export const game = async (render, div) => {
             game.loop(true);
         }
     });
+
+    const sendButton = document.getElementById('sendButton');
+    const websocket = new WebSocket('ws://localhost:5002/game/');
+    websocket.onopen = () => {
+        sendButton.addEventListener('click', () => {
+            for (let i = 0; i < 10; i++) {
+                const message = {'message': 'Hello'};
+                websocket.send(JSON.stringify(message));
+            }
+        });
+    };
 };

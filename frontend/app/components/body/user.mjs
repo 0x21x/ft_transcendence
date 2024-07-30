@@ -1,4 +1,7 @@
 import { error } from "./error.mjs";
+import { data as enData } from '../../languages/en/profile.js'
+import { data as frData } from '../../languages/fr/profile.js'
+
 
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
@@ -16,6 +19,8 @@ export const getUserInfo = async (args) => {
 }
 
 export const user = async (render, div, args) => {
+    const language = localStorage.getItem('language') || 'en';
+    const data = language === 'en' ? enData : frData;
     const userInfo = await getUserInfo(args);
     if (userInfo === null)
         return error(render, div, 'User not found');
@@ -38,6 +43,17 @@ export const user = async (render, div, args) => {
         <div class="container profileContainer">
             <img src="${avatar_url}" alt="Avatar" class="avatar rounded-circle" style="width: 100px; height: 100px;">
             <h1>${userInfo.username}</h1>
+            <div class="row">
+                <div class="col">
+                    <h4 id="status"></h4>
+                </div>
+            </div>
         </div>
     `);
-};
+    const status = document.getElementById('status');
+    if (userInfo.is_online === true) {
+        status.innerText = `🟢 ${data.online}`;
+    } else {
+        status.innerText = `🔴 ${data.offline}`;
+    }
+}

@@ -10,7 +10,7 @@ from .models import Users
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
-        fields = ['id', 'username', 'password', 'avatar', 'otp_enabled']
+        fields = ['id', 'username', 'password', 'avatar', 'otp_enabled', 'is_online']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data: dict) -> Users:   # noqa: ANN101

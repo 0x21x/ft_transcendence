@@ -6,6 +6,7 @@ from .managers import UserManager
 class Users(AbstractBaseUser):
     username = models.CharField(max_length=16, unique=True)
     is_active = models.BooleanField(default=True)
+    is_online = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='avatars', default=File(open('media/default_avatar.jpg', 'rb'), name='default_avatar.jpg'))
     otp_enabled = models.BooleanField(default=False)
     otp_secret = models.CharField(null=True, blank=True)
