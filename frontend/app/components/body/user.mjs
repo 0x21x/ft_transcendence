@@ -2,7 +2,6 @@ import { error } from "./error.mjs";
 import { data as enData } from '../../languages/en/profile.js'
 import { data as frData } from '../../languages/fr/profile.js'
 
-
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
         throw new Error('Invalid number of arguments');
