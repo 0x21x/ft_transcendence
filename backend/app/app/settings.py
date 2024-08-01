@@ -26,10 +26,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "0.0.0.0",
-    '10.13.4.1',
-    '10.13.4.2'
-
+    "0.0.0.0"
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -44,6 +41,12 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 
 # Application definition
 

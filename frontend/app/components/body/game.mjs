@@ -1,7 +1,90 @@
-import {Game} from "../../static/js/game.js"
 import { data as enData } from '../../languages/en/game.js'
 import { data as frData } from '../../languages/fr/game.js'
 
+const GAME_SIZE = [400, 250]
+const PADDLE_SIZE = [10, 50]
+const BALL_SIZE = 10
+
+const GAME = {
+    maxScore: 5,
+    maxGameSaved: 10,
+    size: {
+        width: GAME_SIZE[0],
+        height: GAME_SIZE[1],
+    }, ball: {
+        width: BALL_SIZE,
+        height: BALL_SIZE,
+        speed: 1.33,
+    }, paddle: {
+        width: PADDLE_SIZE[0],
+        height: PADDLE_SIZE[1],
+        speed: 2,
+    }, color: {
+        light: {
+            bg: '#eeeeee',
+            paddle: '#222831',
+            ball: '#ff5722',
+            middleLine: '#dedede',
+            score: '#dedede',
+            shadowPaddle: '#ff5722',
+        }, dark: {
+            bg: '#262c36',
+            paddle: '#eeeeee',
+            ball: '#ff5722',
+            middleLine: '#393e46',
+            score: '#393e46',
+            shadowPaddle: '#ff5722',
+        }
+    }
+};
+
+const renderPong = (ctx, canvas, player1, player2, ball) => {
+        const colorTheme = localStorage.getItem('theme') || 'light';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.bg : GAME.color.dark.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.lineWidth = 5;
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = (colorTheme === 'light') ? GAME.color.light.middleLine : GAME.color.dark.middleLine;
+        ctx.beginPath();
+        ctx.moveTo(canvas.width / 2, 0);
+        ctx.lineTo(canvas.width / 2, canvas.height);
+        ctx.stroke();
+        ctx.closePath();
+
+        ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.score : GAME.color.dark.score;
+        ctx.font = `bold 50px Arial`;
+        let textWidth = ctx.measureText(player1.score).width;
+        ctx.fillText(`${player1.score}`, canvas.width / 4 - (textWidth / 2),60);
+        textWidth = ctx.measureText(player2.score).width;
+        ctx.fillText(`${player2.score}`, canvas.width / 4 * 3 - (textWidth / 2),60);
+
+        ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.ball : GAME.color.dark.ball;
+        ctx.fillRect(ball.x - GAME.ball.width / 2, ball.y - GAME.ball.height / 2,
+            GAME.ball.width, GAME.ball.height);
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = (colorTheme === 'light') ? GAME.color.light.shadowPaddle : GAME.color.dark.shadowPaddle;
+        ctx.fillStyle = (colorTheme === 'light') ? GAME.color.light.paddle : GAME.color.dark.paddle;
+        ctx.fillRect(player1.x, player1.y - GAME.paddle.height / 2, GAME.paddle.width,
+            GAME.paddle.height);
+        ctx.fillRect(player2.x, player2.y - GAME.paddle.height / 2, GAME.paddle.width,
+            GAME.paddle.height);
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 0;
+    };
+
+const handleKeydown = (e, ws) => {
+    switch (e.keyCode) {
+        case 65: // A
+            ws.send(JSON.stringify({'action': 'move', 'direction': 'left'}));
+            break;
+        case 68: // D
+            ws.send(JSON.stringify({'action': 'move', 'direction': 'right'}));
+            break;
+    }
+};
 
 export const game = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
@@ -20,50 +103,26 @@ export const game = async (render, div) => {
                 <canvas id="pong"></canvas>
             </div>
             <div class="row">
-                <div class="col">
-                    <div class="form-outline form-control-sm">
-                        <input type="text" class="form-control form" id="player1Name" placeholder="${data.playerNameField} 1"/>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-outline form-control-sm">
-                        <input type="text" class="form-control form" id="player2Name"placeholder="${data.playerNameField} 2"/>
-                    </div>
-                </div>
                 <button type="button" class="btn button" id="startButton">${data.play}</button>
             </div>
-            
-            <button type="button" class="btn button" id="sendButton">Send Message</button>
         </div>
     `);
 
-    let game = new Game('pong');
-    const theme = document.querySelector('input[name=themeSwitcher]');
     const buttonStart = document.getElementById('startButton');
-    const names = {
-        player1: document.getElementById('player1Name'),
-        player2: document.getElementById('player2Name'),
-    }
-
-    game.render();
-    theme.addEventListener('change', () => {
-        if (game.ended) { game.render(); }
-    });
-    buttonStart.addEventListener('click', () => {
-        if (game.ended && names.player1.value && names.player2.value && (names.player1.value !== names.player2.value)) {
-            game.setNames(names.player1.value, names.player2.value);
-            game.loop(true);
-        }
-    });
-
-    const sendButton = document.getElementById('sendButton');
+    const canvas = document.getElementById('pong');
+    const ctx = canvas.getContext('2d');
+    canvas.width = GAME.size.width;
+    canvas.height = GAME.size.height;
     const websocket = new WebSocket('ws://localhost:5002/game/');
     websocket.onopen = () => {
-        sendButton.addEventListener('click', () => {
-            for (let i = 0; i < 10; i++) {
-                const message = {'message': 'Hello'};
-                websocket.send(JSON.stringify(message));
-            }
+        buttonStart.addEventListener('click', () => {
+            websocket.send(JSON.stringify({'action': 'start'}));
         });
+        document.onkeydown = (e) => handleKeydown(e, websocket);
+    };
+    websocket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        renderPong(ctx, canvas, data.pong.player1, data.pong.player2, data.pong.ball);
+        console.log('receive message from consumer');
     };
 };
