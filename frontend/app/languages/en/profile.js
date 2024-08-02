@@ -10,5 +10,9 @@ export const data = {
     'password': 'Password',
     'old_password': 'Old Password',
     'new_password': 'New Password',
-    'change_password': 'Change password'
+    'change_password': 'Change password',
+    'firstPlayer': 'First player',
+    'secondPlayer': 'Second player',
+    'score': 'Score',
+    'lastGames': 'Last games',
 };

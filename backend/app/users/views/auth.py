@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AuthUser, api_settings
 from ..models import Users
-from ..serlializers import UserSerializer, CustomTokenRefreshSerializer
+from ..serializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
 from .otp import check_otp
 

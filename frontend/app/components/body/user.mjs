@@ -1,7 +1,7 @@
 import { error } from "./error.mjs";
 import { data as enData } from '../../languages/en/profile.js'
 import { data as frData } from '../../languages/fr/profile.js'
-
+import { getHistory } from "./history.mjs";
 
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
@@ -28,6 +28,15 @@ export const user = async (render, div, args) => {
 
     render(div, `
         <style>
+            .table-responsive {
+                text-align: center;
+                margin-top: 20px;
+                margin-left: 30vw;
+                width: 40vw;
+            }    
+            td, th {
+              text-align: center;
+            }
             .profileContainer {
                 margin-top: 20px;
                 width: 300px;
@@ -49,6 +58,20 @@ export const user = async (render, div, args) => {
                 </div>
             </div>
         </div>
+        <div class="table-responsive">
+            <h2>${data.lastGames}</h2>
+            <table class="table table-bordered mb-0 bg-table">
+                 <thead>
+                      <tr>
+                          <th scope="col">${data.firstPlayer}</th>
+                          <th scope="col">${data.score}</th>
+                          <th scope="col">${data.secondPlayer}</th>
+                          <th scope="col">${data.score}</th>
+                      </tr>
+                 </thead>
+                 <tbody id="table"></tbody>
+            </table>
+        </div>
     `);
     const status = document.getElementById('status');
     if (userInfo.is_online === true) {
@@ -56,4 +79,6 @@ export const user = async (render, div, args) => {
     } else {
         status.innerText = `🔴 ${data.offline}`;
     }
+    let table = document.getElementById("table");
+    await getHistory(table, userInfo.username);
 }

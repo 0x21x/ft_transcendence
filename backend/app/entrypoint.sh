@@ -2,7 +2,7 @@
 
 PORT=${PORT}
 
-python manage.py makemigrations users
+python manage.py makemigrations users game
 
 python manage.py migrate
 

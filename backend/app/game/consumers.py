@@ -1,8 +1,11 @@
 import asyncio
-
+import uuid
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+from channels.db import database_sync_to_async
 from typing import Any
 from random import choice
+from .models import Game
+from users.models import Users # noqa: F401
 
 GAME_STATES = ['waiting', 'in_progress', 'finished']
 GAME_SIZE = [400, 250]
@@ -44,9 +47,10 @@ class Pong:
         }
         self.game_state = GAME_STATES[0]
 
-    def reset_game(self: Any, done: bool = False) -> None:
+    def reset_game(self: Any) -> None:
         if self.player1['score'] == MAX_SCORE or self.player2['score'] == MAX_SCORE:
-            done = True
+            self.game_state = GAME_STATES[2]
+            return
         self.ball = {
             'x': GAME_SIZE[0] / 2,
             'y': GAME_SIZE[1] / 2,
@@ -56,15 +60,13 @@ class Pong:
         self.player1 = {
             'x': 0,
             'y': GAME_SIZE[1] / 2,
-            'score': 0 if done else self.player1['score']
+            'score': self.player1['score']
         }
         self.player2 = {
             'x': GAME_SIZE[0] - PADDLE_SIZE[0],
             'y': GAME_SIZE[1] / 2,
-            'score': 0 if done else self.player2['score']
+            'score': self.player2['score']
         }
-        if done:
-            self.game_state = GAME_STATES[2]
 
     def move_paddle(self: Any, player: str, direction: str) -> None:
         if direction == 'up':
@@ -95,12 +97,12 @@ class Pong:
             self.move_ball()
 
     def __dict__(self: Any) -> dict:
-        return {
-            'ball': self.ball,
-            'player1': self.player1,
-            'player2': self.player2,
-            'game_state': self.game_state
-        }
+        dict = {}
+        dict['ball'] = self.ball
+        for i, player in enumerate([self.player1, self.player2], start=1):
+            dict[f'player{i}'] = player
+        dict['game_state'] = self.game_state
+        return dict
 
     def __getitem__(self: Any, item: str) -> Any:  # noqa: ANN401
         return getattr(self, item)
@@ -136,15 +138,25 @@ class MultiplayerPong:
         if len(self.players) < MAX_PLAYERS:
             return
         if self.pong.game_state == GAME_STATES[2]:
-            self.pong.reset_game(True)
+            self.init_game()
         self.pong.game_state = GAME_STATES[1]
+
+    @database_sync_to_async
+    def save_scores(self: Any) -> None:
+        game_name = uuid.uuid4()
+        names = self.get_names()
+        game = Game.objects.create(name=game_name)
+        for player in names:
+            game.scores.create(score=self.pong.__dict__()[self.players[player]]['score'], player=Users.objects.get(username=player))
+
+    def get_names(self: Any) -> list:
+        return list(self.players.keys())
 
     def get_players(self: Any) -> dict:
         return self.players
 
     def get_game_state(self: Any) -> dict:
         return self.pong.__dict__
-
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
     multiplayer_pong = MultiplayerPong()
@@ -180,6 +192,14 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 'pong': self.multiplayer_pong.pong.__dict__()
             })
             self.multiplayer_pong.pong.play_game()
+            if self.multiplayer_pong.pong.game_state == GAME_STATES[2]:
+                await self.channel_layer.group_send(ROOM_NAME, {
+                    'type': 'game_state',
+                    'pong': self.multiplayer_pong.pong.__dict__(),
+                    'message': 'Game finished.'
+                })
+                await self.multiplayer_pong.save_scores()
+                break
             await asyncio.sleep(FPS_SERVER)
 
     async def game_state(self: AsyncJsonWebsocketConsumer, event: dict) -> None:
