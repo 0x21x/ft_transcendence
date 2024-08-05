@@ -40,10 +40,10 @@ class OAuthRegisterView(APIView):
         
         try:
             token = api42.fetch_token(
-				f"{settings.API42_BASE_URL}/oauth/token",
-				client_secret=settings.API42_SECRET,
-				authorization_response=request.get_full_path()
-			)
+                f"{settings.API42_BASE_URL}/oauth/token",
+                client_secret=settings.API42_SECRET,
+                authorization_response=request.build_absolute_uri()
+            )
             print(f"Token: {token}")
         except Exception as e:
             print(f"Erreur lors de la récupération du token: {e}")
