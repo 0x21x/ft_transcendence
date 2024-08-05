@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from requests_oauthlib import OAuth2Session
-from rest_framework.permissions import IsAuthenticated
 from ..models import Users
 from ..serlializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
@@ -17,6 +16,10 @@ class OAuthRegisterView(APIView):
     permission_classes = []
     
     def get(self: APIView, request) -> Response:
+        print(f"API42_UID: {settings.API42_UID}")
+        print(f"API42_REDIRECT_URI: {settings.API42_REDIRECT_URI}")
+        print(f"API42_BASE_URL: {settings.API42_BASE_URL}")
+        
         api42 = OAuth2Session(settings.API42_UID, redirect_uri=settings.API42_REDIRECT_URI)
         url_authorization, state = api42.authorization_url(f"{settings.API42_BASE_URL}/oauth/authorize")
         
@@ -34,6 +37,7 @@ class OAuthRegisterView(APIView):
         print(f"state: {state}")
         print(f"settings.API42_REDIRECT_URI: {settings.API42_REDIRECT_URI}")
         print("before token")
+        
         try:
             token = api42.fetch_token(
 				f"{settings.API42_BASE_URL}/oauth/token",
@@ -73,8 +77,6 @@ class OAuthRegisterView(APIView):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }, status=status.HTTP_201_CREATED)
-        
-        # return Response(user.data, status=status.HTTP_200_OK)
 
 
 # class OAuthRegisterView(APIView):
