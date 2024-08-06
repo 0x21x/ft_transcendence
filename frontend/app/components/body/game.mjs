@@ -113,7 +113,7 @@ export const game = async (render, div) => {
     const ctx = canvas.getContext('2d');
     canvas.width = GAME.size.width;
     canvas.height = GAME.size.height;
-    const websocket = new WebSocket('ws://localhost:5002/game/');
+    const websocket = new WebSocket('ws://localhost:5002/game/ggggggg/');
     websocket.onopen = () => {
         buttonStart.addEventListener('click', () => {
             websocket.send(JSON.stringify({'action': 'start'}));
@@ -122,7 +122,10 @@ export const game = async (render, div) => {
     };
     websocket.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        if (data.message) {
+            alert(data.message);
+            return;
+        }
         renderPong(ctx, canvas, data.pong.player1, data.pong.player2, data.pong.ball);
-        console.log('receive message from consumer');
     };
 };

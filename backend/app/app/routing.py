@@ -1,8 +1,8 @@
 from django.urls import path
-from game.consumers import GameConsumer
-from users.consumers import StatusConsumer
+from game.consumers import GameConsumer # noqa: F401
+from users.consumers import StatusConsumer # noqa: F401
 
 websocket_urlpatterns = [
-    path('game/', GameConsumer.as_asgi()),
+    path('game/<str:room_name>/', GameConsumer.as_asgi()),
     path('status/', StatusConsumer.as_asgi()),
 ]

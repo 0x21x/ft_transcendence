@@ -1,9 +1,23 @@
+import uuid
 from typing import Any
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .models import Game, Score
+from .consumers import ROOM_NAME
+
+
+class GamesHandlerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self: APIView, request: Any) -> Response:  # noqa: ANN401
+        raise NotImplementedError
+
+    def post(self: APIView, request: Any) -> Response:  # noqa: ANN401
+        room_name = str(uuid.uuid4())
+        ROOM_NAME.append(room_name)
+        return Response({"room_name": room_name}, status=status.HTTP_201_CREATED)
 
 
 class GamesHistoryView(APIView):
@@ -21,8 +35,6 @@ class GamesHistoryView(APIView):
                 game_json[f'player{j}'] = score.player.username
                 game_json[f'score{j}'] = score.score
             games_history.append(game_json)
-        if not games_history:
-            return Response({"error": "No games found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(games_history, status=status.HTTP_200_OK)
 
 class GamesHistoryForUserView(APIView):
@@ -44,6 +56,4 @@ class GamesHistoryForUserView(APIView):
                 game_json[f'score{j}'] = score.score
             i += 1
             games_history.append(game_json)
-        if not games_history:
-            return Response({"error": "No games found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(games_history, status=status.HTTP_200_OK)

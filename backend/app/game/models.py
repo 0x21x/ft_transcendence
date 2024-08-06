@@ -12,7 +12,6 @@ class Score(models.Model):
         return self.score
 
 class Game(models.Model):
-    name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     scores = models.ManyToManyField(Score, related_name='games')
