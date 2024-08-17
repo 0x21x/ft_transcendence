@@ -58,7 +58,11 @@ export const register = (render, div) => {
     toRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
+<<<<<<< HEAD:frontend/app/components/body/auth/register.js
         await registerRequest(username, password, render, div);
+=======
+        await registerRequest(username, password);
+>>>>>>> master:frontend/app/components/body/auth/register.mjs
     });
     toOAuthRegisterButton.addEventListener('click', async () => {
         // do AOuth register behavior
