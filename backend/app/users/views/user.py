@@ -5,11 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..models import Users
-<<<<<<< HEAD
 from ..serializers import UserSerializer
-=======
-from ..serlializers import UserSerializer
->>>>>>> master
 
 
 class UsernameView(APIView):
