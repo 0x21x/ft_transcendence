@@ -1,6 +1,6 @@
-import { routes } from './routes.mjs';
-import { data as enData } from '../../languages/en/navbar.js'
-import { data as frData } from '../../languages/fr/navbar.js'
+import { routes } from './routes.js';
+import { data as enData } from '../languages/en/navbar.js'
+import { data as frData } from '../languages/fr/navbar.js'
 
 export const render = (div, html, append=false) => {
     if (append){

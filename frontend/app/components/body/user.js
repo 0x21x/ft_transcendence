@@ -1,12 +1,12 @@
-import { error } from "./error.mjs";
-import { data as enData } from '../../languages/en/profile.js'
-import { data as frData } from '../../languages/fr/profile.js'
-import { getHistory } from "./history.mjs";
+import { data as enData } from '../../languages/en/profile.js';
+import { error } from './error.js';
+import { data as frData } from '../../languages/fr/profile.js';
+import { getHistory } from './history.js';
 
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
         throw new Error('Invalid number of arguments');
-    let response = await fetch(`http://localhost:5002/api/users/${args[0]}/`, {
+    const response = await fetch(`http://localhost:5002/api/users/${args[0]}/`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -15,8 +15,8 @@ export const getUserInfo = async (args) => {
     });
     if (response.status !== 200)
         return null;
-    return await response.json()
-}
+    return await response.json();
+};
 
 export const user = async (render, div, args) => {
     const language = localStorage.getItem('language') || 'en';
@@ -79,6 +79,6 @@ export const user = async (render, div, args) => {
     } else {
         status.innerText = `🔴 ${data.offline}`;
     }
-    let table = document.getElementById("table");
+    const table = document.getElementById('table');
     await getHistory(table, userInfo.username);
-}
+};

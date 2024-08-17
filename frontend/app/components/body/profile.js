@@ -1,14 +1,14 @@
-import { registerOTP } from './otp/registerOTP.mjs';
-import { logoutOTP } from './otp/logoutOTP.mjs';
-import { getUserInfo } from './user.mjs';
-import { data as enData } from '../../languages/en/profile.js'
-import { data as frData } from '../../languages/fr/profile.js'
+import { data as enData } from '../../languages/en/profile.js';
+import { data as frData } from '../../languages/fr/profile.js';
+import { getUserInfo } from './user.js';
+import { logoutOTP } from './otp/logoutOTP.js';
+import { registerOTP } from './otp/registerOTP.js';
 
 
 const uploadAvatar = async (avatar) => {
     if (!avatar)
         return false;
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append('avatar', avatar);
     const response = await fetch('http://localhost:5002/api/avatars/', {
         method: 'PUT',
@@ -38,7 +38,7 @@ const setPassword = async (oldPass, newPass) => {
         },
         body: JSON.stringify({old_password: oldPass, new_password: newPass}),
     });
-}
+};
 
 const getUsername = async () => {
     let username = await fetch('http://localhost:5002/api/usernames/', {
@@ -63,7 +63,7 @@ const logout = async () => {
     if (response.status !== 200)
         return ;
     window.location.href = '/';
-}
+};
 
 export const profile = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';

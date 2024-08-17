@@ -51,10 +51,10 @@ export const notLoggedNavbar = (render, div) => {
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-lg-auto"></div>
                     <div class="navbar-nav ms-lg-4">
-                     <a class="nav-link" href="/login" id="login" data-link></a>
+                     <a class="nav-link" href="/login/" id="login" data-link></a>
                     </div>
                     <div class="d-flex align-items-lg-center mt-3 mt-lg-0">
-                        <a class="btn button-primary btn-sm" href="/register" id="register" data-link></a>
+                        <a class="btn button-primary btn-sm" href="/register/" id="register" data-link></a>
                     </div>
                     <div class="checkbox">
                         <input type="checkbox" name="themeSwitcher" id="themeSwitcher"/>

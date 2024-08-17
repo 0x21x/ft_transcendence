@@ -1,23 +1,26 @@
-import { data as enData } from '../../../languages/en/auth.js'
-import { data as frData } from '../../../languages/fr/auth.js'
+import { data as enData } from '../../../languages/en/auth.js';
+import { data as frData } from '../../../languages/fr/auth.js';
+import { loginRequest } from './login.js';
 
-
-const registerRequest = async (username, password) => {
+const registerRequest = async (username, password, render, div) => {
     if (!username || !password) {
         return;
     }
     const user = {
         username: username,
         password: password
-    }
-    await fetch('http://localhost:5002/api/auth/register/', {
-        method: "POST",
+    };
+    const response = await fetch('http://localhost:5002/api/auth/register/', {
+        method: 'POST',
         body: JSON.stringify(user),
         headers: {'Content-Type': 'application/json',}
     });
-}
+    if (response.status === 200) {
+        return await loginRequest(username, password, render, div);
+    }
+};
 
-export const register = async (render, div) => {
+export const register = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
@@ -55,9 +58,9 @@ export const register = async (render, div) => {
     toRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
-        await registerRequest(username, password);
+        await registerRequest(username, password, render, div);
     });
     toOAuthRegisterButton.addEventListener('click', async () => {
         // do AOuth register behavior
     });
-}
+};

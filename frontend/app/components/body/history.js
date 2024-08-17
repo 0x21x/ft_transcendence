@@ -1,21 +1,21 @@
-import { data as enData } from '../../languages/en/history.js'
-import { data as frData } from '../../languages/fr/history.js'
+import { data as enData } from '../../languages/en/history.js';
+import { data as frData } from '../../languages/fr/history.js';
 
 
 const fillTableWithHistory = (table, history) => {
     for (let i = 0; i < history.length; i++) {
-	    let tr = document.createElement('tr');
+	    const tr = document.createElement('tr');
 	    for (let j = 0; j < 4; j++) {
-	    	let td = document.createElement('td');
-            if ((j + 1) % 2 != 0)
-                td.innerHTML = `<a href="/user/${Object.values(history[i])[j]}">${Object.values(history[i])[j]}</a>`
+	    	const td = document.createElement('td');
+            if ((j + 1) % 2 !== 0)
+                td.innerHTML = `<a href="/user/${Object.values(history[i])[j]}" data-link>${Object.values(history[i])[j]}</a>`;
             else
                 td.textContent = Object.values(history[i])[j];
 	    	tr.appendChild(td);
 	    }
 	    table.appendChild(tr);
     }
-}
+};
 
 export const getHistory = async (table, username='') => {
     const response = await fetch(`http://localhost:5002/api/games/history/${username}`, {
@@ -31,7 +31,7 @@ export const getHistory = async (table, username='') => {
     if (!history.length)
         return ;
     fillTableWithHistory(table, history);
-}
+};
 
 export const history =  async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
@@ -70,7 +70,7 @@ export const history =  async (render, div) => {
       </div>
     `);
 
-    let table = document.getElementById("table");
+    const table = document.getElementById('table');
     await getHistory(table);
 
 };

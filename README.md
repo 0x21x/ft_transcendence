@@ -22,11 +22,8 @@ docker-compose down
 ```
 
 ## Pong - How to play
-
-Player 1 (left):
-- [W] -> GO UP
-- [S] -> GO DOWN
-
-Player 2 (right):
-- [ARROW UP] -> GO UP
-- [ARROW DOWN] -> GO DOWN
+- [A] -> GO UP
+- [D] -> GO DOWN
+<details><summary> 💡</summary>
+These commands can be edited at 'frontend/app/components/game.js' line 80.
+</details>

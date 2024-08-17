@@ -1,5 +1,5 @@
-import { data as enData } from '../../../languages/en/otp.js'
-import { data as frData } from '../../../languages/fr/otp.js'
+import { data as enData } from '../../../languages/en/otp.js';
+import { data as frData } from '../../../languages/fr/otp.js';
 
 const registerOTPRequest = async (password) => {
     if (!password)
@@ -16,9 +16,9 @@ const registerOTPRequest = async (password) => {
         return false;
 
     return response.json();
-}
+};
 
-export const registerOTP = async (render, div) => {
+export const registerOTP = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
@@ -51,4 +51,4 @@ export const registerOTP = async (render, div) => {
         registerOTPClass.style.display = 'none';
         document.getElementById('secret_code').innerHTML = `YOUR OTP CODE IS: ${otp.otp_secret}`;
     });
-}
+};

@@ -3,7 +3,7 @@ from .views.user import UsernameView, PasswordView, AvatarView, GetAvatarView, G
 from .views.auth import RegisterView, LoginView, LogoutView, MyTokenRefreshView, VerifyView
 from .views.otp import RegisterOTPView, LogoutOTPView
 from .views.oauth import OAuthLoginView, OAuthRegisterView
-from game.views import GamesHistoryView, GamesHistoryForUserView # noqa: F401
+from game.views import GamesHistoryView, GamesHistoryForUserView, GamesHandlerView # noqa: F401
 
 urlpatterns = [
     path('auth/verify/', VerifyView.as_view()),
@@ -31,4 +31,6 @@ urlpatterns = [
     # Games history
     path('games/history/', GamesHistoryView.as_view()),
     path('games/history/<str:username>', GamesHistoryForUserView.as_view()),
+
+    path('games/', GamesHandlerView.as_view()),
 ]

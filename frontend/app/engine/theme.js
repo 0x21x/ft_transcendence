@@ -3,7 +3,7 @@ export const themeHandler = (body, checked, loading=false) => {
         return ;
     }
 
-    let theme = localStorage.getItem('theme') || 'light';
+    const theme = localStorage.getItem('theme') || 'light';
     if (theme === 'dark' && loading) {
         checked.checked = true;
     }

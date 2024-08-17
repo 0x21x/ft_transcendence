@@ -1,7 +1,7 @@
-import { login } from './auth/login.mjs';
-import { register } from './auth/register.mjs';
-import { data as enData } from '../../languages/en/welcome.js'
-import { data as frData } from '../../languages/fr/welcome.js'
+import { data as enData } from '../../languages/en/welcome.js';
+import { data as frData } from '../../languages/fr/welcome.js';
+import { login } from './auth/login.js';
+import { register } from './auth/register.js';
 
 export const welcome = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';

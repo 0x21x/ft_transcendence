@@ -1,7 +1,7 @@
-import { data as enData } from '../../languages/en/welcome.js'
-import { data as frData } from '../../languages/fr/welcome.js'
+import { data as enData } from '../../languages/en/welcome.js';
+import { data as frData } from '../../languages/fr/welcome.js';
 
-export const home = async (render, div) => {
+export const home = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 

@@ -1,4 +1,4 @@
-import { setPlayersNames } from "./setPlayersNames.mjs";
+import { setPlayersNames } from './setPlayersNames.js';
 
 export const createTournament = (render, div, data, tournament) => {
     render(div, `
@@ -47,10 +47,10 @@ export const createTournament = (render, div, data, tournament) => {
     const form = {
         tournamentPlayers: document.getElementById('tournamentPlayers'),
         tournamentName: document.getElementById('tournamentName'),
-    }
+    };
 
     createTournamentButton.addEventListener('click', () => {
-        if (form.tournamentPlayers.value !== "" && form.tournamentName.value !== "") {
+        if (form.tournamentPlayers.value !== '' && form.tournamentName.value !== '') {
             tournament.setNbPlayers(form.tournamentPlayers.value);
             tournament.setName(form.tournamentName.value);
             // /!\ /!\ /!\ HAVE TO SET TOURNAMENT TO LOCALSTORAGE
@@ -59,5 +59,5 @@ export const createTournament = (render, div, data, tournament) => {
     });
 
 
-    return []
+    return [];
 };

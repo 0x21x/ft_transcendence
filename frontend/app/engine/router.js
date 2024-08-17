@@ -1,46 +1,15 @@
-import { a, routes } from './routes.mjs';
+import { a, routes } from './routes.js';
+import { getPathArgs, isAMatch } from './utils.js';
 import { navbarRender, updateIcon } from './navbar.js';
 import { renderBody, renderHeader } from './render.mjs';
-import { languageHandler } from './language.mjs';
+import { WebSocketHandler} from './websockets.js';
+import { languageHandler } from './language.js';
 import { loggedIn } from './tokens.js';
-import { themeHandler } from './theme.mjs';
+import { themeHandler } from './theme.js';
 
-let ws = new WebSocket('ws://localhost:5002/status/');
+export const websocketsHandler = new WebSocketHandler();
 let logged = await loggedIn();
 const body = document.getElementById('app');
-
-const getAllFolders = (path) => {
-    const folders = path.split('/');
-    return folders.filter(folder => folder !== '');
-};
-
-const getPathArgs = (actualPath, routePath) => {
-    const routeFolders = getAllFolders(routePath);
-    if (routeFolders.length === routeFolders.filter(folder => folder !== '*').length)
-        return [];
-
-    const args = [];
-    const actualFolders = getAllFolders(actualPath);
-    for (let i = 0; routeFolders[i]; i++) {
-        if (routeFolders[i] === '*')
-            args.push(actualFolders[i]);
-    }
-    return args;
-};
-
-const isAMatch = (actualPath, routePath) => {
-    const routeFolders = getAllFolders(routePath);
-    if (routeFolders.length === routeFolders.filter(folder => folder !== '*').length)
-        return actualPath === routePath;
-
-    const actualFolders = getAllFolders(actualPath);
-
-    for (let i = 0; routeFolders[i] && actualFolders[i]; i++) {
-        if (routeFolders[i] !== '*' && actualFolders[i] !== routeFolders[i])
-            return false;
-    }
-    return routeFolders.length === actualFolders.length;
-};
 
 export const router = async (logged) => {
     const potentialMatches = routes.map(route => ({
@@ -51,17 +20,18 @@ export const router = async (logged) => {
 
     let isMatch = (potentialMatch) => potentialMatch.isMatch;
     if (potentialMatches.find(isMatch) === undefined) {
-        isMatch = (potentialMatch) => potentialMatch.route.path === '/error/404';
+        isMatch = (potentialMatch) => potentialMatch.route.path === '/error/404/';
     }
     if (!logged && potentialMatches.find(isMatch).route.authorization === a.Logged) {
-        isMatch = (potentialMatch) => potentialMatch.route.path === '/welcome';
-        history.replaceState({urlPath: '/welcome'}, '', '/welcome');
+        isMatch = (potentialMatch) => potentialMatch.route.path === '/welcome/';
+        history.replaceState({urlPath: '/welcome/'}, '', '/welcome/');
     }
     let match = potentialMatches.find(isMatch);
     if (match.route.authorization === a.Unlogged && logged) {
         match = potentialMatches.find(potentialMatch => potentialMatch.route.path === '/');
         history.replaceState({urlPath: '/'}, '', '/');
     }
+    websocketsHandler.check(match);
     await renderHeader();
     await renderBody(body, match);
 };
@@ -78,8 +48,7 @@ document.addEventListener('click', async e => {
         e.preventDefault();
         if (await loggedIn() !== logged) {
             logged = !logged;
-            ws.close();
-            ws = new WebSocket('ws://localhost:5002/status/');
+            websocketsHandler.openWs('status', true);
             await navbarRender(logged);
         }
         if (e.target.href === location.href)

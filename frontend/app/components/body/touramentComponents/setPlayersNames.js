@@ -1,4 +1,4 @@
-import { tournament as tournamentFunc } from "./../tournament.mjs"
+import { tournament as tournamentFunc } from '../tournament.js';
 
 export const setPlayersNames = (render, div, data, tournament) => {
     render(div, `
@@ -31,11 +31,11 @@ export const setPlayersNames = (render, div, data, tournament) => {
         </div>
     `);
 
-    let formPlayers = document.getElementById('formPlayers');
+    const formPlayers = document.getElementById('formPlayers');
     for (let i = 0; i < tournament.nbPlayers - (tournament.players) ? tournament.players.length : 0; i++) {
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.classList.add('mb-3');
-        let input = document.createElement("input");
+        const input = document.createElement('input');
         input.classList.add('form-control');
         input.classList.add('players');
         input.setAttribute('type', 'text');
@@ -47,21 +47,20 @@ export const setPlayersNames = (render, div, data, tournament) => {
     const setPlayersNamesButton = document.getElementById('setPlayersNamesButton');
     setPlayersNamesButton.addEventListener('click', () => {
         document.querySelectorAll('.players').forEach(player => {
-            if (player.value !== "") {
+            if (player.value !== '') {
                 // /!\ CHECK IF NO IN PLAYERS LIST
                 // tournament.players.set(player.value, 0);
                 tournament.addPlayer(player.value);
             }
-        })
+        });
         if ((tournament.players) ? tournament.players.length : 0 !== parseInt(tournament.nbPlayers)) {
             setPlayersNames(render, div, data, tournament);
         } else {
             tournament.calculateGames();
             localStorage.setItem('tournament', JSON.stringify(tournament.toJson()));
-            console.log(tournament.toJson());
             tournamentFunc(render,  div).then();
         }
     });
-}
+};
 
 

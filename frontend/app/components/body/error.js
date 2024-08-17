@@ -1,4 +1,4 @@
-export const error = async (render, div, errorCode) => {
+export const error = (render, div, errorCode) => {
     render(div, `
         <style>
             .container-fluid {

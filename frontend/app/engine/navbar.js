@@ -1,5 +1,5 @@
-import { loggedNavbar }  from '../../components/header/logged.mjs';
-import { notLoggedNavbar } from '../../components/header/notLogged.mjs';
+import { loggedNavbar }  from '../components/header/logged.js';
+import { notLoggedNavbar } from '../components/header/notLogged.js';
 import { render } from './render.mjs';
 
 export const updateIcon = () => {

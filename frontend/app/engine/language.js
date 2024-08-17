@@ -1,14 +1,14 @@
 const languages = {
     'en': 0,
     'fr': 1,
-}
+};
 
 export const languageHandler = (event, loading=false) => {
     if (!event) {
         return ;
     }
 
-    let setLanguage = localStorage.getItem('language') || 'en';
+    const setLanguage = localStorage.getItem('language') || 'en';
     const actualLanguage = event.options[event.selectedIndex].getAttribute('id');
     if (setLanguage !== actualLanguage && loading) {
         switch (setLanguage) {
@@ -28,6 +28,6 @@ export const languageHandler = (event, loading=false) => {
         case 'en':
             event.selectedIndex = languages.en;
             localStorage.setItem('language', actualLanguage);
-            return;
+            
     }
 };

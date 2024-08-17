@@ -18,6 +18,7 @@ class Pong:
             'dx': choice([-1, 1]),
             'dy': choice([-1, 1])
         }
+        self.players = {}
         self.player1 = {
             'x': 0,
             'y': GAME_SIZE[1] / 2,
@@ -83,7 +84,7 @@ class Pong:
         dict = {}
         dict['ball'] = self.ball
         for i, player in enumerate([self.player1, self.player2], start=1):
-            dict[f'player{i}'] = player
+            dict['player%d' % i] = player
         dict['game_state'] = self.game_state
         return dict
 

@@ -1,12 +1,12 @@
-import { data as enData } from '../../../languages/en/otp.js'
-import { data as frData } from '../../../languages/fr/otp.js'
+import { data as enData } from '../../../languages/en/otp.js';
+import { data as frData } from '../../../languages/fr/otp.js';
 
 const loginOTPRequest = async (otp, username, password) => {
     if (!otp)
         return false;
     const response = await fetch('http://localhost:5002/api/auth/login/', {
-        method: "POST",
-        credentials: "include",
+        method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -15,7 +15,7 @@ const loginOTPRequest = async (otp, username, password) => {
     return response.status === 200;
 };
 
-export const loginOTP = async (render, div, username, password) => {
+export const loginOTP = (render, div, username, password) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
@@ -43,4 +43,4 @@ export const loginOTP = async (render, div, username, password) => {
             return await loginOTP(render, div, username, password);
         window.location.href = '/';
     });
-}
+};

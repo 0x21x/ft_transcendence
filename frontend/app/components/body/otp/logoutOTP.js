@@ -1,6 +1,6 @@
-import { registerOTP } from './registerOTP.mjs';
-import { data as enData } from '../../../languages/en/otp.js'
-import { data as frData } from '../../../languages/fr/otp.js'
+import { data as enData } from '../../../languages/en/otp.js';
+import { data as frData } from '../../../languages/fr/otp.js';
+import { registerOTP } from './registerOTP.js';
 
 const logoutOTPRequest = async (password) => {
     if (!password)
@@ -14,9 +14,9 @@ const logoutOTPRequest = async (password) => {
         body: JSON.stringify({password: password}),
     });
     return response.status === 200;
-}
+};
 
-export const logoutOTP = async (render, div) => {
+export const logoutOTP = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
@@ -44,4 +44,4 @@ export const logoutOTP = async (render, div) => {
             return ;
         return await registerOTP(render, div);
     });
-}
+};

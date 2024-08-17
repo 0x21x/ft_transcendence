@@ -64,9 +64,9 @@ export const loggedNavbar = async (render, div) => {
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav mx-lg-auto">
                         <a class="nav-link nav-item active" href="/" id="home" data-link></a>
-                        <a class="nav-link nav-item" href="/game" id="game" data-link></a>
-                        <a class="nav-link nav-item" href="/history" id="history" data-link></a>
-                        <a class="nav-link nav-item" href="/tournament" id="tournament" data-link></a>
+                        <a class="nav-link nav-item" href="/games/" id="game" data-link></a>
+                        <a class="nav-link nav-item" href="/history/" id="history" data-link></a>
+                        <a class="nav-link nav-item" href="/tournament/" id="tournament" data-link></a>
                     </div>
                     <div class="checkbox">
                         <input type="checkbox" name="themeSwitcher" id="themeSwitcher"/>
@@ -80,7 +80,7 @@ export const loggedNavbar = async (render, div) => {
                             <option id="fr">🇫🇷</option>
                         </select>
                     </div>
-                    <a class="nav-link nav-item" href="/profile" data-link>
+                    <a class="nav-link nav-item" href="/profile/" data-link>
                         <img src="${avatar_url}" alt="Avatar" class="avatar rounded-circle" width="40px" height="40px">
                     </a>
                 </div>

@@ -1,9 +1,9 @@
-import { loginOTP } from '../otp/loginOTP.mjs'
-import { data as enData } from '../../../languages/en/auth.js'
-import { data as frData } from '../../../languages/fr/auth.js'
+import { data as enData } from '../../../languages/en/auth.js';
+import { data as frData } from '../../../languages/fr/auth.js';
+import { loginOTP } from '../otp/loginOTP.js';
 
 
-const loginRequest = async (username, password, render, div) => {
+export const loginRequest = async (username, password, render, div) => {
     if (!username || !password) {
         return;
     }
@@ -20,9 +20,9 @@ const loginRequest = async (username, password, render, div) => {
     if (response.status !== 200)
         return ;
     window.location.href = '/';
-}
+};
 
-export const login = async (render, div) => {
+export const login = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
@@ -61,4 +61,4 @@ export const login = async (render, div) => {
     toOAuthLoginButton.addEventListener('click', async () => {
         // do AOuth login behavior
     });
-}
+};
