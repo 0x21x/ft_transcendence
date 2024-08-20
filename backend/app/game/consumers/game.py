@@ -1,19 +1,11 @@
 import asyncio
-from typing import Callable, Optional, Any
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
 from users.models import Users # noqa: F401
-from .multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
-from .models import Game
-from .pong import FPS_SERVER
-
-def is_authenticated(func: Callable) -> Callable:
-    def wrapper(*args: Optional[Any], **kwargs: Optional[Any]) -> object:  # noqa: ANN401
-        if args[0].scope['user'] and not args[0].scope['user'].is_authenticated:
-            return args[0].close()
-        return func(*args, **kwargs)
-
-    return wrapper
+from game.multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
+from game.models import Game
+from game.pong import FPS_SERVER
+from .utils import is_authenticated
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
     groups = []
@@ -96,23 +88,3 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     def add_room_to_groups(cls: type, room_group_name: str) -> None:
         if not room_group_name in cls.groups:
             cls.groups.append(room_group_name)
-
-
-class GameHandlerConsumer(AsyncJsonWebsocketConsumer):
-
-    @is_authenticated
-    async def connect(self: AsyncJsonWebsocketConsumer) -> None:
-        await self.accept()
-        asyncio.create_task(self.stream_games_infos())
-
-    async def stream_games_infos(self: AsyncJsonWebsocketConsumer) -> None:
-        games = []
-        while True:
-            new_games = await GameConsumer.get_games()
-            if games != new_games:
-                games = new_games
-                await self.send_json({'games': games or []})
-            await asyncio.sleep(0.5)
-
-    async def disconnect(self: AsyncJsonWebsocketConsumer, code: object) -> object:
-        return await self.close()

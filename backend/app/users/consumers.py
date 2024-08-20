@@ -1,6 +1,6 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from game.consumers import is_authenticated
+from game.consumers.utils import is_authenticated
 
 class StatusConsumer(AsyncWebsocketConsumer):
 

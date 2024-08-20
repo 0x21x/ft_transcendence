@@ -29,7 +29,16 @@ export const getPathArgs = (actualPath, routePath) => {
     return args;
 };
 
+const addSlash = (path) => {
+    if (path.length < 1)
+        return path;
+    if (path[path.length - 1] !== '/')
+        return path + '/';
+    return path;
+};
+
 export const isAMatch = (actualPath, routePath) => {
+    actualPath = addSlash(actualPath);
     const routeFolders = getAllFolders(routePath);
     if (routeFolders.length === routeFolders.filter(folder => folder === '*').length)
         return true;

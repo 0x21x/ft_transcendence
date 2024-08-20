@@ -34,10 +34,13 @@ class MultiplayerPong:
         self.games[game_name].players[player_name] = 'player%d' % (len(self.games[game_name].players) + 1)
 
     def move_paddle(self: Any, game_name: str, player_name: str, direction: str) -> None:
-        if not player_name in self.games[game_name].players:
+        try:
+            if not player_name in self.games[game_name].players:
+                return
+            direction = PLAYER1_KEY[direction] if self.games[game_name].players[player_name] == 'player1' else PLAYER2_KEY[direction]
+            self.games[game_name].move_paddle(self.games[game_name].players[player_name], direction)
+        except KeyError:
             return
-        direction = PLAYER1_KEY[direction] if self.games[game_name].players[player_name] == 'player1' else PLAYER2_KEY[direction]
-        self.games[game_name].move_paddle(self.games[game_name].players[player_name], direction)
 
     def remove_player(self: Any, game_name: str, player_name: str) -> None:
         if not player_name in self.games[game_name].players:

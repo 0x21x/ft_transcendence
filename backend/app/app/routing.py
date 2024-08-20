@@ -1,5 +1,7 @@
 from django.urls import path
-from game.consumers import GameConsumer, GameHandlerConsumer # noqa: F401
+from game.consumers.game import GameConsumer # noqa: F401
+from game.consumers.game_handler import GameHandlerConsumer # noqa: F401
+
 from users.consumers import StatusConsumer # noqa: F401
 
 websocket_urlpatterns = [
