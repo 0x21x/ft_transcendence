@@ -83,7 +83,7 @@ export const profile = async (render, div) => {
             }
         </style>
         <div class="container profileContainer">
-            <img src="${avatar_url}" alt="img" class="avatar rounded-circle" width="50px" height="50px">
+            <img src="${avatar_url}" alt="avatar" class="avatar rounded-circle" width="50px" height="50px">
             <h2 id="username">${userInfo.username}</h2>
             <div class="row row-cols-2">
                 <div class="col">

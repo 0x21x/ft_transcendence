@@ -39,8 +39,8 @@ export const router = async (logged) => {
 
 window.addEventListener('popstate', async () => {
     logged = await loggedIn();
-    await router(logged);
     await navbarRender(logged);
+    await router(logged);
 });
 
 document.addEventListener('click', async e => {

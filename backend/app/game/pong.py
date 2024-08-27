@@ -7,8 +7,11 @@ PADDLE_SIZE = [10, 50]
 BALL_SIZE = 10
 MAX_SCORE = 3
 MAX_PLAYERS = 2
-FPS_SERVER = 160
-FPS_SERVER = (1000 / FPS_SERVER / 1000) if FPS_SERVER > 0 else 0.1
+FPS_SERVER = 60
+FPS_SERVER_MILLISECONDS = (1000 / FPS_SERVER / 1000) if FPS_SERVER > 0 else 0.1
+BOT_FPS = 1
+
+from .bot import ask_next_moves
 
 class Pong:
     def __init__(self: Any) -> None:
@@ -19,6 +22,7 @@ class Pong:
             'dy': choice([-1, 1])
         }
         self.players = {}
+        self.ago_bot = False
         self.player1 = {
             'x': 0,
             'y': GAME_SIZE[1] / 2,
@@ -41,6 +45,7 @@ class Pong:
             'dx': choice([-1, 1]),
             'dy': choice([-1, 1])
         }
+        self.ago_bot = self.ago_bot
         self.player1 = {
             'x': 0,
             'y': GAME_SIZE[1] / 2,
@@ -51,6 +56,24 @@ class Pong:
             'y': GAME_SIZE[1] / 2,
             'score': self.player2['score']
         }
+
+    def play_game(self: Any) -> None:
+        self.move_ball()
+        if self.ago_bot:
+            try:
+                self.move_paddle(self.players['bot'], next(self.bot_moves))
+            except StopIteration:
+                self.bot_moves = ask_next_moves(self.ball, int(FPS_SERVER / BOT_FPS), self.player2['y'])
+
+    def start_game(self: Any) -> None:
+        if 'bot' in self.players:
+            self.bot_moves = ask_next_moves(self.ball, int(FPS_SERVER / BOT_FPS), self.player2['y'])
+            self.ago_bot = True
+
+    def add_bot(self: Any) -> None:
+        if len(self.players) == MAX_PLAYERS:
+            return
+        self.players['bot'] = 'player%d' % (len(self.players) + 1)
 
     def move_paddle(self: Any, player: str, direction: str) -> None:
         if direction == 'up':
@@ -75,10 +98,6 @@ class Pong:
             self.ball['dx'] *= -1
         if self.ball['x'] >= GAME_SIZE[0] - PADDLE_SIZE[0] and self.player2['y'] <= self.ball['y'] <= self.player2['y'] + PADDLE_SIZE[1]:
             self.ball['dx'] *= -1
-
-    def play_game(self: Any) -> None:
-        if self.game_state == GAME_STATES[1]:
-            self.move_ball()
 
     def __dict__(self: Any) -> dict:
         dict = {}

@@ -32,6 +32,9 @@ class MultiplayerPong:
         if len(self.games[game_name].players) == MAX_PLAYERS or player_name in self.games[game_name].players:
             return
         self.games[game_name].players[player_name] = 'player%d' % (len(self.games[game_name].players) + 1)
+        BOT = True
+        if BOT:
+            self.games[game_name].add_bot()
 
     def move_paddle(self: Any, game_name: str, player_name: str, direction: str) -> None:
         try:
@@ -56,6 +59,7 @@ class MultiplayerPong:
             self.games[game_name].reset_game()
         self.update_game_status(game_name, GAME_STATES[1])
         self.games[game_name].game_state = GAME_STATES[1]
+        self.games[game_name].start_game()
 
     def play_game(self: Any, game_name: str) -> None:
         self.games[game_name].play_game()
