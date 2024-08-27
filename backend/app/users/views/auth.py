@@ -55,12 +55,14 @@ class LoginView(APIView):
         response.set_cookie('access',
                             tokens['access'],
                             max_age=api_settings.ACCESS_TOKEN_LIFETIME.total_seconds() if api_settings.ACCESS_TOKEN_LIFETIME else None,
-                            # secure=False, // Have to uncomment this line when using HTTPS
+                            samesite='Lax',
+                            secure=True,
                             httponly=True)
         response.set_cookie('refresh',
                             tokens['refresh'],
                             max_age=api_settings.REFRESH_TOKEN_LIFETIME.total_seconds() if api_settings.REFRESH_TOKEN_LIFETIME else None,
-                            # secure=False, // Have to uncomment this line when using HTTPS
+                            samesite='Lax',
+                            secure=True,
                             httponly=True)
         return response
 

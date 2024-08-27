@@ -5,7 +5,7 @@ import { registerOTP } from './registerOTP.js';
 const logoutOTPRequest = async (password) => {
     if (!password)
         return false;
-    const response = await fetch('http://localhost:5002/api/otp/logout/', {
+    const response = await fetch('/api/otp/logout/', {
         method: 'POST',
         credentials: 'include',
         headers: {

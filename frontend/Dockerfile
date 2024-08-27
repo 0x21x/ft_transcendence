@@ -1,26 +1,7 @@
-FROM node:22-alpine3.20 as build
+FROM nginx:1.21.3-alpine
 
-RUN mkdir -p /node
-WORKDIR /node
+ADD nginx.conf /etc/nginx/nginx.conf.template
+ADD app /usr/share/nginx/html
+ADD certs /etc/nginx/ssl
 
-ADD package.json /node/package.json
-RUN npm install
-
-
-FROM node:22-alpine3.20 as runtime
-
-RUN apk add --no-cache curl
-
-# Create app directory
-RUN mkdir -p /app
-ADD app /app
-WORKDIR /app
-
-COPY --from=build /node/. /app/.
-
-# UnRoot User
-RUN addgroup -S app && adduser -S app -G app
-RUN chown -R app:app /app
-USER app
-
-ENTRYPOINT ["npm", "run", "dev"]
+CMD ["/bin/sh" , "-c" , "envsubst '${API_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]

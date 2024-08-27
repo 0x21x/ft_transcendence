@@ -25,15 +25,13 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "0.0.0.0",
-    '10.13.4.1',
-    '10.13.4.2'
-
+    'localhost',
+    '0.0.0.0'
 ]
+# ahead add also the address IP of the machine else the server will not be able to connect for other network devices
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "https://localhost",
 ]
 
 CORS_ALLOW_HEADERS = [

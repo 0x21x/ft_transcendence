@@ -133,6 +133,4 @@ export const game = (render, div) => {
         if (game_data.pong)
             renderPong(ctx, canvas, game_data.pong.player1, game_data.pong.player2, game_data.pong.ball);
     };
-
-
 };

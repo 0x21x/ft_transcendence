@@ -69,7 +69,7 @@ export const gameHandler = (render, div) => {
         };
     });
     createGameButton.addEventListener('click', async () => {
-        await fetch('http://localhost:5002/api/games/', {
+        await fetch('/api/games/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,5 +1,5 @@
 const getAvatarUrl = async () => {
-    let avatar = await fetch('http://localhost:5002/api/avatars/', {
+    let avatar = await fetch('/api/avatars/', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -7,7 +7,7 @@ const getAvatarUrl = async () => {
         },
     });
     avatar = await avatar.json();
-    return 'http://localhost:5002/api/' + avatar.avatar_url;
+    return '/api/' + avatar.avatar_url;
 };
 
 export const loggedNavbar = async (render, div) => {

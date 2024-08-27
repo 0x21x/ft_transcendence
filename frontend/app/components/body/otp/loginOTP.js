@@ -4,7 +4,7 @@ import { data as frData } from '../../../languages/fr/otp.js';
 const loginOTPRequest = async (otp, username, password) => {
     if (!otp)
         return false;
-    const response = await fetch('http://localhost:5002/api/auth/login/', {
+    const response = await fetch('/api/auth/login/', {
         method: 'POST',
         credentials: 'include',
         headers: {

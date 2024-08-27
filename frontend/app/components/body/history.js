@@ -18,7 +18,7 @@ const fillTableWithHistory = (table, history) => {
 };
 
 export const getHistory = async (table, username='') => {
-    const response = await fetch(`http://localhost:5002/api/games/history/${username}`, {
+    const response = await fetch(`/api/games/history/${username}`, {
         method: 'GET',
         credentials: 'include',
         headers: {

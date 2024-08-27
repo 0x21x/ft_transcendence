@@ -1,7 +1,7 @@
 import { a, routes } from './routes.js';
 import { getPathArgs, isAMatch } from './utils.js';
 import { navbarRender, updateIcon } from './navbar.js';
-import { renderBody, renderHeader } from './render.mjs';
+import { renderBody, renderHeader } from './render.js';
 import { WebSocketHandler} from './websockets.js';
 import { languageHandler } from './language.js';
 import { loggedIn } from './tokens.js';
@@ -39,8 +39,8 @@ export const router = async (logged) => {
 
 window.addEventListener('popstate', async () => {
     logged = await loggedIn();
-    await router(logged);
     await navbarRender(logged);
+    await router(logged);
 });
 
 document.addEventListener('click', async e => {

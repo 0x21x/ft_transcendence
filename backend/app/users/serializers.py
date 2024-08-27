@@ -19,6 +19,13 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    def update(self, instance: Users, validated_data: dict) -> Users:   # noqa: ANN101
+        instance.username = validated_data.get('username', instance.username)
+        instance.set_password(validated_data.get('password', instance.password))
+        instance.save()
+        return instance
+
+
 class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     """
     Inherit from `TokenRefreshSerializer` and touch the database

@@ -1,5 +1,5 @@
 const refresh = async () => {
-    const response = await fetch('http://localhost:5002/api/auth/login/refresh/', {
+    const response = await fetch('/api/auth/login/refresh/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -11,7 +11,7 @@ const refresh = async () => {
 
 
 export const loggedIn = async () => {
-    const response = await fetch('http://localhost:5002/api/auth/verify/', {
+    const response = await fetch('/api/auth/verify/', {
         method: 'GET',
         credentials: 'include',
         headers: {

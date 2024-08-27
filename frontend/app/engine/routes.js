@@ -6,7 +6,7 @@ import { home } from '../components/body/home.js';
 import { login } from '../components/body/auth/login.js';
 import { profile } from '../components/body/profile.js';
 import { register } from '../components/body/auth/register.js';
-import { render } from './render.mjs';
+import { render } from './render.js';
 import { tournament } from '../components/body/tournament.js';
 import { user } from '../components/body/user.js';
 import { welcome } from '../components/body/welcome.js';
@@ -18,8 +18,8 @@ export const a = Object.freeze({
     'Admin': 4
 });
 
-const port = 5002;
-export const address = `ws://localhost:${port}`;
+
+export const address = 'wss://localhost/ws';
 
 export const routes = [
     { path: '/', view: (app, args) => home(render, app, args), authorization: a.Logged, name: 'home'},

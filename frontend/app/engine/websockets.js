@@ -20,20 +20,6 @@ export class WebSocketHandler {
 
         const websocket = new WebSocket(wsPath);
         this.ws.set(wsRoute.name, websocket);
-        // return new Promise((resolve, reject) => {
-        //     websocket.onopen = () => {
-        //
-        //         resolve(websocket);
-        //     };
-        //
-        //     websocket.onerror = (error) => {
-        //         reject(error);
-        //     };
-        //
-        //     websocket.onclose = () => {
-        //         this.ws.delete(wsRoute.name);
-        //     };
-        // });
     }
 
     getWs(wsName) {

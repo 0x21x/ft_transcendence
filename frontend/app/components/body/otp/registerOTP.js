@@ -4,7 +4,7 @@ import { data as frData } from '../../../languages/fr/otp.js';
 const registerOTPRequest = async (password) => {
     if (!password)
         return false;
-    const response = await fetch('http://localhost:5002/api/otp/register/', {
+    const response = await fetch('/api/otp/register/', {
         method: 'POST',
         credentials: 'include',
         headers: {

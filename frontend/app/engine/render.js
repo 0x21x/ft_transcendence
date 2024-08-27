@@ -1,6 +1,6 @@
+import { data as enData } from '../languages/en/navbar.js';
+import { data as frData } from '../languages/fr/navbar.js';
 import { routes } from './routes.js';
-import { data as enData } from '../languages/en/navbar.js'
-import { data as frData } from '../languages/fr/navbar.js'
 
 export const render = (div, html, append=false) => {
     if (append){
@@ -10,17 +10,17 @@ export const render = (div, html, append=false) => {
     div.innerHTML = html;
 };
 
-export const renderHeader = async () => {
+export const renderHeader = () => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
-    for (let route of routes) {
+    for (const route of routes) {
         const page = document.getElementById(route.name);
         if (page) { page.innerHTML = data[route.name]; }
     }
 };
 
-export const renderBody = async (div, match) => {
+export const renderBody = (div, match) => {
     if (!match) {
         const unknown = `
             <div class="container d-flex  
@@ -33,6 +33,6 @@ export const renderBody = async (div, match) => {
         render(div, unknown);
         return ;
     }
-    match.route.view(div, match.args)
+    match.route.view(div, match.args);
 };
 

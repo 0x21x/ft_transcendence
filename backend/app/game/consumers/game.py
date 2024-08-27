@@ -15,7 +15,9 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self: AsyncJsonWebsocketConsumer) -> None:
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
         self.room_group_name = "game_%s" % self.room_name
-        if not await self.get_game(self.room_name):
+        try:
+            await self.get_game(self.room_name)
+        except GameNotFound:
             return await self.close()
         self.channel_layer.group_add(self.room_group_name, self.channel_name)
         self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
@@ -69,10 +71,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             if self.multiplayer_pong.get_game_status(self.room_name) == GAME_STATES[1]:
                 self.multiplayer_pong.set_game_status(self.room_name, GAME_STATES[2])
                 await self.multiplayer_pong.save_scores(self.room_name)
-                self.channel_layer.group_send(self.room_group_name, {
-                    'type': 'game_state',
-                    'finished': True,
-                })
+                await self.close_all_connections()
             self.channel_layer.group_discard(self.room_group_name, self.channel_name)
             self.multiplayer_pong.remove_player(self.room_name, self.scope['user'].username)
         except GameNotFound:

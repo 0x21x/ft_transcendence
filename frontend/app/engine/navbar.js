@@ -1,6 +1,6 @@
 import { loggedNavbar }  from '../components/header/logged.js';
 import { notLoggedNavbar } from '../components/header/notLogged.js';
-import { render } from './render.mjs';
+import { render } from './render.js';
 
 export const updateIcon = () => {
     const icon = document.getElementById('themeIcon');

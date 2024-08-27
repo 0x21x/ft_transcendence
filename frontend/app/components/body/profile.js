@@ -4,13 +4,12 @@ import { getUserInfo } from './user.js';
 import { logoutOTP } from './otp/logoutOTP.js';
 import { registerOTP } from './otp/registerOTP.js';
 
-
 const uploadAvatar = async (avatar) => {
     if (!avatar)
         return false;
     const formData = new FormData();
     formData.append('avatar', avatar);
-    const response = await fetch('http://localhost:5002/api/avatars/', {
+    const response = await fetch('/api/avatars/', {
         method: 'PUT',
         credentials: 'include',
         body: formData,
@@ -19,7 +18,7 @@ const uploadAvatar = async (avatar) => {
 };
 
 const setUsername = async (username) => {
-    await fetch('http://localhost:5002/api/usernames/', {
+    const response = await fetch('/api/usernames/', {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -27,10 +26,11 @@ const setUsername = async (username) => {
         },
         body: JSON.stringify({username: username}),
     });
+    return response.status === 200;
 };
 
 const setPassword = async (oldPass, newPass) => {
-    await fetch('http://localhost:5002/api/passwords/', {
+    const response = await fetch('/api/passwords/', {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -38,10 +38,11 @@ const setPassword = async (oldPass, newPass) => {
         },
         body: JSON.stringify({old_password: oldPass, new_password: newPass}),
     });
+    return response.status === 200;
 };
 
 const getUsername = async () => {
-    let username = await fetch('http://localhost:5002/api/usernames/', {
+    let username = await fetch('/api/usernames/', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -53,7 +54,7 @@ const getUsername = async () => {
 };
 
 const logout = async () => {
-    const response = await fetch('http://localhost:5002/api/auth/logout/', {
+    const response = await fetch('/api/auth/logout/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -69,7 +70,7 @@ export const profile = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
     const userInfo = await getUserInfo([await getUsername()]);
-    const avatar_url = 'http://localhost:5002/api' + userInfo.avatar;
+    const avatar_url = '/api' + userInfo.avatar;
 
     render(div, `
         <style>
@@ -120,7 +121,8 @@ export const profile = async (render, div) => {
     const setNewUsernameButton = document.getElementById('setNewUsernameButton');
     setNewUsernameButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
-        await setUsername(username);
+        if (await setUsername(username))
+            window.location.reload();
     });
 
     const logoutButton = document.getElementById('logoutButton');

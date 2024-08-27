@@ -4,22 +4,22 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    ports:
+      - ${HTTP_PORT}:80
+      - ${HTTPS_PORT}:443
+    environment:
+      - API_PORT=${API_PORT}
     develop:
       watch:
         - action: sync
           path: ./frontend/app
-          target: /app
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: /frontend/package.json
-    ports:
-      - ${FRONT_PORT}:${FRONT_PORT}
-    environment:
-      - PORT=${FRONT_PORT}
+          target: /usr/share/nginx/html
+        - action: sync+restart
+          path: ./frontend/nginx.conf
+          target: /etc/nginx/nginx.conf.template
     depends_on:
-      backend:
-        condition: service_healthy
+        backend:
+            condition: service_healthy
 
   backend:
     image: backend
@@ -38,8 +38,6 @@ services:
           path: /backend/app/requirements.txt
     ports:
       - ${API_PORT}:${API_PORT}
-    expose:
-      - ${API_PORT}
     environment:
       - PORT=${API_PORT}
       - SECRET_KEY=${SECRET_KEY}
@@ -50,7 +48,7 @@ services:
       - DB_PORT=${DB_PORT}
       - REDIS_PORT=${REDIS_PORT}
     healthcheck:
-        test: curl --fail http://localhost:5002/health/ || exit 1
+        test: curl --fail http://localhost:${API_PORT}/health/ || exit 1
         interval: 15s
         timeout: 10s
         retries: 3

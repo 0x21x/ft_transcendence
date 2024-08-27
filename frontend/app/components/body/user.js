@@ -6,7 +6,7 @@ import { getHistory } from './history.js';
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
         throw new Error('Invalid number of arguments');
-    const response = await fetch(`http://localhost:5002/api/users/${args[0]}/`, {
+    const response = await fetch(`/api/users/${args[0]}/`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -24,7 +24,7 @@ export const user = async (render, div, args) => {
     const userInfo = await getUserInfo(args);
     if (userInfo === null)
         return error(render, div, 'User not found');
-    const avatar_url = 'http://localhost:5002/api' + userInfo.avatar;
+    const avatar_url = '/api' + userInfo.avatar;
 
     render(div, `
         <style>

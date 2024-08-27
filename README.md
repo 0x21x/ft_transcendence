@@ -7,6 +7,13 @@ git clone git@github.com:0x21x/ft_transcendence.git
 
 ### Run
 
+#### Generate required certificates
+```zsh
+mkdir -m ./frontend/certs
+
+openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./frontend/certs/privateKey.key -out ./frontend/certs/certificate.crt
+```
+
 ### # Development
 ```zsh
 docker-compose --file docker-compose-dev.yml up --build --watch
