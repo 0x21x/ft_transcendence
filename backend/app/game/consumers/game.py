@@ -4,7 +4,7 @@ from channels.db import database_sync_to_async
 from users.models import Users # noqa: F401
 from game.multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
 from game.models import Game
-from game.pong import FPS_SERVER
+from game.pong import FPS_SERVER_MILLISECONDS
 from .utils import is_authenticated
 
 class GameConsumer(AsyncJsonWebsocketConsumer):
@@ -44,7 +44,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 if self.multiplayer_pong.get_game_status(self.room_name) == GAME_STATES[2]:
                     await self.multiplayer_pong.save_scores(self.room_name, delete_after_save=True)
                     return await self.close_all_connections()
-                await asyncio.sleep(FPS_SERVER)
+                await asyncio.sleep(FPS_SERVER_MILLISECONDS)
         except GameNotFound:
             return await self.close_all_connections()
 

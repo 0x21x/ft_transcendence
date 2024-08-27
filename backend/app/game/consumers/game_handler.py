@@ -1,6 +1,5 @@
 import asyncio
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from users.models import Users # noqa: F401
 from .game import GameConsumer
 from .utils import is_authenticated
 

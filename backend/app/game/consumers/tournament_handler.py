@@ -1,6 +1,4 @@
-import asyncio
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from users.models import Users # noqa: F401
 from .utils import is_authenticated
 
 
@@ -13,5 +11,5 @@ class TournamentHandlerConsumer(AsyncJsonWebsocketConsumer):
     async def stream_tournament_infos(self: AsyncJsonWebsocketConsumer) -> None:
         raise NotImplementedError
 
-    async def disconnect(self: AsyncJsonWebsocketConsumer, code: object) -> object:
+    async def disconnect(self: AsyncJsonWebsocketConsumer, code: object) -> None:
         return await self.close()
