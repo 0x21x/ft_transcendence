@@ -9,7 +9,7 @@ git clone git@github.com:0x21x/ft_transcendence.git
 
 #### Generate required certificates
 ```zsh
-mkdir -m ./frontend/certs
+mkdir -p frontend/certs
 
 openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout ./frontend/certs/privateKey.key -out ./frontend/certs/certificate.crt
 ```
