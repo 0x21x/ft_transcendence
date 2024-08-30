@@ -35,14 +35,16 @@ export const register = (render, div) => {
             }
         </style>
             <div class="row registerForm">
-                <div class="mb-3">
-                    <label for="username" class="form-label">${data.username}</label>
-                    <input type="text" class="form-control" id="usernameValue">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">${data.password}</label>
-                    <input type="password" class="form-control" id="passwordValue">
-                </div>
+                <form>
+                    <div class="mb-3">
+                        <label for="usernameValue" class="form-label">${data.username}</label>
+                        <input type="text" class="form-control" id="usernameValue">
+                    </div>
+                    <div class="mb-3">
+                        <label for="passwordValue" class="form-label">${data.password}</label>
+                        <input type="password" class="form-control" id="passwordValue">
+                    </div>
+                </form>
                 <div class="col text-center">
                     <button type="button" class="btn button w-100" id="toRegisterButton">${data.register}</button>
                 </div>

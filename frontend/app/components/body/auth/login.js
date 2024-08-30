@@ -10,10 +10,11 @@ export const loginRequest = async (username, password, render, div) => {
     const response = await fetch('/api/auth/login/', {
         method: 'POST',
         credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({username, password}),
+        headers: {'Content-Type': 'application/json',},
+        body: JSON.stringify({
+            username: username,
+            password: password
+        })
     });
     if (response.status === 423)
         return await loginOTP(render, div, username, password);
@@ -33,16 +34,19 @@ export const login = (render, div) => {
         }
     </style>
         <div class="row loginForm">
-            <div class="mb-3">
-                <label for="username" class="form-label">${data.username}</label>
-                <input type="text" class="form-control" id="usernameValue">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">${data.password}</label>
-                <input type="password" class="form-control" id="passwordValue">
-            </div>
+            <form>
+                <div class="mb-3">
+                    <label for="usernameValue" class="form-label">${data.username}</label>
+                    <input type="text" class="form-control" id="usernameValue" required>
+                </div>
+                <div class="mb-3">
+                    <label for="passwordValue" class="form-label">${data.password}</label>
+                    <input type="password" class="form-control" id="passwordValue" required>
+                </div>
+            </form>
+            <br>
             <div class="col text-center">
-                <button type="button" class="btn button w-100" id="toLoginButton">${data.login}</button>
+                <input type="submit" class="btn button w-100" id="toLoginButton" value="${data.login}"></input>
             </div>
             <br>
             <div class="col text-center">

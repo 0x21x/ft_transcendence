@@ -25,7 +25,6 @@ export const welcome = async (render, div) => {
             
         </style>
         <div class="container-fluid">
-            
             <div class="row">
                 <div class="col-md-6 text-center">
                     <h1>${data.welcome}</h1>
