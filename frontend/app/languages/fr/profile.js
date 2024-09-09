@@ -14,5 +14,15 @@ export const data = {
     'firstPlayer': 'Premier joueur',
     'secondPlayer': 'Deuxieme joueur',
     'score': 'Score',
-    'lastGames': 'Dernieres parties'
+    'lastGames': 'Dernieres parties',
+    'requestFriend': 'Demander en ami',
+    'enterUsername': 'Entrer le nom d\'utilisateur',
+    'cancelInvitation': 'Annuler l\'invitation',
+    'removeFriend': 'Supprimer l\'ami',
+    'pendingFriends': 'Demandes en attente',
+    'noPendingFriendsYet': 'Pas de demandes en attente pour l\'instant',
+    'requestedFriends': 'Demandes envoyées',
+    'noRequestedFriendsYet': 'Pas de demandes envoyées pour l\'instant',
+    'acceptedFriends': 'Amis',
+    'noAcceptedFriendsYet': 'Pas d\'amis pour l\'instant',
 };

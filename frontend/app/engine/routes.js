@@ -1,4 +1,5 @@
 import { error } from '../components/body/error.js';
+import { friends } from '../components/body/friends.js';
 import { game } from '../components/body/game.js';
 import { gameHandler } from '../components/body/gameHandler.js';
 import { history } from '../components/body/history.js';
@@ -30,6 +31,7 @@ export const routes = [
     { path: '/register/', view: (app, args) => register(render, app, args), authorization: a.Unlogged, name: 'register' },
     { path: '/login/', view: (app, args) => login(render, app, args), authorization: a.Unlogged, name: 'login' },
     { path: '/profile/', view: (app, args) => profile(render, app, args), authorization: a.Logged, name: 'profile' },
+    { path: '/friends/', view: (app, args) => friends(render, app, args), authorization: a.Logged, name: 'friends' },
     { path: '/user/*/', view: (app, args) => user(render, app, args), authorization: a.Logged, name: 'user' },
     { path: '/welcome/', view: (app, args) => welcome(render, app, args), authorization: a.Unlogged, name: 'welcome'},
     { path: '/error/404/', view: (app) => error(render, app, '404'), authorization: a.Everyone, name: 'error'}

@@ -2,6 +2,7 @@ import { data as enData } from '../../languages/en/profile.js';
 import { error } from './error.js';
 import { data as frData } from '../../languages/fr/profile.js';
 import { getHistory } from './history.js';
+import { reload } from '../../engine/utils.js';
 
 export const getUserInfo = async (args) => {
     if (args.length !== 1)
@@ -55,6 +56,7 @@ export const user = async (render, div, args) => {
             <div class="row">
                 <div class="col">
                     <h4 id="status"></h4>
+                    <input type="button" id="requestFriendButton" class="btn button w-100"></input>
                 </div>
             </div>
         </div>
@@ -81,4 +83,41 @@ export const user = async (render, div, args) => {
     }
     const table = document.getElementById('table');
     await getHistory(table, userInfo.username);
+    const requestFriendButton = document.getElementById('requestFriendButton');
+    switch (userInfo.friendship_status) {
+        case null:
+            requestFriendButton.value = data.requestFriend;
+            requestFriendButton.classList.add('invite');
+            break;
+        case 'pending':
+            requestFriendButton.value = data.cancelInvitation;
+            requestFriendButton.classList.add('decline');
+            break;
+        case 'accepted':
+            requestFriendButton.value = data.removeFriend;
+            requestFriendButton.classList.add('decline');
+            break;
+        default:
+    }
+    requestFriendButton.addEventListener('click', async () => {
+        if (requestFriendButton.classList.contains('invite'))
+            await fetch('/api/friendships/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: userInfo.username}),
+            });
+        else if (requestFriendButton.classList.contains('decline'))
+            await fetch('/api/friendships/', {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({username: userInfo.username, action: 'decline'}),
+            });
+        return await reload(true);
+    });
 };

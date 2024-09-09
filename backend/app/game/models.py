@@ -1,6 +1,6 @@
 from typing import Any
 from django.db import models
-from users.models import Users
+from users.models.users import Users
 
 class Score(models.Model):
     score = models.IntegerField()

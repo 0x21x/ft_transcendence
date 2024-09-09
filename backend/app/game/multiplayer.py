@@ -1,6 +1,6 @@
 from typing import Any
 from channels.db import database_sync_to_async
-from users.models import Users # noqa: F401
+from users.models.users import Users # noqa: F401
 from .pong import Pong, GAME_STATES, MAX_PLAYERS
 from .models import Game
 

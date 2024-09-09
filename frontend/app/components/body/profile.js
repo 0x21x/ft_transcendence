@@ -41,7 +41,7 @@ const setPassword = async (oldPass, newPass) => {
     return response.status === 200;
 };
 
-const getUsername = async () => {
+export const getUsername = async () => {
     let username = await fetch('/api/usernames/', {
         method: 'GET',
         credentials: 'include',

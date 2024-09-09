@@ -1,7 +1,8 @@
+from typing import Any
 from django.db import models
 from django.core.files import File
 from django.contrib.auth.models import AbstractBaseUser
-from .managers import UserManager
+from users.managers import UserManager
 
 class Users(AbstractBaseUser):
     username = models.CharField(max_length=16, unique=True)
@@ -16,5 +17,5 @@ class Users(AbstractBaseUser):
 
     objects = UserManager()
 
-    def __str__(self) -> str:   # noqa: ANN101
+    def __str__(self: Any) -> str:
         return str(self.username)

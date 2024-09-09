@@ -1,4 +1,5 @@
 import { loggedIn } from './tokens.js';
+import { navbarRender } from './navbar.js';
 import { router } from './router.js';
 
 export const redirect = async (url) => {
@@ -6,7 +7,11 @@ export const redirect = async (url) => {
     return await router(await loggedIn());
 };
 
-export const reload = async () => await router(await loggedIn());
+export const reload = async (withNavBar=false) => {
+    if (withNavBar)
+        await navbarRender(await loggedIn());
+    await router(await loggedIn());
+};
 
 export const getAllFolders = (path) => {
     if (path.split('/').length - 1 <= 1)

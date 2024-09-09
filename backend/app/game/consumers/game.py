@@ -1,7 +1,7 @@
 import asyncio
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
-from users.models import Users # noqa: F401
+from users.models.users import Users # noqa: F401
 from game.multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
 from game.models import Game
 from game.pong import FPS_SERVER

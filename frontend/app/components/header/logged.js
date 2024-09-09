@@ -1,3 +1,5 @@
+import { getAllFriendRequests } from '../body/friends.js';
+
 const getAvatarUrl = async () => {
     let avatar = await fetch('/api/avatars/', {
         method: 'GET',
@@ -39,6 +41,11 @@ export const loggedNavbar = async (render, div) => {
                 background-color: var(--btn-bg-color);
                 transition: background-color 0.2s;
             }
+            .button-border-none {
+                border: none;
+                color: var(--font-color);
+                background-color: var(--bg-color);
+            }
             .checkbox , .languageSwitcher {
                 margin-left: 5px;
             }
@@ -50,6 +57,9 @@ export const loggedNavbar = async (render, div) => {
             }
             .logoAsText {
                 font-size: 1.5rem;
+            }
+            .friendRequest {
+                display: flex;
             }
             
         </style>
@@ -67,7 +77,8 @@ export const loggedNavbar = async (render, div) => {
                         <a class="nav-link nav-item" href="/games/" id="game" data-link></a>
                         <a class="nav-link nav-item" href="/history/" id="history" data-link></a>
                         <a class="nav-link nav-item" href="/tournament/" id="tournament" data-link></a>
-                    </div>
+                    </div>    
+                    <a class="nav-link nav-item material-symbols-outlined" id="friendsButton" href="/friends/" data-link>group</a>
                     <div class="checkbox">
                         <input type="checkbox" name="themeSwitcher" id="themeSwitcher"/>
                         <label for="themeSwitcher">
@@ -87,4 +98,9 @@ export const loggedNavbar = async (render, div) => {
             </div>
         </nav>
     `);
+
+    const friendsRequests = await getAllFriendRequests('pending');
+    if (friendsRequests && friendsRequests.length > 0) {
+        document.getElementById('friendsButton').innerHTML = 'notifications_unread';
+    }
 };

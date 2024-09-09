@@ -15,4 +15,15 @@ export const data = {
     'secondPlayer': 'Second player',
     'score': 'Score',
     'lastGames': 'Last games',
+    'requestFriend': 'Add friend',
+    'enterUsername': 'Enter username',
+    'cancelInvitation': 'Cancel invitation',
+    'removeFriend': 'Remove friend',
+    'pendingFriends': 'Pending Friends',
+    'noPendingFriendsYet': 'No pending friends yet',
+    'requestedFriends': 'Requested Friends',
+    'noRequestedFriendsYet': 'No requested friends yet',
+    'acceptedFriends': 'Accepted Friends',
+    'noAcceptedFriendsYet': 'No friends yet',
+
 };

@@ -20,7 +20,7 @@ export const renderHeader = () => {
     }
 };
 
-export const renderBody = (div, match) => {
+export const renderBody = async (div, match) => {
     if (!match) {
         const unknown = `
             <div class="container d-flex  
@@ -33,6 +33,7 @@ export const renderBody = (div, match) => {
         render(div, unknown);
         return ;
     }
-    match.route.view(div, match.args);
+
+    await match.route.view(div, match.args);
 };
 

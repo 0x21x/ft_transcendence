@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.settings import api_settings
 from .auth import get_tokens_for_user
-from ..models import Users
-from ..serializers import UserSerializer
+from users.models.users import Users
+from ..serializers import UserSerializer, GetUserInfoSerializer
 
 
 class UsernameView(APIView):
@@ -89,7 +89,7 @@ class GetUserInfoView(APIView):
             instance = Users.objects.get(username=username)
         except Users.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        user = UserSerializer(instance)
+        user = GetUserInfoSerializer(instance, context={'request': request})
         return Response(user.data, status=status.HTTP_200_OK)
 
 class PasswordView(APIView):

@@ -1,5 +1,5 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from users.models import Users # noqa: F401
+from users.models.users import Users # noqa: F401
 from .utils import is_authenticated
 
 
