@@ -92,7 +92,7 @@ export const loggedNavbar = async (render, div) => {
                         </select>
                     </div>
                     <a class="nav-link nav-item" href="/profile/" data-link>
-                        <img src="${avatar_url}" alt="Avatar" class="avatar rounded-circle" width="40px" height="40px">
+                        <img src="${avatar_url}" alt="Avatar" class="avatar rounded-circle" width="40px" height="40px" href="/profile/" data-link>
                     </a>
                 </div>
             </div>

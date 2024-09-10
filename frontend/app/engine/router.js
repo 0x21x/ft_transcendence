@@ -45,6 +45,9 @@ window.addEventListener('popstate', async () => {
 
 document.addEventListener('click', async e => {
     if (e.target.matches('[data-link]')) {
+        if (e.target.tagName === 'IMG') {
+            e.target.href = e.target.parentElement.getAttribute('href');
+        }
         e.preventDefault();
         if (await loggedIn() !== logged) {
             logged = !logged;
