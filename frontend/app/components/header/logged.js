@@ -99,7 +99,7 @@ export const loggedNavbar = async (render, div) => {
         </nav>
     `);
 
-    const friendsRequests = await getAllFriendRequests('pending');
+    const friendsRequests = await getAllFriendRequests('notifications');
     if (friendsRequests && friendsRequests.length > 0) {
         document.getElementById('friendsButton').innerHTML = 'notifications_unread';
     }

@@ -1,8 +1,8 @@
+import { navbarReload, reload} from '../../engine/utils.js';
 import { data as enData } from '../../languages/en/profile.js';
 import { data as frData } from '../../languages/fr/profile.js';
 import { getUserInfo } from './user.js';
 import { getUsername } from './profile.js';
-import { reload } from '../../engine/utils.js';
 
 export const getAllFriendRequests = async (status=null) => {
     let response;
@@ -187,6 +187,7 @@ export const friends = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = language === 'en' ? enData : frData;
 
+
     render(div, `
         <style>
             .container-fluid {
@@ -251,6 +252,8 @@ export const friends = async (render, div) => {
     await renderPendingFriendships(document.getElementById('pendingFriendsRow'), data);
     await renderRequestedFriendships(document.getElementById('requestedFriendsRow'), data);
     await renderAcceptedFriendships(document.getElementById('friendsRow'), data);
+
+    await navbarReload();
 
     const buttonSelection = Object.values(document.getElementsByClassName('button'));
     buttonSelection.forEach((button) => {

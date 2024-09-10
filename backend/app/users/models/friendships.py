@@ -7,6 +7,8 @@ class Friends(models.Model):
     status = models.CharField(max_length=10, choices=[('pending', 'pending', ), ('accepted', 'accepted')], default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    seen_by_user = models.BooleanField(default=True)
+    seen_by_friend = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('user', 'friend')

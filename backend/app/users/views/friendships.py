@@ -8,7 +8,7 @@ from users.models.friendships import Friends
 from users.models.users import Users
 from users.serializers import FriendshipsSerializer
 
-def get_attribute(data: any, attribute: str) -> Optional[str]:
+def get_attribute(data: Optional[dict], attribute: str) -> Optional[str]:
     try:
         return data[attribute]
     except KeyError:
@@ -30,24 +30,31 @@ def get_all_friends(username: str, status_of_friendship: Optional[str] = None) -
     """
     if status_of_friendship is None:
         return Friends.objects.select_related('user', 'friend').filter(Q(user__username=username) | Q(friend__username=username))
-    if status_of_friendship not in ['requested', 'pending', 'accepted']:
+    if status_of_friendship not in ['requested', 'pending', 'accepted', 'notifications']:
         return None
-    if status_of_friendship == 'pending':
-        return Friends.objects.select_related('user', 'friend').filter(friend__username=username, status='pending')
-    if status_of_friendship == 'requested':
+    if status_of_friendship == 'notifications':
+        return Friends.objects.select_related('user', 'friend').filter(friend__username=username, seen_by_friend=False, status='pending')
+    elif status_of_friendship == 'pending':
+        friendships = Friends.objects.select_related('user', 'friend').filter(friend__username=username, status='pending')
+        if not friendships:
+            return None
+        friendships.filter(seen_by_friend=False).update(seen_by_friend=True)
+        return friendships
+    elif status_of_friendship == 'requested':
         return Friends.objects.select_related('user', 'friend').filter(user__username=username, status='pending')
     return Friends.objects.select_related('user', 'friend').filter((Q(user__username=username) | Q(friend__username=username)) & Q(status='accepted'))
 
 class FriendshipsView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self: APIView, request: any, status_of_friendship: str | None = None) -> Response:
+    def get(self: APIView, request: any, status_of_friendship: Optional[str] = None) -> Response:
         """
         Return all friendships for the given user.
 
         If `status_of_friendship` is provided, only return friendships with the given status.
         """
-        if status_of_friendship and status_of_friendship not in ['pending', 'accepted', 'requested']:
+
+        if status_of_friendship and status_of_friendship not in ['pending', 'accepted', 'requested', 'notifications']:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         friends = get_all_friends(request.user.username, status_of_friendship)
         if not friends:
@@ -94,7 +101,9 @@ class FriendshipsView(APIView):
         friendship = get_friendship(user, friend)
         if not friendship:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        if action == 'accept' and friendship.status == 'pending':
+        if action == 'accept' and friendship.status == 'pending' and friend.username != request.user.username:
+            if not friendship.seen_by_friend:
+                friendship.seen_by_friend = True
             friendship.status = 'accepted'
             friendship.save()
         elif action == 'decline':

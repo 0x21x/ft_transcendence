@@ -1,5 +1,6 @@
 import { loggedIn } from './tokens.js';
 import { navbarRender } from './navbar.js';
+import { renderHeader } from './render.js';
 import { router } from './router.js';
 
 export const redirect = async (url) => {
@@ -11,6 +12,11 @@ export const reload = async (withNavBar=false) => {
     if (withNavBar)
         await navbarRender(await loggedIn());
     await router(await loggedIn());
+};
+
+export const navbarReload = async () => {
+    await navbarRender(await loggedIn());
+    renderHeader();
 };
 
 export const getAllFolders = (path) => {
