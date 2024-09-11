@@ -4,11 +4,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AuthUser, api_settings
+
 from users.models.users import Users
 from ..serializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
+from ..sessions import login_session
 from .otp import check_otp
-
 
 def get_tokens_for_user(user: AuthUser) -> dict:
     refresh = RefreshToken.for_user(user)
@@ -51,6 +52,7 @@ class LoginView(APIView):
         login(request, user)
         response = Response(status=status.HTTP_200_OK)
         tokens = get_tokens_for_user(user)
+        session = login_session(user)
         response.headers['Access-Control-Allow-Credentials'] = 'true'
         response.set_cookie('access',
                             tokens['access'],
@@ -60,6 +62,12 @@ class LoginView(APIView):
                             httponly=True)
         response.set_cookie('refresh',
                             tokens['refresh'],
+                            max_age=api_settings.REFRESH_TOKEN_LIFETIME.total_seconds() if api_settings.REFRESH_TOKEN_LIFETIME else None,
+                            samesite='Lax',
+                            secure=True,
+                            httponly=True)
+        response.set_cookie('session',
+                            session.token,
                             max_age=api_settings.REFRESH_TOKEN_LIFETIME.total_seconds() if api_settings.REFRESH_TOKEN_LIFETIME else None,
                             samesite='Lax',
                             secure=True,

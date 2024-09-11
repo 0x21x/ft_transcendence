@@ -5,6 +5,7 @@ from rest_framework import exceptions
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.state import token_backend
+from users.sessions import check_session
 from users.models.users import Users
 from users.models.friendships import Friends
 
@@ -58,16 +59,19 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
     before re-issuing a new access token and ensure that the user
     exists and is active.
     """
-
     error_msg = 'No active account found with the given credentials'
 
     def validate(self: TokenRefreshSerializer, attrs: Dict[str, Any]) -> Dict[str, str]:
         token_payload = token_backend.decode(attrs['refresh'])
         try:
-            get_user_model().objects.get(pk=token_payload['user_id'])
+            user = get_user_model().objects.get(pk=token_payload['user_id'])
+            request = self.context.get('request')
+            if request and request.COOKIES.get('session'):
+                session_token = request.COOKIES.get('session')
+                if not check_session(user, session_token):
+                    raise exceptions.AuthenticationFailed('Invalid session')
         except get_user_model().DoesNotExist:
             raise exceptions.AuthenticationFailed(
                 self.error_msg, 'no_active_account'
             )
-
         return super().validate(attrs)
