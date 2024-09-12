@@ -1,5 +1,4 @@
-import { data as enData } from '../../../languages/en/auth.js';
-import { data as frData } from '../../../languages/fr/auth.js';
+import { getLanguageDict } from '../../../engine/language.js';
 import { loginOTP } from '../otp/loginOTP.js';
 
 
@@ -25,7 +24,7 @@ export const loginRequest = async (username, password, render, div) => {
 
 export const login = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'auth');
 
     render(div, `
     <style>

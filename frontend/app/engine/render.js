@@ -1,5 +1,4 @@
-import { data as enData } from '../languages/en/navbar.js';
-import { data as frData } from '../languages/fr/navbar.js';
+import { getLanguageDict } from './language.js';
 import { routes } from './routes.js';
 
 export const render = (div, html, append=false) => {
@@ -12,7 +11,7 @@ export const render = (div, html, append=false) => {
 
 export const renderHeader = () => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'navbar');
 
     for (const route of routes) {
         const page = document.getElementById(route.name);

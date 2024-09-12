@@ -1,5 +1,4 @@
-import { data as enData } from '../../languages/en/game.js';
-import { data as frData } from '../../languages/fr/game.js';
+import { getLanguageDict } from '../../engine/language.js';
 import { reload } from '../../engine/utils.js';
 import { websocketsHandler } from '../../engine/router.js';
 
@@ -25,7 +24,7 @@ export const fillTableWithGames = (table, games) => {
 
 export const gameHandler = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'game');
 
     render(div, `
         <style>

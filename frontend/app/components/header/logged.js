@@ -89,6 +89,7 @@ export const loggedNavbar = async (render, div) => {
                         <select data-width="fit" id="languageSwitcher">
                             <option id="en">🇬🇧</option>
                             <option id="fr">🇫🇷</option>
+                            <option id="es">🇪🇸</option>
                         </select>
                     </div>
                     <a class="nav-link nav-item" href="/profile/" data-link>

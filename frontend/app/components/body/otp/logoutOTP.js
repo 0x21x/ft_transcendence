@@ -1,5 +1,4 @@
-import { data as enData } from '../../../languages/en/otp.js';
-import { data as frData } from '../../../languages/fr/otp.js';
+import { getLanguageDict } from '../../../engine/language.js';
 import { registerOTP } from './registerOTP.js';
 
 const logoutOTPRequest = async (password) => {
@@ -18,7 +17,7 @@ const logoutOTPRequest = async (password) => {
 
 export const logoutOTP = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'otp');
 
     render(div, `
         <style>

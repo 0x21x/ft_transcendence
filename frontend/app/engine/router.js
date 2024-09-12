@@ -10,7 +10,8 @@ import { themeHandler } from './theme.js';
 export const websocketsHandler = new WebSocketHandler();
 let logged = await loggedIn();
 const body = document.getElementById('app');
-
+let theme;
+let language;
 export const router = async (logged) => {
     const potentialMatches = routes.map(route => ({
             isMatch: isAMatch(location.pathname, route.path),
@@ -34,8 +35,21 @@ export const router = async (logged) => {
     websocketsHandler.check(match);
     await renderHeader();
     await renderBody(body, match);
-};
+    theme = document.querySelector('input[name=themeSwitcher]');
+    language = document.getElementById('languageSwitcher');
 
+    if (theme) {
+        theme.addEventListener('change', () =>{
+            themeHandler(document.body, theme);
+            updateIcon();
+        });
+    } if (language) {
+        language.addEventListener('change', async () =>{
+            languageHandler(language);
+            await router(logged);
+        });
+    }
+};
 
 window.addEventListener('popstate', async () => {
     logged = await loggedIn();
@@ -65,21 +79,6 @@ if (document.getElementById('navbar').innerHTML === '') {
     await navbarRender(logged);
 } if (body.innerHTML === '') {
     await router(logged);
-}
-
-const theme = document.querySelector('input[name=themeSwitcher]');
-const language = document.getElementById('languageSwitcher');
-
-if (theme) {
-    theme.addEventListener('change', () =>{
-        themeHandler(document.body, theme);
-        updateIcon();
-    });
-} if (language) {
-    language.addEventListener('change', async () =>{
-        languageHandler(language);
-        await router(logged);
-    });
 }
 
 themeHandler(document.body, theme, true);

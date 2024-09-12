@@ -1,5 +1,4 @@
-import { data as enData } from '../../languages/en/profile.js';
-import { data as frData } from '../../languages/fr/profile.js';
+import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { logoutOTP } from './otp/logoutOTP.js';
 import { registerOTP } from './otp/registerOTP.js';
@@ -68,7 +67,7 @@ const logout = async () => {
 
 export const profile = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'profile');
     const userInfo = await getUserInfo([await getUsername()]);
     const avatar_url = '/api' + userInfo.avatar;
 

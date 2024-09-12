@@ -1,7 +1,6 @@
-import { data as enData } from '../../languages/en/profile.js';
 import { error } from './error.js';
-import { data as frData } from '../../languages/fr/profile.js';
 import { getHistory } from './history.js';
+import { getLanguageDict } from '../../engine/language.js';
 import { reload } from '../../engine/utils.js';
 
 export const getUserInfo = async (args) => {
@@ -21,7 +20,7 @@ export const getUserInfo = async (args) => {
 
 export const user = async (render, div, args) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'profile');
     const userInfo = await getUserInfo(args);
     if (userInfo === null)
         return error(render, div, 'User not found');

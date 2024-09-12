@@ -66,6 +66,7 @@ export const notLoggedNavbar = (render, div) => {
                         <select data-width="fit" id="languageSwitcher">
                             <option id="en">🇬🇧</option>
                             <option id="fr">🇫🇷</option>
+                            <option id="es">🇪🇸</option>
                         </select>
                     </div>
                 </div>

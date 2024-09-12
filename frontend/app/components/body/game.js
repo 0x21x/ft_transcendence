@@ -1,5 +1,4 @@
-import { data as enData } from '../../languages/en/game.js';
-import { data as frData } from '../../languages/fr/game.js';
+import { getLanguageDict } from '../../engine/language.js';
 import { redirect } from '../../engine/utils.js';
 import { websocketsHandler } from '../../engine/router.js';
 
@@ -90,7 +89,7 @@ const handleKeydown = (e, ws) => {
 
 export const game = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'game');
 
     render(div, `
         <style>

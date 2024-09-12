@@ -1,9 +1,8 @@
-import { data as enData } from '../../languages/en/welcome.js';
-import { data as frData } from '../../languages/fr/welcome.js';
+import { getLanguageDict } from '../../engine/language.js';
 
 export const home = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'welcome');
 
     render(div, `
         <style>

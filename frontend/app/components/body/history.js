@@ -1,5 +1,4 @@
-import { data as enData } from '../../languages/en/history.js';
-import { data as frData } from '../../languages/fr/history.js';
+import { getLanguageDict } from '../../engine/language.js';
 
 
 const fillTableWithHistory = (table, history) => {
@@ -35,7 +34,7 @@ export const getHistory = async (table, username='') => {
 
 export const history =  async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'history');
 
     render (div, `
         <style>

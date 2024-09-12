@@ -1,6 +1,5 @@
-import { navbarReload, reload} from '../../engine/utils.js';
-import { data as enData } from '../../languages/en/profile.js';
-import { data as frData } from '../../languages/fr/profile.js';
+import { navbarReload, reload } from '../../engine/utils.js';
+import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { getUsername } from './profile.js';
 
@@ -185,7 +184,7 @@ const renderAcceptedFriendships = async (div, data) => {
 
 export const friends = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = language === 'en' ? enData : frData;
+    const data = getLanguageDict(language, 'profile');
 
 
     render(div, `
