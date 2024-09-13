@@ -38,7 +38,7 @@ export const createTournament = (render, div, data, tournament) => {
                       <option value="16">16</option>
                     </select>
                 </div>
-                <button type="button" class="btn button w-25" id="createTournamentButton">${data.create}</button>
+                <button type="button" class="btn button w-100" id="createTournamentButton">${data.create}</button>
             </form>
         </div>
     `);
