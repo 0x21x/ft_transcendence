@@ -1,5 +1,7 @@
-import { getLanguageDict } from '../../../engine/language.js';
+import { data as enData } from '../../../languages/en/auth.js';
+import { data as frData } from '../../../languages/fr/auth.js';
 import { loginRequest } from './login.js';
+import { oauthLoginRequest } from './login.js';
 
 const registerRequest = async (username, password, render, div) => {
     if (!username || !password) {
@@ -19,9 +21,37 @@ const registerRequest = async (username, password, render, div) => {
     }
 };
 
+const oauthRegisterRequest = async (username, password, state, token, render, div) => {
+    if (!username || !password) {
+        return;
+    }
+
+	const user = {
+        username: username,
+        password: password,
+		state: state,
+		token: token,
+    }
+
+	try {
+        const response = await fetch('http://localhost:5002/api/oauth/register/', {
+            method: 'POST',
+			credential: 'include',
+            body: JSON.stringify(user),
+            headers: {'Content-Type': 'application/json'}
+        });
+        
+        if (response.status === 200) {
+            return await oauthLoginRequest(username, password, render, div);
+        }
+    } catch (error) {
+        console.error('Erreur lors de l\'enregistrement:', error);
+    }
+};
+
 export const register = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = getLanguageDict(language, 'auth');
+    const data = language === 'en' ? enData : frData;
 
 
     render(div, `
@@ -62,6 +92,10 @@ export const register = (render, div) => {
         await registerRequest(username, password, render, div);
     });
     toOAuthRegisterButton.addEventListener('click', async () => {
-        // do AOuth register behavior
+        const username = document.getElementById('usernameValue').value;
+        const password = document.getElementById('passwordValue').value;
+		const state = document.getElementById('stateValue').value;
+		const token = document.getElementById('tokenValue').value;
+		await oauthRegisterRequest(username, password, state, token);
     });
 };

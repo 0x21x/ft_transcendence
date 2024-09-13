@@ -1,4 +1,5 @@
-import { getLanguageDict } from '../../../engine/language.js';
+import { data as enData } from '../../../languages/en/auth.js';
+import { data as frData } from '../../../languages/fr/auth.js';
 import { loginOTP } from '../otp/loginOTP.js';
 
 
@@ -22,9 +23,28 @@ export const loginRequest = async (username, password, render, div) => {
     window.location.href = '/';
 };
 
+export const oauthLoginRequest = async (username, password, render, div) => {
+    if (!username || !password) {
+        return;
+    }
+    const response = await fetch('http://localhost:5002/api/oauth/login/', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username, password}),
+    });
+    if (response.status === 423)
+        return await loginOTP(render, div, username, password);
+    if (response.status !== 200)
+        return ;
+    window.location.href = '/';
+};
+
 export const login = (render, div) => {
     const language = localStorage.getItem('language') || 'en';
-    const data = getLanguageDict(language, 'auth');
+    const data = language === 'en' ? enData : frData;
 
     render(div, `
     <style>
@@ -62,6 +82,8 @@ export const login = (render, div) => {
         await loginRequest(username, password, render, div);
     });
     toOAuthLoginButton.addEventListener('click', async () => {
-        // do AOuth login behavior
+        const username = document.getElementById('usernameValue').value;
+        const password = document.getElementById('passwordValue').value;
+		await oauthLoginRequest(username, password, render, div);
     });
 };
