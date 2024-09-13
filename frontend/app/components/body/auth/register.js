@@ -96,6 +96,6 @@ export const register = (render, div) => {
         const password = document.getElementById('passwordValue').value;
 		const state = document.getElementById('stateValue').value;
 		const token = document.getElementById('tokenValue').value;
-		await oauthRegisterRequest(username, password, state, token);
+		await oauthRegisterRequest(username, password, state, token, render, div);
     });
 };
