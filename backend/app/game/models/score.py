@@ -1,4 +1,3 @@
-from typing import Any
 from django.db import models
 from users.models.users import Users
 
@@ -8,5 +7,5 @@ class Score(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     player = models.ForeignKey(Users, on_delete=models.CASCADE, related_name='scores')
 
-    def __str__(self: Any) -> models.CharField:
+    def __str__(self: models.Model) -> models.CharField:
         return self.score

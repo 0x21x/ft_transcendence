@@ -4,7 +4,12 @@ from .views.auth import RegisterView, LoginView, LogoutView, MyTokenRefreshView,
 from .views.otp import RegisterOTPView, LogoutOTPView
 from .views.oauth import OAuthLoginView, OAuthRegisterView
 from .views.friendships import FriendshipsView
-from game.views import GamesHistoryView, GamesHistoryForUserView, GamesHandlerView # noqa: F401
+from game.views import (
+    GamesHistoryView,
+    GamesHistoryForUserView,
+    GamesHandlerView,
+    TournamentHandlerView,
+)
 
 urlpatterns = [
     path('auth/verify/', VerifyView.as_view()),
@@ -35,6 +40,9 @@ urlpatterns = [
 
     # Games
     path('games/', GamesHandlerView.as_view()),
+
+    # Tournaments
+    path('tournaments/', TournamentHandlerView.as_view(), name='tournaments'),
 
     # Friendships
     path('friendships/<str:status_of_friendship>/', FriendshipsView.as_view(), name='friendships_with_status'),
