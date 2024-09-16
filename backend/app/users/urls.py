@@ -1,3 +1,4 @@
+# urls.py
 from django.urls import path
 from .views.user import UsernameView, PasswordView, AvatarView, GetAvatarView, GetUserInfoView
 from .views.auth import RegisterView, LoginView, LogoutView, MyTokenRefreshView, VerifyView

@@ -1,3 +1,4 @@
+# oauth.py
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -14,14 +15,14 @@ from ..tokens import MyTokenViewBase
 from .otp import check_otp
 from .auth import LoginView, RegisterView
 
+User = get_user_model()
+
 def get_tokens_for_user(user: AuthUser) -> dict:
     refresh = RefreshToken.for_user(user)
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
-
-User = get_user_model()
 
 class OAuthRegisterView(RegisterView):
     permission_classes = []
@@ -108,13 +109,12 @@ class OAuthLoginView(LoginView):
     permission_classes = []
     
     def post(self: APIView, request: any) -> Response:
-        username = request.data["username"]
-        password = request.data["password"]
-        try:
-            otp = request.data["otp"]
-        except:
-            otp = None
+        username = request.data("username")
+        password = request.data("password")
+        otp = request.data.get("otp")
+
         user = authenticate(request, username=username, password=password)
+        
         if user is None:
             return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
         if not user.check_password(password):

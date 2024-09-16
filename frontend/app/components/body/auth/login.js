@@ -1,3 +1,4 @@
+// login.js
 import { data as enData } from '../../../languages/en/auth.js';
 import { data as frData } from '../../../languages/fr/auth.js';
 import { loginOTP } from '../otp/loginOTP.js';

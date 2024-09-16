@@ -1,3 +1,4 @@
+// register.js
 import { data as enData } from '../../../languages/en/auth.js';
 import { data as frData } from '../../../languages/fr/auth.js';
 import { loginRequest } from './login.js';
@@ -36,7 +37,7 @@ const oauthRegisterRequest = async (username, password, state, token, render, di
 	try {
         const response = await fetch('http://localhost:5002/api/oauth/register/', {
             method: 'POST',
-			credential: 'include',
+			credentials: 'include',
             body: JSON.stringify(user),
             headers: {'Content-Type': 'application/json'}
         });
@@ -86,11 +87,13 @@ export const register = (render, div) => {
 
     const toRegisterButton = document.getElementById('toRegisterButton');
     const toOAuthRegisterButton = document.getElementById('toOAuthRegisterButton');
+
     toRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
         await registerRequest(username, password, render, div);
     });
+
     toOAuthRegisterButton.addEventListener('click', async () => {
         const username = document.getElementById('usernameValue').value;
         const password = document.getElementById('passwordValue').value;
