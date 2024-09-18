@@ -43,6 +43,7 @@ urlpatterns = [
 
     # Tournaments
     path('tournaments/', TournamentHandlerView.as_view(), name='tournaments'),
+    path('tournaments/<str:tournament_name>/', TournamentHandlerView.as_view(), name='tournament'),
 
     # Friendships
     path('friendships/<str:status_of_friendship>/', FriendshipsView.as_view(), name='friendships_with_status'),
