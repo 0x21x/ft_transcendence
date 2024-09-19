@@ -1,16 +1,19 @@
 from rest_framework import serializers
 from ..models import Tournament, TournamentRow
-
+from .game import GameSerializer
+from users.serializers import GetUserInfoSerializer
 
 class TournamentRowSerializer(serializers.ModelSerializer):
+    players = GetUserInfoSerializer(many=True)
+    games = GameSerializer(many=True)
+
     class Meta:
         model = TournamentRow
-        fields = ['name', 'status', 'level']
+        fields = ['level', 'status', 'players', 'nb_players', 'games']
 
 class TournamentSerializer(serializers.ModelSerializer):
-    # players = serializers.ListField()
-    # rows = serializers.ListField()
+    rows = TournamentRowSerializer(many=True)
 
     class Meta:
         model = Tournament
-        fields = ['name', 'status', 'nb_of_players', 'nb_of_rows']
+        fields = ['name', 'status', 'nb_of_players', 'nb_of_rows', 'rows']
