@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 from channels.db import database_sync_to_async
 from users.models.users import Users # noqa: F401
 from .pong import Pong, GAME_STATES, MAX_PLAYERS
@@ -65,7 +65,7 @@ class MultiplayerPong:
         Game.objects.filter(name=game_name).update(status=GAME_STATES[1])
 
     @database_sync_to_async
-    def save_scores(self: Any, game_name: str, delete_after_save: bool = False) -> None:
+    def save_scores(self: Any, game_name: str, delete_after_save: bool = False, loser: Optional[str] = None) -> None:
         if self.games[game_name].game_state != GAME_STATES[2]:
             return
         names = self.get_names(game_name)
@@ -75,6 +75,11 @@ class MultiplayerPong:
         game.status = 'finished'
         for player in names:
             game.scores.create(score=self.games[game_name].__dict__()[self.games[game_name].players[player]]['score'], player=Users.objects.get(username=player))
+        if not loser:
+            game.winner = game.scores.order_by('-score').first().player
+        else:
+            loser_user = Users.objects.get(username=loser)
+            game.winner = game.scores.exclude(player=loser_user).order_by('-score').first().player
         game.save()
         if delete_after_save:
             del self.games[game_name]

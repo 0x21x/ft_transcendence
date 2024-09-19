@@ -89,7 +89,6 @@ class TournamentApiViewTest(TestCase):
 
     def try_row_calculation_after_filling(self: TestCase) -> None:
         serialized_tournament = self.client.post(reverse('tournaments'), {'nb_of_players': 8}, format='json').json()
-        print(serialized_tournament)
         tournament_name = serialized_tournament['name']
         tournament = Tournament.objects.get(name=tournament_name)
         # Check if the tournament is created
@@ -120,7 +119,6 @@ class TournamentApiViewTest(TestCase):
             # Check if the player correctly added to the row
             self.assertEqual(tournament.rows.first().players.count(), player_id)
 
-        print(serialized_tournament)
         # Check once the row is fulled if the status is in_progres
         self.assertEqual(tournament.rows.first().status, 'in_progress')
         self.assertEqual(serialized_tournament['status'], 'in_progress')
@@ -131,7 +129,7 @@ class TournamentApiViewTest(TestCase):
         self.assertEqual(tournament.rows.first().games.count(), tournament.nb_of_players // 2)
         for game in tournament.rows.first().games.all():
             self.assertEqual(game.status, 'waiting')
-            self.assertEqual(game.in_tournament, True)
+            self.assertEqual(game.tournament_name, tournament_name)
             self.assertEqual(game.players.count(), 2)
 
     def test_tournament_api(self: TestCase) -> None:

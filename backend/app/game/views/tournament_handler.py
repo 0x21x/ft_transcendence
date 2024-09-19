@@ -24,6 +24,9 @@ class AlreadyFullException(Exception):
 class TournamentHasBeenDeletedException(Exception):
     pass
 
+def check_tournament(tournament: Tournament) -> None:
+    pass
+
 def join_or_leave_row(tournament: Tournament, row: TournamentRow, action: str, user: Users) -> None:
     if action == 'join' and (row.players.count() >= row.nb_players or user in row.players.all()):
         raise AlreadyFullException
@@ -33,7 +36,7 @@ def join_or_leave_row(tournament: Tournament, row: TournamentRow, action: str, u
         row.players.add(user)
         if row.players.count() == row.nb_players:
             row.status = 'in_progress'
-            create_row_games(row)
+            create_row_games(row, tournament.name)
             row.save()
             tournament.status = 'in_progress'
             tournament.save()
@@ -45,12 +48,12 @@ def join_or_leave_row(tournament: Tournament, row: TournamentRow, action: str, u
                 tournament.delete()
                 raise TournamentHasBeenDeletedException
 
-def create_row_games(row: TournamentRow) -> None:
+def create_row_games(row: TournamentRow, tournament_name: str) -> None:
     if row.players.count() != row.nb_players:
         return
     players = list(row.players.all())
     for _ in range(row.nb_players // 2):
-        game = row.games.create(name=str(uuid4()), status='waiting', in_tournament=True)
+        game = row.games.create(name=str(uuid4()), status='waiting', tournament_name=tournament_name)
         players_to_add = sample(players, 2)
         game.players.set(players_to_add)
         game.save()
