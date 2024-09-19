@@ -33,8 +33,9 @@ def join_or_leave_row(tournament: Tournament, row: TournamentRow, action: str, u
         row.players.add(user)
         if row.players.count() == row.nb_players:
             row.status = 'in_progress'
-            tournament.status = 'in_progress'
             create_row_games(row)
+            row.save()
+            tournament.status = 'in_progress'
             tournament.save()
     elif action == 'leave':
         row.players.remove(user)
