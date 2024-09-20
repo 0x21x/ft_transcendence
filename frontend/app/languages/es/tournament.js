@@ -8,4 +8,12 @@ export const data = {
   'create': 'Crear',
   'add': 'Añadir',
   'setPlayersNames': 'Dar el nombre de cada jugador',
+  'waitingTournaments': 'Torneos en espera',
+  'inProgressTournaments': 'Torneos en curso',
+  'finishedTournaments': 'Torneos finalizados',
+  'view': 'Ver',
+  'noWaitingTournamentsYet': 'No hay torneos en espera todavía',
+  'noInProgressTournamentsYet': 'No hay torneos en curso todavía',
+  'noFinishedTournamentsYet': 'No hay torneos finalizados todavía',
+  'players': 'jugadores',
 };

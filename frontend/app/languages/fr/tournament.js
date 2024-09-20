@@ -7,5 +7,13 @@ export const data ={
   'player': 'Joueur',
   'create': 'Créer',
   'add': 'Ajouter',
-  'setPlayersNames': 'Indiquez le nom de chaque joueur'
+  'setPlayersNames': 'Indiquez le nom de chaque joueur',
+  'waitingTournaments': 'Tournois en attente',
+  'inProgressTournaments': 'Tournois en cours',
+  'finishedTournaments': 'Tournois finis',
+  'view': 'Voir',
+  'noWaitingTournamentsYet': 'Aucun tournoi en attente',
+  'noInProgressTournamentsYet': 'Aucun tournoi en cours',
+  'noFinishedTournamentsYet': 'Aucun tournoi fini',
+  'players': 'joueurs',
 };

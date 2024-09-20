@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
@@ -71,16 +72,16 @@ class TournamentApiViewTest(TestCase):
 
         # Create a tournament
         ## Create a tournament with 2 players
-        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 2}, format='json').status_code, 200)
+        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 2, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').status_code, 200)
         ## Create a tournament with 4 players
-        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 4}, format='json').status_code, 200)
+        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 4, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').status_code, 200)
         ## Create a tournament with 8 players
-        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 8}, format='json').status_code, 200)
+        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 8, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').status_code, 200)
         ## Create a tournament with 16 players
-        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 16}, format='json').status_code,
+        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 16, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').status_code,
                          200)
         ## Create a tournament with 7 player
-        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 7}, format='json').status_code, 400)
+        self.assertEqual(self.client.post(reverse('tournaments'), {'nb_of_players': 7, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').status_code, 400)
         ## Create a tournament without data
         self.assertEqual(self.client.post(reverse('tournaments')).status_code, 400)
 
@@ -88,7 +89,7 @@ class TournamentApiViewTest(TestCase):
         self.assertEqual(self.client.get(reverse('tournaments')).status_code, 200)
 
     def try_row_calculation_after_filling(self: TestCase) -> None:
-        serialized_tournament = self.client.post(reverse('tournaments'), {'nb_of_players': 8}, format='json').json()
+        serialized_tournament = self.client.post(reverse('tournaments'), {'nb_of_players': 8, 'tournament_name': f'test${str(uuid4())[:-4]}'}, format='json').json()
         tournament_name = serialized_tournament['name']
         tournament = Tournament.objects.get(name=tournament_name)
         # Check if the tournament is created

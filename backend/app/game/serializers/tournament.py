@@ -16,4 +16,4 @@ class TournamentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tournament
-        fields = ['name', 'status', 'nb_of_players', 'nb_of_rows', 'rows']
+        fields = ['tournament_name', 'name', 'status', 'nb_of_players', 'nb_of_rows', 'rows']

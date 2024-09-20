@@ -95,17 +95,28 @@ def create_row(tournament: Tournament, level: int, initial_nb_players: int) -> T
     tournament.rows.add(row)
     return row
 
+def get_all_tournaments(tournaments_status: Optional[str]) -> list:
+    if tournaments_status and tournaments_status not in ['waiting', 'in_progress', 'finished']:
+        return []
+    elif tournaments_status == 'waiting':
+        return Tournament.objects.filter(status='waiting')
+    elif tournaments_status == 'in_progress':
+        return Tournament.objects.filter(status='in_progress')
+    elif tournaments_status == 'finished':
+        return Tournament.objects.filter(status='finished')
+    return Tournament.objects.all()
+
 class TournamentHandlerView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self: APIView, request: Optional[str]) -> Response:
+    def get(self: APIView, request: Optional[str], tournaments_status: Optional[str] = None) -> Response:
         """
         Returns all active tournaments.
 
         Returns:
             Response: A list of all tournaments.
         """
-        tournaments = Tournament.objects.all()
+        tournaments = get_all_tournaments(tournaments_status)
         if not tournaments:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serialized_tournaments = TournamentSerializer(tournaments, many=True)
@@ -120,7 +131,7 @@ class TournamentHandlerView(APIView):
         """
         nb_of_players = get_attribute(request.data, 'nb_of_players')
         tournament_name = get_attribute(request.data, 'tournament_name')
-        if not nb_of_players or nb_of_players not in nb_of_players_available and not tournament_name:
+        if not nb_of_players or nb_of_players not in nb_of_players_available or not tournament_name:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         nb_of_rows = nb_of_players // 2
         tournament = Tournament.objects.create(

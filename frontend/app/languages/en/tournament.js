@@ -7,5 +7,13 @@ export const data = {
   'player': 'Player',
   'create': 'Create',
   'add': 'Add',
-  'setPlayersNames': 'Give the name of each player'
+  'setPlayersNames': 'Give the name of each player',
+  'waitingTournaments': 'Waiting tournaments',
+  'inProgressTournaments': 'In progress tournaments',
+  'finishedTournaments': 'Finished tournaments',
+  'view': 'View',
+  'noWaitingTournamentsYet': 'No waiting tournaments yet',
+  'noInProgressTournamentsYet': 'No in progress tournaments yet',
+  'noFinishedTournamentsYet': 'No finished tournaments yet',
+  'players': 'players',
 };

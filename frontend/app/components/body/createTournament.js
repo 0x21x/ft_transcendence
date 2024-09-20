@@ -1,6 +1,10 @@
-import { setPlayersNames } from './setPlayersNames.js';
+import { redirect, reload } from '../../engine/utils.js';
+import { getLanguageDict } from '../../engine/language.js';
 
-export const createTournament = (render, div, data, tournament) => {
+export const createTournament = (render, div) => {
+    const language = localStorage.getItem('language') || 'en';
+    const data = getLanguageDict(language, 'tournament');
+
     render(div, `
         <style>
             .container {
@@ -49,15 +53,23 @@ export const createTournament = (render, div, data, tournament) => {
         tournamentName: document.getElementById('tournamentName'),
     };
 
-    createTournamentButton.addEventListener('click', () => {
-        if (form.tournamentPlayers.value !== '' && form.tournamentName.value !== '') {
-            tournament.setNbPlayers(form.tournamentPlayers.value);
-            tournament.setName(form.tournamentName.value);
-            // /!\ /!\ /!\ HAVE TO SET TOURNAMENT TO LOCALSTORAGE
-            setPlayersNames(render, div, data, tournament);
+    createTournamentButton.addEventListener('click', async () => {
+        if (form.tournamentPlayers.value && form.tournamentName.value) {
+            const response = await fetch('/api/tournaments/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tournament_name: form.tournamentName.value,
+                    nb_of_players: parseInt(form.tournamentPlayers.value, 10),
+                }),
+            });
+            if (response.status !== 200) {
+                return await reload();
+            }
+            return await redirect('/tournament/');
         }
     });
-
-
-    return [];
 };
