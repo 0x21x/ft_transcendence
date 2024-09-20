@@ -3,6 +3,7 @@ from channels.db import database_sync_to_async
 from users.models.users import Users # noqa: F401
 from .pong import Pong, GAME_STATES, MAX_PLAYERS
 from .models import Game
+from .views.tournament_handler import check_tournament
 
 ROOM_NAME = 'game'
 
@@ -83,6 +84,7 @@ class MultiplayerPong:
         game.save()
         if delete_after_save:
             del self.games[game_name]
+        check_tournament(game.tournament_name)
 
     @database_sync_to_async
     def get_infos(self: Any) -> list:

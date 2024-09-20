@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
 from users.models.users import Users
-from game.models import Tournament
+from ..models import Tournament
 
 # Create your tests here.
 class TournamentApiViewTest(TestCase):

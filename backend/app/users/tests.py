@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from django.urls import reverse
-from users.models.users import Users
+from .models.users import Users
 
 class FriendshipApiViewTest(TestCase):
     def setUp(self: TestCase) -> None:

@@ -1,11 +1,12 @@
 from math import pow
 from uuid import uuid4
 from random import sample
-from typing import Optional
+from typing import Optional, Callable, Any
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.core.exceptions import ObjectDoesNotExist
 from users.views.friendships import get_attribute
 from users.models.users import Users
 from ..models import Tournament, TournamentRow
@@ -24,8 +25,34 @@ class AlreadyFullException(Exception):
 class TournamentHasBeenDeletedException(Exception):
     pass
 
-def check_tournament(tournament: Tournament) -> None:
-    pass
+def check_tournament(tournament: Tournament or str) -> None:
+    if type(tournament) == str:
+        try:
+            tournament = Tournament.objects.get(name=tournament)
+        except ObjectDoesNotExist:
+            return
+    row = tournament.rows.last()
+    if not row:
+        return
+    if tournament.status == 'in_progress':
+        final = True if row.level == tournament.nb_of_rows else False
+        if row.games.filter(status='finished').count() == row.nb_players // 2:
+            row.status = 'finished'
+            if final:
+                tournament.status = 'finished'
+            else:
+                new_row = create_row(tournament, row.level + 1, tournament.nb_of_players)
+                new_row.status = 'in_progress'
+                transfer_winners_of_row(row, new_row)
+                create_row_games(new_row, tournament.name)
+                new_row.save()
+            tournament.save()
+
+def transfer_winners_of_row(row: TournamentRow, new_row: TournamentRow) -> None:
+    if row.games.count() != new_row.nb_players:
+        return
+    for game in row.games.all():
+        new_row.players.add(game.winner)
 
 def join_or_leave_row(tournament: Tournament, row: TournamentRow, action: str, user: Users) -> None:
     if action == 'join' and (row.players.count() >= row.nb_players or user in row.players.all()):
@@ -54,18 +81,19 @@ def create_row_games(row: TournamentRow, tournament_name: str) -> None:
     players = list(row.players.all())
     for _ in range(row.nb_players // 2):
         game = row.games.create(name=str(uuid4()), status='waiting', tournament_name=tournament_name)
-        players_to_add = sample(players, 2)
+        players_to_add = sample(players, 2) if row.level == 1 else players[:-2]
         game.players.set(players_to_add)
         game.save()
         players.remove(players_to_add[0])
         players.remove(players_to_add[1])
 
-def create_row(tournament: Tournament, level: int, initial_nb_players: int) -> None:
+def create_row(tournament: Tournament, level: int, initial_nb_players: int) -> TournamentRow:
     if tournament.rows.all().filter(level=level).exists():
         return
     row_nb_players = initial_nb_players // pow(2, level - 1) if level > 1 else initial_nb_players
     row = TournamentRow.objects.create(level=level, nb_players=row_nb_players, status='waiting')
     tournament.rows.add(row)
+    return row
 
 class TournamentHandlerView(APIView):
     permission_classes = [IsAuthenticated]

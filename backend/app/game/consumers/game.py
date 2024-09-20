@@ -9,6 +9,9 @@ from .utils import is_authenticated
 class TournamentNotInProgressException(Exception):
     pass
 
+class PlayerNotInGameException(Exception):
+    pass
+
 class GameConsumer(AsyncJsonWebsocketConsumer):
     groups = []
     multiplayer_pong = MultiplayerPong()
@@ -19,7 +22,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.room_group_name = "game_%s" % self.room_name
         try:
             await self.get_game(self.room_name)
-        except GameNotFound or TournamentNotInProgressException:
+        except GameNotFound or TournamentNotInProgressException or PlayerNotInGameException:
             return await self.close()
         self.channel_layer.group_add(self.room_group_name, self.channel_name)
         self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
@@ -67,6 +70,8 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
             raise GameNotFound()
         if game.tournament_name and not Tournament.objects.filter(game.tournament_name, status='in_progress').first():
             raise TournamentNotInProgressException
+        if game.tournament_name and self.scope['user'] not in game.players.all():
+            raise PlayerNotInGameException
         return Game.objects.filter(name=game_name, status='waiting').first()
 
     @is_authenticated
