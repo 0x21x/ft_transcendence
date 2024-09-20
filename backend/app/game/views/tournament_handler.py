@@ -1,7 +1,7 @@
 from math import pow
 from uuid import uuid4
 from random import sample
-from typing import Optional, Callable, Any
+from typing import Optional
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -119,10 +119,12 @@ class TournamentHandlerView(APIView):
             Response: Created tournament.
         """
         nb_of_players = get_attribute(request.data, 'nb_of_players')
-        if not nb_of_players or nb_of_players not in nb_of_players_available:
+        tournament_name = get_attribute(request.data, 'tournament_name')
+        if not nb_of_players or nb_of_players not in nb_of_players_available and not tournament_name:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         nb_of_rows = nb_of_players // 2
         tournament = Tournament.objects.create(
+            tournament_name=tournament_name,
             name=str(uuid4())[:18],
             nb_of_players=nb_of_players,
             nb_of_rows=nb_of_rows

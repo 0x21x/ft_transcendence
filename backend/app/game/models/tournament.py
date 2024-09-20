@@ -13,6 +13,7 @@ class TournamentRow(models.Model):
         return self.level
 
 class Tournament(models.Model):
+    tournament_name = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
