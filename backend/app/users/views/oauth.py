@@ -1,12 +1,10 @@
 # oauth.py
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.tokens import RefreshToken, AuthUser, api_settings
 from requests_oauthlib import OAuth2Session
 from ..models import Users
