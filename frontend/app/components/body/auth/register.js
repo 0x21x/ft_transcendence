@@ -35,6 +35,7 @@ const oauthRegisterRequest = async (username, password, state, token, render, di
     }
 
 	try {
+	// await (state)
         const response = await fetch('http://localhost:5002/api/oauth/register/', {
             method: 'POST',
 			credentials: 'include',
@@ -43,7 +44,7 @@ const oauthRegisterRequest = async (username, password, state, token, render, di
         });
         
         if (response.status === 200) {
-            return await oauthLoginRequest(username, password, render, div);
+            return await oauthLoginRequest(username, password, state, render, div);
         }
     } catch (error) {
         console.error('Erreur lors de l\'enregistrement:', error);

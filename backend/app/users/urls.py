@@ -19,6 +19,7 @@ urlpatterns = [
     # Oauth (inherit from classic auth)
     path('oauth/login/', OAuthLoginView.as_view()),
     path('oauth/register/', OAuthRegisterView.as_view()),
+    # path('oauth/callback', ),
 
     # OTP
     path('otp/register/', RegisterOTPView.as_view()),

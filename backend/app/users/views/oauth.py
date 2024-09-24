@@ -15,12 +15,55 @@ from .auth import LoginView, RegisterView
 
 User = get_user_model()
 
-def get_tokens_for_user(user: AuthUser) -> dict:
-    refresh = RefreshToken.for_user(user)
-    return {
-        'refresh': str(refresh),
-        'access': str(refresh.access_token),
-    }
+# def get_tokens_for_user(user: AuthUser) -> dict:
+#     refresh = RefreshToken.for_user(user)
+#     return {
+#         'refresh': str(refresh),
+#         'access': str(refresh.access_token),
+#     }
+
+# def connexion_api42(request):
+#     try:
+#         api42 = OAuth2Session(settings.API42_UID, redirect_uri=settings.API42_REDIRECT_URI)
+#         url_autorisation, state = api42.authorization_url(f"{settings.API42_BASE_URL}/oauth/authorize")
+#         request.session['oauth_state'] = state
+#         return redirect(url_autorisation)
+#     except Exception as e:
+#         messages.error(request, f"Erreur lors de la connexion à l'API 42: {e}")
+#         return redirect('index')
+
+# def callback_api42(request):
+#     if 'oauth_state' not in request.session:
+#         messages.error(request, "État OAuth manquant. Réessayez la connexion.")
+#         return redirect('connexion_api42')
+
+#     try:
+#         api42 = OAuth2Session(settings.API42_UID, state=request.session['oauth_state'], redirect_uri=settings.API42_REDIRECT_URI)
+#         token = api42.fetch_token(
+#             f"{settings.API42_BASE_URL}/oauth/token",
+#             client_secret=settings.API42_SECRET,
+#             authorization_response=request.get_full_path()
+#         )
+#         request.session['oauth_token'] = token
+#         return redirect('profil_api42')
+#     except Exception as e:
+#         messages.error(request, f"Erreur lors du callback de l'API 42: {e}")
+#         print(e)
+#         return redirect('index')
+
+# def profil_api42(request):
+#     if 'oauth_token' not in request.session:
+#         messages.error(request, "Vous devez vous connecter pour voir votre profil.")
+#         return redirect('connexion_api42')
+
+#     try:
+#         api42 = OAuth2Session(settings.API42_UID, token=request.session['oauth_token'])
+#         donnees_profil = api42.get(f"{settings.API42_BASE_URL}/v2/me").json()
+#         return render(request, 'profile.html', {'profil': donnees_profil})
+#     except Exception as e:
+#         messages.error(request, f"Erreur lors de la récupération des données de profil: {e}")
+#         return redirect('index')
+
 
 class OAuthRegisterView(RegisterView):
     permission_classes = []

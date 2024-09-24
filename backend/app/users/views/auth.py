@@ -86,7 +86,7 @@ class LogoutView(APIView):
         return response
 
 class VerifyView(APIView):
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def get(self: APIView, request: any) -> Response:
         return Response(status=status.HTTP_200_OK)
