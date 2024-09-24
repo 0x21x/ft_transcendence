@@ -3,6 +3,14 @@ import { navbarRender } from './navbar.js';
 import { renderHeader } from './render.js';
 import { router } from './router.js';
 
+export const troncate = (text, length) => {
+    if (text === undefined)
+        return '';
+    if (text.length <= length)
+        return text;
+    return text.slice(0, length - 2) + '..';
+};
+
 export const redirect = async (url) => {
     history.pushState(null, null, url);
     return await router(await loggedIn());

@@ -16,4 +16,13 @@ export const data ={
   'noInProgressTournamentsYet': 'Aucun tournoi en cours',
   'noFinishedTournamentsYet': 'Aucun tournoi fini',
   'players': 'joueurs',
+  'notFull': 'Le tournoi n\'est pas complet',
+  'waiting': 'En attente',
+  'inProgress': 'En cours',
+  'finished': 'Finis',
+  'join': 'Rejoindre',
+  'play': 'Jouer',
+  'stage': 'Étape',
+  'score': 'Score',
+  'winner': 'Gagnant',
 };

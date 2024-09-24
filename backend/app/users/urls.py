@@ -9,6 +9,7 @@ from game.views import (
     GamesHistoryForUserView,
     GamesHandlerView,
     TournamentHandlerView,
+    TournamentsHandlerView
 )
 
 urlpatterns = [
@@ -42,8 +43,8 @@ urlpatterns = [
     path('games/', GamesHandlerView.as_view()),
 
     # Tournaments
-    path('tournaments/', TournamentHandlerView.as_view(), name='tournaments'),
-    path('tournaments/<str:tournaments_status>/', TournamentHandlerView.as_view(), name='tournaments'),
+    path('tournaments/', TournamentsHandlerView.as_view(), name='tournaments'),
+    path('tournaments/<str:tournaments_status>/', TournamentsHandlerView.as_view(), name='tournaments'),
     path('tournament/<str:tournament_name>/', TournamentHandlerView.as_view(), name='tournament'),
 
     # Friendships

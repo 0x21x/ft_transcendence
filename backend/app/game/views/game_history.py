@@ -9,7 +9,7 @@ class GamesHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self: APIView, request: Any) -> Response:  # noqa: ANN401
-        finished_games = Game.objects.filter(status='finished').order_by('-created_at')
+        finished_games = Game.objects.filter(status='finished', tournament_name__isnull=True).order_by('-created_at')
         games_history = []
         for i, game in enumerate(finished_games, start=0):
             if i == 15:

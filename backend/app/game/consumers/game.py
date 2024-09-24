@@ -68,7 +68,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         game = Game.objects.filter(name=game_name, status='waiting').first()
         if not game:
             raise GameNotFound()
-        if game.tournament_name and not Tournament.objects.filter(game.tournament_name, status='in_progress').first():
+        if game.tournament_name and not Tournament.objects.filter(name=game.tournament_name, status='in_progress').first():
             raise TournamentNotInProgressException
         if game.tournament_name and self.scope['user'] not in game.players.all():
             raise PlayerNotInGameException

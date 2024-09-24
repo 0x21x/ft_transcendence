@@ -1,5 +1,4 @@
 import { getLanguageDict } from '../../engine/language.js';
-import { getUserInfo } from './user.js';
 import { redirect } from '../../engine/utils.js';
 
 const getAllTournaments = async (status=null) => {
@@ -146,9 +145,7 @@ export const tournament = async (render, div) => {
     `);
 
     const createTournamentButton = document.querySelector('.sticky-button');
-    createTournamentButton.addEventListener('click', async () => {
-        return await redirect('/create_tournament');
-    });
+    createTournamentButton.addEventListener('click', async () => await redirect('/create_tournament/'));
 
     await renderWaitingTournaments(document.getElementById('waitingTournamentsRow'), data);
     await renderInProgressTournaments(document.getElementById('inProgressTournamentsRow'), data);

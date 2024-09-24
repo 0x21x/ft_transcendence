@@ -16,4 +16,12 @@ export const data = {
   'noInProgressTournamentsYet': 'No in progress tournaments yet',
   'noFinishedTournamentsYet': 'No finished tournaments yet',
   'players': 'players',
+  'notFull': 'Tournament is not full',
+  'waiting': 'Waiting',
+  'in_progress': 'In progress',
+  'finished': 'Finished',
+  'play': 'Play',
+  'stage': 'Stage',
+  'score': 'Score',
+  'winner': 'Winner'
 };

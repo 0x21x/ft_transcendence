@@ -106,7 +106,7 @@ def get_all_tournaments(tournaments_status: Optional[str]) -> list:
         return Tournament.objects.filter(status='finished')
     return Tournament.objects.all()
 
-class TournamentHandlerView(APIView):
+class TournamentsHandlerView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self: APIView, request: Optional[str], tournaments_status: Optional[str] = None) -> Response:
@@ -147,6 +147,23 @@ class TournamentHandlerView(APIView):
             return Response(status=status.HTTP_409_CONFLICT)
         serialized_tournament = TournamentSerializer(tournament)
         return Response(serialized_tournament.data, status=status.HTTP_200_OK)
+
+
+class TournamentHandlerView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self: APIView, request: Optional[str], tournament_name: Optional[str] = None) -> Response:
+        """
+        Returns a tournament by the tournament name given.
+
+        Returns:
+            Response: A tournament by the tournament name given.
+        """
+        tournament = Tournament.objects.filter(name=tournament_name).first()
+        if not tournament:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serialized_tournaments = TournamentSerializer(tournament)
+        return Response(serialized_tournaments.data, status=status.HTTP_200_OK)
 
     def put(self: APIView, request: Optional[str], tournament_name: Optional[str]) -> Response:
         """
