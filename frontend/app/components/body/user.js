@@ -75,10 +75,18 @@ export const user = async (render, div, args) => {
         </div>
     `);
     const status = document.getElementById('status');
-    if (userInfo.is_online === true) {
-        status.innerText = `🟢 ${data.online}`;
-    } else {
-        status.innerText = `🔴 ${data.offline}`;
+    switch (userInfo.status) {
+        case 'online':
+            status.innerText = `🟢 ${data.online}`;
+            break;
+        case 'in_party':
+            status.innerText = `🟡 ${data.in_party}`;
+            break;
+        case 'offline':
+            status.innerText = `🔴 ${data.offline}`;
+            break;
+        default:
+            break;
     }
     const table = document.getElementById('table');
     await getHistory(table, userInfo.username);

@@ -5,6 +5,7 @@ export const data = {
     'avatar': 'Avatar',
     'status': 'Status',
     'online': 'Online',
+    'in_party': 'In party',
     'offline': 'Offline',
     'change_avatar': 'Change avatar',
     'password': 'Password',

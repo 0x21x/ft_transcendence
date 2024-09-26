@@ -29,15 +29,23 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 class GetUserInfoSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
     friendship_status = serializers.SerializerMethodField()
 
     class Meta:
         model = Users
-        fields = ['id', 'username', 'avatar', 'is_online', 'friendship_status']
+        fields = ['id', 'username', 'avatar', 'status', 'friendship_status']
+
+    def get_status(self: serializers.ModelSerializer, instance: Users) -> Optional[str]:
+        from game.multiplayer import MultiplayerPong
+        in_progress_players = MultiplayerPong.get_players_by_status('in_progress')
+        in_game = any(instance.username in d for d in in_progress_players)
+        if in_game:
+            return 'in_party'
+        return 'online' if instance.is_online else 'offline'
 
     def get_friendship_status(self: serializers.ModelSerializer, instance: Users) -> Optional[str]:
         try:
-            # return Friends.objects.get(user=instance, friend=self.context['request'].user).status
             friendship = Friends.objects.select_related('user', 'friend').filter((Q(user=instance) & Q(friend=self.context['request'].user)) | (Q(user=self.context['request'].user) & Q(friend=instance))).first()
             return friendship.status
         except:

@@ -21,8 +21,10 @@ class GameNotFound(Exception):
     pass
 
 class MultiplayerPong:
+    games = {}
+
     def __init__(self: Any) -> None:
-        self.games = {}
+        pass
 
     @database_sync_to_async
     def create_game(self: Any, game_name: str) -> None:
@@ -134,3 +136,7 @@ class MultiplayerPong:
         if not game_name in self.games:
             raise GameNotFound()
         self.games[game_name].game_state = status
+
+    @classmethod
+    def get_players_by_status(cls: type, status: str) -> list:
+        return [cls.games[game].players for game in cls.games if cls.games[game].game_state == status]
