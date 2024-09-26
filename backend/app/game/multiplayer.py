@@ -2,7 +2,7 @@ from typing import Any, Optional
 from channels.db import database_sync_to_async
 from users.models.users import Users # noqa: F401
 from .pong import Pong, GAME_STATES, MAX_PLAYERS
-from .models import Game
+from .models import Game, Tournament
 from .views.tournament_handler import check_tournament
 
 ROOM_NAME = 'game'
@@ -24,12 +24,17 @@ class MultiplayerPong:
     def __init__(self: Any) -> None:
         self.games = {}
 
+    @database_sync_to_async
     def create_game(self: Any, game_name: str) -> None:
-        self.games[game_name] = Pong()
+        tournament = Tournament.objects.filter(name=game_name).first()
+        if tournament:
+            self.games[game_name] = Pong(tournament.name)
+        else:
+            self.games[game_name] = Pong()
 
-    def add_player(self: Any, game_name: str, player_name: str) -> None:
+    async def add_player(self: Any, game_name: str, player_name: str) -> None:
         if not game_name in self.games:
-            self.create_game(game_name)
+            await self.create_game(game_name)
         if len(self.games[game_name].players) == MAX_PLAYERS or player_name in self.games[game_name].players:
             return
         self.games[game_name].players[player_name] = 'player%d' % (len(self.games[game_name].players) + 1)
@@ -98,7 +103,7 @@ class MultiplayerPong:
                 games.append({
                         'name': game.name,
                         'players': self.games[game.name].players,
-                        'status': self.games[game.name].game_state
+                        'status': self.games[game.name].game_state,
                     })
         return games
 

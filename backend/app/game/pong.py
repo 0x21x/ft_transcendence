@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 from random import choice
 
 GAME_STATES = ['waiting', 'in_progress', 'finished']
@@ -11,7 +11,7 @@ FPS_SERVER = 160
 FPS_SERVER = (1000 / FPS_SERVER / 1000) if FPS_SERVER > 0 else 0.1
 
 class Pong:
-    def __init__(self: Any) -> None:
+    def __init__(self: Any, tournament_name: Optional[str] = None) -> None:
         self.ball = {
             'x': GAME_SIZE[0] / 2,
             'y': GAME_SIZE[1] / 2,
@@ -30,6 +30,7 @@ class Pong:
             'score': 0
         }
         self.game_state = GAME_STATES[0]
+        self.tournament_name = tournament_name
 
     def reset_game(self: Any) -> None:
         if self.player1['score'] == MAX_SCORE or self.player2['score'] == MAX_SCORE:
@@ -86,6 +87,8 @@ class Pong:
         for i, player in enumerate([self.player1, self.player2], start=1):
             dict['player%d' % i] = player
         dict['game_state'] = self.game_state
+        if self.tournament_name:
+            dict['tournament_name'] = self.tournament_name
         return dict
 
     def __getitem__(self: Any, item: str) -> Any:  # noqa: ANN401

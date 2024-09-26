@@ -1,5 +1,5 @@
 import { getLanguageDict } from '../../engine/language.js';
-import { redirect } from '../../engine/utils.js';
+import { popBack } from '../../engine/utils.js';
 import { websocketsHandler } from '../../engine/router.js';
 
 const GAME_SIZE = [400, 250];
@@ -116,7 +116,7 @@ export const game = (render, div) => {
     canvas.height = Game.size.height;
     const websocket = websocketsHandler.getWs('game');
     if (!websocket) {
-        return redirect('/games/');
+        return popBack();
     }
     websocketsHandler.handleWebSocketOpen(websocket, (websocket) => {
         buttonStart.addEventListener('click', () => {
@@ -124,12 +124,12 @@ export const game = (render, div) => {
         });
         document.onkeydown = (e) => handleKeydown(e, websocket);
     });
-    websocket.onclose = () => redirect('/games/');
+    websocket.onclose = () => popBack();
     websocket.onmessage = (event) => {
         const game_data = JSON.parse(event.data);
-        if (game_data.finished || game_data.error)
-            return redirect('/games/');
-        if (game_data.pong)
+        if (game_data.finished || game_data.error) {
+            return popBack();
+        } else if (game_data.pong)
             renderPong(ctx, canvas, game_data.pong.player1, game_data.pong.player2, game_data.pong.ball);
     };
 };

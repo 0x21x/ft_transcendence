@@ -37,21 +37,19 @@ def check_tournament(tournament: Tournament or str) -> None:
         row = tournament.rows.last()
     except ObjectDoesNotExist:
         return
-    if not row:
-        return
     if tournament.status == 'in_progress':
         final = True if row.level == tournament.nb_of_rows else False
         if row.games.filter(status='finished').count() == row.nb_players // 2:
             row.status = 'finished'
             if final:
                 tournament.status = 'finished'
+                tournament.save()
             else:
                 new_row = create_row(tournament, row.level + 1, tournament.nb_of_players)
                 new_row.status = 'in_progress'
                 transfer_winners_of_row(row, new_row)
                 create_row_games(new_row, tournament.name)
                 new_row.save()
-            tournament.save()
 
 def transfer_winners_of_row(row: TournamentRow, new_row: TournamentRow) -> None:
     if row.games.count() != new_row.nb_players:
@@ -84,9 +82,9 @@ def create_row_games(row: TournamentRow, tournament_name: str) -> None:
     if row.players.count() != row.nb_players:
         return
     players = list(row.players.all())
-    for _ in range(row.nb_players // 2):
+    for _ in range(int(row.nb_players // 2)):
         game = row.games.create(name=str(uuid4())[:18], status='waiting', tournament_name=tournament_name)
-        players_to_add = sample(players, 2) if row.level == 1 else players[:-2]
+        players_to_add = sample(players, 2) if row.level == 1 else players[:2]
         game.players.set(players_to_add)
         game.save()
         game_handler.create_game(game.name)

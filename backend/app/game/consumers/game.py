@@ -25,7 +25,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         except GameNotFound or TournamentNotInProgressException or PlayerNotInGameException:
             return await self.close()
         self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
+        await self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
         return await self.accept()
 
     @is_authenticated

@@ -1,4 +1,4 @@
-import { reload, troncate } from '../../engine/utils.js';
+import { reload, truncate } from '../../engine/utils.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUsername } from './profile.js';
 
@@ -30,7 +30,7 @@ const renderRow = (tournament, rowId, div, data, username) => {
     for (const game of tournament.rows[rowId - 1].games) {
         const gameCard = document.createElement('div');
         gameCard.classList.add('col', 'tournamentCard');
-        gameCard.style = 'padding: 15px;';
+        gameCard.style = 'padding: 15px; margin-top: 15px;';
         const players = document.createElement('div');
         players.classList.add('row', 'w-100', 'text-center', 'justify-content-center', 'd-flex', 'align-items-center');
         players.style = 'padding: 5px;';
@@ -44,7 +44,7 @@ const renderRow = (tournament, rowId, div, data, username) => {
                     <img href="/user/${friendInfo.username}/" src="${avatarUrl}" class="rounded-circle" alt="${friendInfo.username}" height="40px" data-link>
                 </a>
                 <a href="/user/${friendInfo.username}/" id="pendingFriendName" data-link>
-                    ${troncate(friendInfo.username, 6)}
+                    ${truncate(friendInfo.username, 6)}
                 </a>
             `;
             players.appendChild(col);
@@ -139,16 +139,19 @@ const onClickStagesTab = (tournament, event, data, username) => {
     const target = document.querySelector(`[data-tabs-id="${id}"]`);
     if (target.classList.contains('disabled') === false && !active_element) {
         target.classList.add('active');
-    } else if (target.classList.contains('disabled')) {
+    } else if (target.classList.contains('disabled') === false && active_element) {
+        active_element.classList.remove('active');
+        target.classList.add('active');
+    }
+    else if (target.classList.contains('disabled')) {
         return null;
     }
-    if (tournament.rows[id - 1].players.length < tournament.nb_of_players) {
+    if (tournament.rows[0].players.length < tournament.nb_of_players) {
         renderNotFullRow(div, data);
     } else {
         renderRow(tournament, id, div, data, username);
     }
 };
-
 
 const renderStagesTabsOfTournament = (div, data, tournament, username) => {
     const rows = tournament.rows;
@@ -231,7 +234,7 @@ export const tournamentView = async (render, div, args) => {
             .tournamentCard {
                 background-color: var(--btn-bg-color);
                 align-items: center;
-                border-radius: 10px;
+                border-radius: 20px;
             }
         </style>
         <div class="container-fluid">
@@ -258,6 +261,6 @@ export const tournamentView = async (render, div, args) => {
     }
     renderStagesTabsOfTournament(div.querySelector('#stageTabList'), data, tournament, username);
     div.querySelector('#stageTabList').addEventListener('click', (event) => {
-        onClickStagesTab(tournament, event, data);
+        onClickStagesTab(tournament, event, data, username);
     });
 };
