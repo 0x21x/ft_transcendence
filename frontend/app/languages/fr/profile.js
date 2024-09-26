@@ -26,4 +26,5 @@ export const data = {
     'noRequestedFriendsYet': 'Pas de demandes envoyées pour l\'instant',
     'acceptedFriends': 'Amis',
     'noAcceptedFriendsYet': 'Pas d\'amis pour l\'instant',
+    'winRate': 'Taux de victoire',
 };

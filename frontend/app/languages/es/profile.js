@@ -26,4 +26,5 @@ export const data = {
     'noRequestedFriendsYet': 'No hay amigos solicitados todavía',
     'acceptedFriends': 'Amigos aceptados',
     'noAcceptedFriendsYet': 'Sin amigos todavía',
+    'winRate': 'Rendimiento',
 };

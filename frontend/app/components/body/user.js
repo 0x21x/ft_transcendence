@@ -60,7 +60,8 @@ export const user = async (render, div, args) => {
             </div>
         </div>
         <div class="table-responsive">
-            <h2>${data.lastGames}</h2>
+            <h2 id="titleLastGames">${data.lastGames}</h2>
+            <h4 id="titleWinRate" style="display: none"></h4>
             <table class="table table-bordered mb-0 bg-table">
                  <thead>
                       <tr>
@@ -89,7 +90,10 @@ export const user = async (render, div, args) => {
             break;
     }
     const table = document.getElementById('table');
-    await getHistory(table, userInfo.username);
+    const winrate = await getHistory(table, userInfo.username);
+    if (winrate)
+        document.getElementById('titleWinRate').style = 'display: block';
+        document.getElementById('titleWinRate').innerText = `${data.winRate}: ${winrate}%`;
     const requestFriendButton = document.getElementById('requestFriendButton');
     switch (userInfo.friendship_status) {
         case null:

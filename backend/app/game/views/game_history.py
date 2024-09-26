@@ -39,6 +39,7 @@ class GamesHistoryForUserView(APIView):
             for j, score in enumerate(scores, start=1):
                 game_json['player%d' % j] = score.player.username
                 game_json['score%d' % j] = score.score
+                game_json['winner'] = game.winner.username
             i += 1
             games_history.append(game_json)
         return Response(games_history, status=status.HTTP_200_OK)

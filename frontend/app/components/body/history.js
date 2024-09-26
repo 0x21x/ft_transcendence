@@ -4,16 +4,32 @@ import { getLanguageDict } from '../../engine/language.js';
 const fillTableWithHistory = (table, history) => {
     for (let i = 0; i < history.length; i++) {
 	    const tr = document.createElement('tr');
-	    for (let j = 0; j < 4; j++) {
-	    	const td = document.createElement('td');
-            if ((j + 1) % 2 !== 0)
-                td.innerHTML = `<a href="/user/${Object.values(history[i])[j]}" data-link>${Object.values(history[i])[j]}</a>`;
-            else
-                td.textContent = Object.values(history[i])[j];
-	    	tr.appendChild(td);
-	    }
+        const tdPlayer1 = document.createElement('td');
+        const tdPlayer2 = document.createElement('td');
+        const tdScore1 = document.createElement('td');
+        const tdScore2 = document.createElement('td');
+        tdPlayer1.innerHTML = `<a href="/user/${history[i]['player1']}" data-link>${history[i]['player1']}</a>`;
+        tdPlayer2.innerHTML = `<a href="/user/${history[i]['player2']}" data-link>${history[i]['player2']}</a>`;
+        tdScore1.innerHTML = history[i]['score1'];
+        tdScore2.innerHTML = history[i]['score2'];
+        tr.appendChild(tdPlayer1);
+        tr.appendChild(tdScore1);
+        tr.appendChild(tdPlayer2);
+        tr.appendChild(tdScore2);
 	    table.appendChild(tr);
     }
+};
+
+const calculateWinRate = (history, username) => {
+    let win = 0;
+    let lose = 0;
+    for (let i = 0; i < history.length; i++) {
+        if (history[i]['winner'] === username)
+            win++;
+        else
+            lose++;
+    }
+    return Math.round(win / (win + lose) * 100);
 };
 
 export const getHistory = async (table, username='') => {
@@ -30,6 +46,8 @@ export const getHistory = async (table, username='') => {
     if (!history.length)
         return ;
     fillTableWithHistory(table, history);
+    if (username !== '')
+        return(calculateWinRate(history, username));
 };
 
 export const history =  async (render, div) => {

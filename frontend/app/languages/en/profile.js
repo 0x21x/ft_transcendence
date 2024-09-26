@@ -26,5 +26,5 @@ export const data = {
     'noRequestedFriendsYet': 'No requested friends yet',
     'acceptedFriends': 'Accepted Friends',
     'noAcceptedFriendsYet': 'No friends yet',
-
+    'winRate': 'Win rate',
 };
