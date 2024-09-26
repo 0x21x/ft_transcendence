@@ -11,6 +11,8 @@ from users.views.friendships import get_attribute
 from users.models.users import Users
 from ..models import Tournament, TournamentRow
 from ..serializers import TournamentSerializer
+from . import game_handler
+
 
 nb_of_players_available = [
     2, 4, 8, 16
@@ -31,7 +33,10 @@ def check_tournament(tournament: Tournament or str) -> None:
             tournament = Tournament.objects.get(name=tournament)
         except ObjectDoesNotExist:
             return
-    row = tournament.rows.last()
+    try:
+        row = tournament.rows.last()
+    except ObjectDoesNotExist:
+        return
     if not row:
         return
     if tournament.status == 'in_progress':
@@ -80,10 +85,11 @@ def create_row_games(row: TournamentRow, tournament_name: str) -> None:
         return
     players = list(row.players.all())
     for _ in range(row.nb_players // 2):
-        game = row.games.create(name=str(uuid4()), status='waiting', tournament_name=tournament_name)
+        game = row.games.create(name=str(uuid4())[:18], status='waiting', tournament_name=tournament_name)
         players_to_add = sample(players, 2) if row.level == 1 else players[:-2]
         game.players.set(players_to_add)
         game.save()
+        game_handler.create_game(game.name)
         players.remove(players_to_add[0])
         players.remove(players_to_add[1])
 

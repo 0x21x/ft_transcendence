@@ -9,6 +9,9 @@ from ..consumers.game import GameConsumer
 from ..models import Game
 
 
+def create_game(name: str) -> None:
+    GameConsumer.add_room_to_groups('game_%s' % name)
+
 class GamesHandlerView(APIView):
     permission_classes = [IsAuthenticated]
 

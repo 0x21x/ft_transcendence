@@ -1,10 +1,10 @@
 import asyncio
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from channels.db import database_sync_to_async
-from ..multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
 from ..models import Game, Tournament
 from ..pong import FPS_SERVER
 from .utils import is_authenticated
+from ..multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
 
 class TournamentNotInProgressException(Exception):
     pass

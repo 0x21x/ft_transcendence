@@ -26,7 +26,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    '0.0.0.0'
+    '0.0.0.0',
+    '10.18.247.242'
 ]
 # ahead add also the address IP of the machine else the server will not be able to connect for other network devices
 

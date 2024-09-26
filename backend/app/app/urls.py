@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.shortcuts import HttpResponse
+from game.apps import ready as game_ready
+from users.apps import ready as users_ready
 
 def health_check(request: any) -> HttpResponse:
     return HttpResponse(200)
@@ -24,3 +26,7 @@ urlpatterns = [
     path('health/', health_check),
     path('api/', include('users.urls')),
 ]
+
+# DO ONE TIME STARTUP METHOD CALLS HERE
+game_ready()
+users_ready()

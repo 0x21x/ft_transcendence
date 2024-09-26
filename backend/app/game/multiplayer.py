@@ -84,13 +84,14 @@ class MultiplayerPong:
         game.save()
         if delete_after_save:
             del self.games[game_name]
-        check_tournament(game.tournament_name)
+        if game.tournament_name:
+            check_tournament(game.tournament_name)
 
     @database_sync_to_async
     def get_infos(self: Any) -> list:
         games = []
 
-        for game in Game.objects.all().filter(status='waiting'):
+        for game in Game.objects.all().filter(status='waiting', tournament_name__isnull=True):
             if not game.name in self.games:
                 games.append({'name': game.name, 'players': [], 'status': 'waiting'})
             else:
