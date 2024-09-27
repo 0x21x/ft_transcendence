@@ -5,5 +5,7 @@ export const data = {
     'register': 'Register',
     'Oregister': 'Register with 42',
     'username': 'Username',
-    'password': 'Password'
+    'password': 'Password',
+    'or': 'or with',
+    'youWillBeRedirected': 'You will be redirected',
 };

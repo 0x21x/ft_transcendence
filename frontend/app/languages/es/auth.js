@@ -5,5 +5,7 @@ export const data = {
     'register': 'Registrarse',
     'Oregister': 'Registrarse con 42',
     'username': 'Nombre de usuario',
-    'password': 'Contraseña'
+    'password': 'Contraseña',
+    'or': 'o con',
+    'youWillBeRedirected': 'Sera redirigido',
 };

@@ -5,5 +5,7 @@ export const data = {
     'register': 'S\'inscrire',
     'Oregister': 'S\'inscrire avec 42',
     'username': 'Nom d\'utilisateur',
-    'password': 'Mot de passe'
+    'password': 'Mot de passe',
+    'or': 'ou',
+    'youWillBeRedirected': 'Vous allez etre redirigés',
 };

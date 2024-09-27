@@ -1,6 +1,7 @@
 import { getLanguageDict } from '../../../engine/language.js';
 import { loginOTP } from '../otp/loginOTP.js';
-
+import { redirect } from '../../../engine/utils.js';
+import { redirectToIntraApi } from './oauth.js';
 
 export const loginRequest = async (username, password, render, div) => {
     if (!username || !password) {
@@ -19,7 +20,7 @@ export const loginRequest = async (username, password, render, div) => {
         return await loginOTP(render, div, username, password);
     if (response.status !== 200)
         return ;
-    window.location.href = '/';
+    return await redirect('/', true);
 };
 
 export const login = (render, div) => {
@@ -31,6 +32,7 @@ export const login = (render, div) => {
         .loginForm {
             margin-top: 5vh;
         }
+
     </style>
         <div class="row loginForm">
             <form>
@@ -43,12 +45,13 @@ export const login = (render, div) => {
                     <input type="password" class="form-control" id="passwordValue" required>
                 </div>
             </form>
-            <br>
-            <div class="col text-center">
+            <div class="mb-3 text-center">
                 <input type="submit" class="btn button w-100" id="toLoginButton" value="${data.login}"></input>
             </div>
-            <br>
-            <div class="col text-center">
+            <div class="mb-3 text-center">
+                <span class="text-muted">${data.or}</span>
+            </div>
+            <div class="mb-3 text-center">
                 <button type="button" class="btn button w-100" id="toOAuthLoginButton">${data.Ologin}</button>
             </div>
         </div>
@@ -61,7 +64,7 @@ export const login = (render, div) => {
         const password = document.getElementById('passwordValue').value;
         await loginRequest(username, password, render, div);
     });
-    toOAuthLoginButton.addEventListener('click', async () => {
-        // do AOuth login behavior
+    toOAuthLoginButton.addEventListener('click', () => {
+        redirectToIntraApi();
     });
 };

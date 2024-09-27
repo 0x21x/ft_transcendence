@@ -1,5 +1,6 @@
 import { getLanguageDict } from '../../../engine/language.js';
 import { loginRequest } from './login.js';
+import { redirectToIntraApi } from './oauth.js';
 
 const registerRequest = async (username, password, render, div) => {
     if (!username || !password) {
@@ -44,11 +45,13 @@ export const register = (render, div) => {
                         <input type="password" class="form-control" id="passwordValue">
                     </div>
                 </form>
-                <div class="col text-center">
+                <div class="mb-3 text-center">
                     <button type="button" class="btn button w-100" id="toRegisterButton">${data.register}</button>
                 </div>
-                <br>
-                <div class="col text-center">
+                <div class="mb-3 text-center">
+                    <span class="text-muted">${data.or}</span>
+                </div>
+                <div class="mb-3 text-center">
                     <button type="button" class="btn button w-100" id="toOAuthRegisterButton">${data.Oregister}</button>
                 </div>
             </div>
@@ -61,7 +64,7 @@ export const register = (render, div) => {
         const password = document.getElementById('passwordValue').value;
         await registerRequest(username, password, render, div);
     });
-    toOAuthRegisterButton.addEventListener('click', async () => {
-        // do AOuth register behavior
+    toOAuthRegisterButton.addEventListener('click', () => {
+        redirectToIntraApi();
     });
 };

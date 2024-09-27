@@ -1,15 +1,19 @@
+import urllib.parse
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AuthUser, api_settings
-
 from users.models.users import Users
+from app.settings import CLIENT_ID, REDIRECT_URI
 from ..serializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
 from ..sessions import login_session
 from .otp import check_otp
+
+api_42 = urllib.parse.quote('https://api.intra.42.fr/oauth/authorize?client_id={}&redirect_uri={}&response_type=code'
+                            .format(CLIENT_ID, REDIRECT_URI), safe='')
 
 def get_tokens_for_user(user: AuthUser) -> dict:
     refresh = RefreshToken.for_user(user)
@@ -85,10 +89,15 @@ class LogoutView(APIView):
         return response
 
 class VerifyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = []
 
     def get(self: APIView, request: any) -> Response:
-        return Response(status=status.HTTP_200_OK)
+        response_status = status.HTTP_200_OK
+        if not request.user.is_authenticated:
+            response_status = status.HTTP_401_UNAUTHORIZED
+        response = Response(status=response_status)
+        response.set_cookie('api_42', api_42, samesite='Lax', secure=True)
+        return response
 
 class MyTokenRefreshView(MyTokenViewBase):
     """

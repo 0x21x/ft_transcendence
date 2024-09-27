@@ -47,6 +47,9 @@ services:
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - REDIS_PORT=${REDIS_PORT}
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - REDIRECT_URI=${REDIRECT_URI}
     healthcheck:
         test: curl --fail http://localhost:${API_PORT}/health/ || exit 1
         interval: 15s

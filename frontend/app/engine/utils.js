@@ -3,6 +3,19 @@ import { navbarRender } from './navbar.js';
 import { renderHeader } from './render.js';
 import { router } from './router.js';
 
+export const getCookie = (name) => {
+    const cookieArr = document.cookie.split(';');
+
+    for(let i = 0; i < cookieArr.length; i++) {
+        const cookiePair = cookieArr[i].split('=');
+
+        if(name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+};
+
 export const truncate = (text, length) => {
     if (text === undefined)
         return '';
@@ -16,9 +29,12 @@ export const popBack = async () => {
     return router(await loggedIn());
 };
 
-export const redirect = async (url) => {
+export const redirect = async (url, withNavBar = false) => {
     history.pushState(null, null, url);
-    return await router(await loggedIn());
+    const logged = await loggedIn();
+    if (withNavBar)
+        await navbarRender(logged);
+    return await router(logged);
 };
 
 export const reload = async (withNavBar=false) => {
@@ -33,13 +49,22 @@ export const navbarReload = async () => {
 };
 
 export const getAllFolders = (path) => {
+    if (path.includes('?'))
+        path = path.split('?')[0];
     if (path.split('/').length - 1 <= 1)
         return [path];
     const folders = path.split('/');
     return folders.filter(folder => folder !== '');
 };
 
+const getQueryStringsArgs = (path) => {
+    const tmp = path.split('?')[1].split('&');
+    return tmp.map(arg => arg.split('=')[1]);
+};
+
 export const getPathArgs = (actualPath, routePath) => {
+    if (window.location.href.includes('?'))
+        return getQueryStringsArgs(window.location.href);
     const routeFolders = getAllFolders(routePath);
     if (routeFolders.length === routeFolders.filter(folder => folder !== '*').length)
         return [];

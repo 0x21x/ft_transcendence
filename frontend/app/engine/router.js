@@ -2,7 +2,7 @@ import { a, routes } from './routes.js';
 import { getPathArgs, isAMatch } from './utils.js';
 import { navbarRender, updateIcon } from './navbar.js';
 import { renderBody, renderHeader } from './render.js';
-import { WebSocketHandler} from './websockets.js';
+import { WebSocketHandler } from './websockets.js';
 import { languageHandler } from './language.js';
 import { loggedIn } from './tokens.js';
 import { themeHandler } from './theme.js';
@@ -12,6 +12,7 @@ let logged = await loggedIn();
 const body = document.getElementById('app');
 let theme;
 let language;
+
 export const router = async (logged) => {
     const potentialMatches = routes.map(route => ({
             isMatch: isAMatch(location.pathname, route.path),

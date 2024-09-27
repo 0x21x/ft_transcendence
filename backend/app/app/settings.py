@@ -24,6 +24,11 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# OAuth Settings
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SECRET = os.environ['CLIENT_SECRET']
+REDIRECT_URI = os.environ['REDIRECT_URI']
+
 ALLOWED_HOSTS = [
     'localhost',
     '0.0.0.0',

@@ -6,6 +6,7 @@ import { gameHandler } from '../components/body/gameHandler.js';
 import { history } from '../components/body/history.js';
 import { home } from '../components/body/home.js';
 import { login } from '../components/body/auth/login.js';
+import { oauth } from '../components/body/auth/oauth.js';
 import { profile } from '../components/body/profile.js';
 import { register } from '../components/body/auth/register.js';
 import { render } from './render.js';
@@ -34,6 +35,7 @@ export const routes = [
     { path: '/create_tournament/', view: (app, args) => createTournament(render, app, args), authorization: a.Logged, name: 'create_tournament' },
     { path: '/register/', view: (app, args) => register(render, app, args), authorization: a.Unlogged, name: 'register' },
     { path: '/login/', view: (app, args) => login(render, app, args), authorization: a.Unlogged, name: 'login' },
+    { path: '/oauth/', view: (app, args) => oauth(render, app, args), authorization: a.Unlogged, name: 'oauth' },
     { path: '/profile/', view: (app, args) => profile(render, app, args), authorization: a.Logged, name: 'profile' },
     { path: '/friends/', view: (app, args) => friends(render, app, args), authorization: a.Logged, name: 'friends' },
     { path: '/user/*/', view: (app, args) => user(render, app, args), authorization: a.Logged, name: 'user' },
