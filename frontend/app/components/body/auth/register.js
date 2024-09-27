@@ -35,7 +35,13 @@ const oauthRegisterRequest = async (username, password, state, token, render, di
     }
 
 	try {
-	// await (state)
+		const authorize = await fetch('https://api.intra.42.fr/oauth/authorize', {
+			method: 'GET',
+			credentials: 'include',
+			// body: JSON.stringify(user),
+			headers: {'Content-Type': 'application/json'}
+		});
+
         const response = await fetch('http://localhost:5002/api/oauth/register/', {
             method: 'POST',
 			credentials: 'include',
