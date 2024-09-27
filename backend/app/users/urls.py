@@ -17,9 +17,10 @@ urlpatterns = [
     path('auth/logout/', LogoutView.as_view()),
 
     # Oauth (inherit from classic auth)
-    path('oauth/login/', OAuthLoginView.as_view()),
-    path('oauth/register/', OAuthRegisterView.as_view()),
-    # path('oauth/callback', ),
+    # path('oauth/login/', OAuthLoginView.as_view()),
+    # path('oauth/register/', OAuthRegisterView.as_view()),
+    # path('')
+    path('oauth/callback', OAuthCallback.as_view()),
 
     # OTP
     path('otp/register/', RegisterOTPView.as_view()),
