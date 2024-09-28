@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AuthUser, api_settings
 from requests_oauthlib import OAuth2Session
-from ..models import Users
+from ..models.users import Users
 from ..serializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
 from .otp import check_otp
@@ -19,12 +19,13 @@ User = get_user_model()
 class OAuthCallbackView(APIView):
     permission_classes = []
     
-    def get(self, request) -> Response:
+    def post(self, request) -> Response:
         
         state = request.data.get('code')
+        print(f"state: {state}")
         
         api42 = OAuth2Session(settings.API42_UID, state=state, redirect_uri=settings.API42_REDIRECT_URI)
-        print("API42: {api42}")
+        print(f"API42: {api42}")
         
         try:
             token = api42.fetch_token(

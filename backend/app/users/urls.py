@@ -2,7 +2,7 @@ from django.urls import path
 from .views.user import UsernameView, PasswordView, AvatarView, GetAvatarView, GetUserInfoView
 from .views.auth import RegisterView, LoginView, LogoutView, MyTokenRefreshView, VerifyView
 from .views.otp import RegisterOTPView, LogoutOTPView
-from .views.oauth import OAuthLoginView, OAuthRegisterView
+from .views.oauth import OAuthCallbackView
 from .views.friendships import FriendshipsView
 from game.views import (
     GamesHistoryView,
