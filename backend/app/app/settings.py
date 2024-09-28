@@ -13,10 +13,10 @@ import os
 from pathlib import Path
 
 # Utiliser les variables d'environnement
-API42_UID = os.environ.get('API42_UID')
-API42_SECRET = os.environ.get('API42_SECRET')
-API42_REDIRECT_URI = os.environ.get('API42_REDIRECT_URI')
-API42_BASE_URL = os.environ.get('API42_BASE_URL')
+# API42_UID = os.environ.get('API42_UID')
+# API42_SECRET = os.environ.get('API42_SECRET')
+# API42_REDIRECT_URI = os.environ.get('API42_REDIRECT_URI')
+# API42_BASE_URL = os.environ.get('API42_BASE_URL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,9 +31,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
 # OAuth Settings
-CLIENT_ID = os.environ['CLIENT_ID']
-CLIENT_SECRET = os.environ['CLIENT_SECRET']
-REDIRECT_URI = os.environ['REDIRECT_URI']
+CLIENT_ID = os.environ.get['CLIENT_ID']
+CLIENT_SECRET = os.environ.get['CLIENT_SECRET']
+REDIRECT_URI = os.environ.get['REDIRECT_URI']
 
 ALLOWED_HOSTS = [
     'localhost',

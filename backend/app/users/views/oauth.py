@@ -24,7 +24,7 @@ class OAuthCallbackView(APIView):
         state = request.data.get('code')
         print(f"state: {state}")
         
-        api42 = OAuth2Session(settings.API42_UID, state=state, redirect_uri=settings.API42_REDIRECT_URI)
+        api42 = OAuth2Session(settings.CLIENT_ID , state=state, redirect_uri=settings.API42_REDIRREDIRECT_URI)
         print(f"API42: {api42}")
         
         try:
@@ -33,13 +33,13 @@ class OAuthCallbackView(APIView):
                 client_secret=settings.API42_SECRET,
                 authorization_response=request.build_absolute_uri()
                 )
-            print(f"Token récupéré avec succès : {token}")
+            print(f"Token: {token}")
 
         except Exception as e:
                 print(f"Erreur lors de la récupération du token : {str(e)}")
                 return Response({"message": f"Erreur lors de la récupération du token: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
         
-        user_info = api42.get(f"{settings.API42_BASE_URL}/v2/me").json()
+        user_info = api42.get(f"https://api.intra.42.fr/v2/me").json()
         print(f"Informations utilisateur récupérées : {user_info}")
         
         prenom = user_info.get('first_name')
