@@ -42,3 +42,7 @@ txaio==23.1.1
 typing_extensions==4.12.1
 uuid==1.30
 zope.interface==6.4.post2
+
+requests==2.32.3
+requests-oauthlib==2.0.0
+oauthlib==3.2.2
