@@ -63,14 +63,14 @@ const renderPong = (ctx, canvas, player1, player2, ball) => {
         ctx.fillText(`${player2.score}`, canvas.width / 4 * 3 - (textWidth / 2),60);
 
         ctx.fillStyle = (colorTheme === 'light') ? Game.color.light.ball : Game.color.dark.ball;
-        ctx.fillRect(ball.x - Game.ball.width / 2, ball.y - Game.ball.height / 2,
+        ctx.fillRect(ball.x, ball.y,
             Game.ball.width, Game.ball.height);
         ctx.shadowBlur = 20;
         ctx.shadowColor = (colorTheme === 'light') ? Game.color.light.shadowPaddle : Game.color.dark.shadowPaddle;
         ctx.fillStyle = (colorTheme === 'light') ? Game.color.light.paddle : Game.color.dark.paddle;
-        ctx.fillRect(player1.x, player1.y - Game.paddle.height / 2, Game.paddle.width,
+        ctx.fillRect(player1.x, player1.y, Game.paddle.width,
             Game.paddle.height);
-        ctx.fillRect(player2.x, player2.y - Game.paddle.height / 2, Game.paddle.width,
+        ctx.fillRect(player2.x, player2.y, Game.paddle.width,
             Game.paddle.height);
         ctx.shadowBlur = 0;
         ctx.shadowColor = 0;
