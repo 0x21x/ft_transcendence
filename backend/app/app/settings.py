@@ -31,9 +31,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = True
 
 # OAuth Settings
-CLIENT_ID = os.environ.get['CLIENT_ID']
-CLIENT_SECRET = os.environ.get['CLIENT_SECRET']
-REDIRECT_URI = os.environ.get['REDIRECT_URI']
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SECRET = os.environ['CLIENT_SECRET']
+REDIRECT_URI = os.environ['REDIRECT_URI']
 
 ALLOWED_HOSTS = [
     'localhost',
