@@ -12,7 +12,8 @@ from ..models.users import Users
 from ..serializers import UserSerializer, CustomTokenRefreshSerializer
 from ..tokens import MyTokenViewBase
 from .otp import check_otp
-from .auth import LoginView, RegisterView
+from .auth import LoginView, RegisterView, get_tokens_for_user
+from ..sessions import login_session
 
 User = get_user_model()
 
@@ -54,40 +55,57 @@ class OAuthCallbackView(APIView):
         
         response_me = requests.get(user_info_url, headers={'Authorization': f'Bearer {access_token}'})
         response_me = response_me.json()
-        login = response_me.get('login')
-        # username = response_me.get('login')
-        # first_name = response_me.get('first_name')
-        # last_name = response_me.get('last_name')
-        # email = response_me.get('email')
-        avatar = response_me['image']['link']
         
+        login = response_me.get('login')
+        avatar = response_me['image']['link']
         print(response_me)
         
+        # return Response({"response_me": response_me}, status=status.HTTP_200_OK)
         
+        if not User.objects.filter(login=login).exists():
+            User.save()
+            return Response({"message": f"New user created: {response_me['login']}"}, status=status.HTTP_201_CREATED)
         
-        return Response({"response_me": response_me}, status=status.HTTP_200_OK)
-        # return Response("access_token: {access_token}", status=status.HTTP_200_OK)
-   
-   
-        # try:
-            # user_info_url = "https://api.intra.42.fr/v2/me"
-            # user_info = request.data.get(user_info_url)
-            # headers = {'Authorization': f'Bearer {token_data}'}
-            # user_info_response = requests.get(user_info_url, headers=headers)
-            # user_info = user_info_response.json()
+        login = request.data['login']
+        try:
+            otp = request.data["otp"]
+        except:
+            otp = None
+        user = authenticate(request, login=login)
+        if user is None:
+            return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
+        if not user.check_password(password):
+            return Response({"message": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
+        if user.otp_enabled == True is not None and not otp:
+            return Response(status=status.HTTP_423_LOCKED)
+        if otp and not check_otp(otp, user):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        login(request, user)
+        response = Response(status=status.HTTP_200_OK)
+        tokens = get_tokens_for_user(user)
+        session = login_session(user)
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.set_cookie('access',
+                            tokens['access'],
+                            max_age=api_settings.ACCESS_TOKEN_LIFETIME.total_seconds() if api_settings.ACCESS_TOKEN_LIFETIME else None,
+                            samesite='Lax',
+                            secure=True,
+                            httponly=True)
+        response.set_cookie('refresh',
+                            tokens['refresh'],
+                            max_age=api_settings.REFRESH_TOKEN_LIFETIME.total_seconds() if api_settings.REFRESH_TOKEN_LIFETIME else None,
+                            samesite='Lax',
+                            secure=True,
+                            httponly=True)
+        response.set_cookie('session',
+                            session.token,
+                            max_age=api_settings.REFRESH_TOKEN_LIFETIME.total_seconds() if api_settings.REFRESH_TOKEN_LIFETIME else None,
+                            samesite='Lax',
+                            secure=True,
+                            httponly=True)
+        return response
+        
 
-        # except requests.RequestException as e:
-        #     return Response({"message": f"Erreur lors de la récupération des informations utilisateur : {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
-
-        # prenom = user_info.get('first_name')
-        # nom = user_info.get('last_name')
-        # email = user_info.get('email')
-        # username = user_info.get('login')
-        # login = user_info.get('login')
-        
-        # print(f"Informations utilisateur récupérées : {user_info}")
-        
-        # return Response("user_info: {user_info}", status=status.HTTP_200_OK)
         
         # if User.objects.filter(username=username).exists():
         #     user = User.objects.get(username=username)
@@ -119,5 +137,4 @@ class OAuthCallbackView(APIView):
         #         'refresh': str(refresh),
         #         'access': str(refresh.access_token),
         #     }, status=status.HTTP_200_OK)
-        
         
