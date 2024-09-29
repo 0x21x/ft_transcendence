@@ -56,15 +56,16 @@ class OAuthCallbackView(APIView):
         response_me = requests.get(user_info_url, headers={'Authorization': f'Bearer {access_token}'})
         response_me = response_me.json()
         
-        login = response_me.get('login')
+        username = response_me.get('login')
         avatar = response_me['image']['link']
         print(response_me)
         
         # return Response({"response_me": response_me}, status=status.HTTP_200_OK)
         
-        if not User.objects.filter(login=login).exists():
-            User.save()
-            return Response({"message": f"New user created: {response_me['login']}"}, status=status.HTTP_201_CREATED)
+        user = User.objects.filter(username=username).exists()
+        if not user:
+            user.save()
+            return Response({"message": f"New user created: {response_me['username']}"}, status=status.HTTP_201_CREATED)
         
         login = request.data['login']
         try:
