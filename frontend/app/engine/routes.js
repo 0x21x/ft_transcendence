@@ -22,7 +22,7 @@ export const a = Object.freeze({
 });
 
 
-export const address = 'wss://localhost/ws';
+export const address = `wss://${window.location.host}/ws`;
 
 export const routes = [
     { path: '/', view: (app, args) => home(render, app, args), authorization: a.Logged, name: 'home'},

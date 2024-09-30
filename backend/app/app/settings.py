@@ -24,16 +24,13 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '0.0.0.0',
-    '10.18.247.242'
-]
+ALLOWED_HOSTS = ['*']
 # ahead add also the address IP of the machine else the server will not be able to connect for other network devices
 
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
-]
+    'https://localhost',
+    'https://127.0.0.1',
+    'https://frontend',]
 
 CORS_ALLOW_HEADERS = [
     'content-type',
