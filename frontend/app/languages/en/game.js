@@ -9,5 +9,7 @@ export const data = {
   'player1': 'Player 1',
   'player2': 'Player 2',
   'status': 'Status',
-  'inGame': 'IN GAME',
+  'inGame': 'In game',
+  'waitingPlayers': 'Waiting for players',
+  'startGame': 'It\'s time for battle!',
 };

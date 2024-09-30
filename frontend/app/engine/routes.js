@@ -26,7 +26,7 @@ export const address = 'wss://localhost/ws';
 
 export const routes = [
     { path: '/', view: (app, args) => home(render, app, args), authorization: a.Logged, name: 'home'},
-    { path: '/games/', view: (app, args) => gameHandler(render, app, args), authorization: a.Logged, name: 'game' },
+    { path: '/games/', view: (app, args) => gameHandler(render, app, args), authorization: a.Logged, name: 'games' },
     { path: '/games/*/', view: (app, args) => game(render, app, args), authorization: a.Logged, name: 'game' },
     { path: '/history/', view: (app, args) => history(render, app, args), authorization: a.Logged, name: 'history' },
     { path: '/tournament/', view: (app, args) => tournament(render, app, args), authorization: a.Logged, name: 'tournament' },
