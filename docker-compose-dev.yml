@@ -17,6 +17,9 @@ services:
         - action: sync+restart
           path: ./frontend/nginx.conf
           target: /etc/nginx/nginx.conf.template
+    volumes:
+      - avatars:/var/www/avatars
+    restart: on-failure
     depends_on:
         backend:
             condition: service_healthy
@@ -54,7 +57,7 @@ services:
         retries: 3
         start_period: 10s
     volumes:
-      - ${AVATARS_PATH}:/app/avatars/
+      - avatars:/app/media/avatars
     restart: on-failure
     depends_on:
       - postgres
@@ -81,4 +84,8 @@ services:
 
 volumes:
   postgres:
+    driver: local
+  frontend:
+    driver: local
+  avatars:
     driver: local

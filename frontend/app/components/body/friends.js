@@ -65,14 +65,14 @@ const renderPendingFriendships = async (div, data) => {
     for (let i = 0; i < requests.length; i++) {
 
         const friendInfo = await getUserInfo([requests[i].user_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
         const friendCard = document.createElement('div');
         friendCard.classList.add('col-md-3', 'friendCard', 'row');
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');
@@ -112,14 +112,14 @@ const renderRequestedFriendships = async (div, data) => {
     for (let i = 0; i < requests.length; i++) {
 
         const friendInfo = await getUserInfo([requests[i].friend_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
         const friendCard = document.createElement('div');
         friendCard.classList.add('col-md-3', 'friendCard', 'row');
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');
@@ -154,7 +154,7 @@ const renderAcceptedFriendships = async (div, data) => {
         const friend_username = requests[i].user_username === user_username ? requests[i].friend_username
             : requests[i].user_username;
         const friendInfo = await getUserInfo([friend_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
 
         const friendCard = document.createElement('div');
@@ -162,7 +162,7 @@ const renderAcceptedFriendships = async (div, data) => {
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');

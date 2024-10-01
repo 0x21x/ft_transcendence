@@ -35,13 +35,13 @@ const renderRow = (tournament, rowId, div, data, username) => {
         players.classList.add('row', 'w-100', 'text-center', 'justify-content-center', 'd-flex', 'align-items-center');
         players.style = 'padding: 5px;';
         for (const friendInfo of game.players) {
-            const avatarUrl = '/api' + friendInfo.avatar;
+            const avatarUrl = friendInfo.avatar;
             const col = document.createElement('div');
             col.classList.add('col-md-5');
             col.style = 'padding: 5px;';
             col.innerHTML = `
                 <a href="/user/${friendInfo.username}/" id="pendingFriendName" data-link>
-                    <img href="/user/${friendInfo.username}/" src="${avatarUrl}" class="rounded-circle" alt="${friendInfo.username}" height="40px" data-link>
+                    <img href="/user/${friendInfo.username}/" src="${avatarUrl}" class="rounded-circle" alt="${friendInfo.username}" width="40px" height="40px" data-link>
                 </a>
                 <a href="/user/${friendInfo.username}/" id="pendingFriendName" data-link>
                     ${truncate(friendInfo.username, 6)}
@@ -189,7 +189,7 @@ const renderPlayersOfTournament = (div, data, tournament, username) => {
         if (player !== undefined) {
             col.innerHTML = `
                 <a href="/user/${player.username}/" data-link>
-                    <img src="/api${player.avatar}" alt="${player.username}" class="avatar rounded-circle" height="50px" data-link>
+                    <img src="${player.avatar}" alt="${player.username}" class="avatar rounded-circle" height="50px" width="50px" data-link>
                 </a>
             `;
         } else {

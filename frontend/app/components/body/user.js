@@ -24,7 +24,7 @@ export const user = async (render, div, args) => {
     const userInfo = await getUserInfo(args);
     if (userInfo === null)
         return error(render, div, 'User not found');
-    const avatar_url = '/api' + userInfo.avatar;
+    const avatar_url = userInfo.avatar;
 
     render(div, `
         <style>
