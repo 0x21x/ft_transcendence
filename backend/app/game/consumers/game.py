@@ -4,7 +4,7 @@ from channels.db import database_sync_to_async
 from ..models import Game, Tournament
 from ..pong import FPS_SERVER
 from .utils import is_authenticated
-from ..multiplayer import MultiplayerPong, GAME_STATES, GameNotFound
+from ..multiplayer import MultiplayerPong, GAME_STATES, GameNotFoundException, GameFullException
 
 class TournamentNotInProgressException(Exception):
     pass
@@ -22,22 +22,32 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
         self.room_group_name = "game_%s" % self.room_name
         try:
             await self.get_game(self.room_name)
-        except GameNotFound or TournamentNotInProgressException or PlayerNotInGameException:
+            await self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
+            self.channel_layer.group_add(self.room_group_name, self.channel_name)
+            if self.multiplayer_pong.game_full(self.room_name):
+                await self.channel_layer.group_send(self.room_group_name, {
+                    'type': 'game.full',
+                    'game_full': True
+                })
+        except GameNotFoundException or TournamentNotInProgressException or PlayerNotInGameException or GameFullException:
             return await self.close()
-        self.channel_layer.group_add(self.room_group_name, self.channel_name)
-        await self.multiplayer_pong.add_player(self.room_name, self.scope['user'].username)
         return await self.accept()
 
     @is_authenticated
     async def receive_json(self: AsyncJsonWebsocketConsumer, content: dict) -> None:
         try:
-            if 'action' in content and content['action'] == 'start' and self.multiplayer_pong.get_game_status(
+            if 'action' in content and content['action'] == 'ask':
+                await self.channel_layer.group_send(self.room_group_name, {
+                    'type': 'game.full',
+                    'game_full': self.multiplayer_pong.game_full(self.room_name)
+                })
+            elif 'action' in content and content['action'] == 'start' and self.multiplayer_pong.get_game_status(
                     self.room_name) == GAME_STATES[0]:
                 self.multiplayer_pong.start_game(self.room_name)
                 asyncio.create_task(self.game_loop())
             elif 'direction' in content and (content['direction'] == 'left' or content['direction'] == 'right'):
                 self.multiplayer_pong.move_paddle(self.room_name, self.scope['user'].username, content['direction'])
-        except GameNotFound:
+        except GameNotFoundException:
             return await self.close_all_connections()
 
     async def game_loop(self: AsyncJsonWebsocketConsumer) -> None:
@@ -52,10 +62,13 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                     await self.multiplayer_pong.save_scores(self.room_name, delete_after_save=True)
                     return await self.close_all_connections()
                 await asyncio.sleep(FPS_SERVER)
-        except GameNotFound:
+        except GameNotFoundException:
             return await self.close_all_connections()
 
     async def game_state(self: AsyncJsonWebsocketConsumer, event: dict) -> None:
+        await self.send_json(event)
+
+    async def game_full(self: AsyncJsonWebsocketConsumer, event: dict) -> None:
         await self.send_json(event)
 
     async def close_all_connections(self: AsyncJsonWebsocketConsumer) -> None:
@@ -67,7 +80,7 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
     def get_game(self: AsyncJsonWebsocketConsumer, game_name: str) -> Game:
         game = Game.objects.filter(name=game_name, status='waiting').first()
         if not game:
-            raise GameNotFound()
+            raise GameNotFoundException()
         if game.tournament_name and not Tournament.objects.filter(name=game.tournament_name, status='in_progress').first():
             raise TournamentNotInProgressException
         if game.tournament_name and self.scope['user'] not in game.players.all():
@@ -84,7 +97,12 @@ class GameConsumer(AsyncJsonWebsocketConsumer):
                 await self.close_all_connections()
             self.channel_layer.group_discard(self.room_group_name, self.channel_name)
             self.multiplayer_pong.remove_player(self.room_name, self.scope['user'].username)
-        except GameNotFound:
+            if not self.multiplayer_pong.game_full(self.room_name):
+                await self.channel_layer.group_send(self.room_group_name, {
+                    'type': 'game.full',
+                    'game_full': False
+                })
+        except GameNotFoundException:
             return await self.close()
         finally:
             return await self.close()

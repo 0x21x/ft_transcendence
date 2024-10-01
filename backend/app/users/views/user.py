@@ -1,5 +1,4 @@
-from pathlib import Path
-from django.http import FileResponse
+from PIL import Image
 from django.contrib.auth import login
 from rest_framework import status
 from rest_framework.views import APIView
@@ -10,6 +9,15 @@ from .auth import get_tokens_for_user
 from users.models.users import Users
 from ..serializers import UserSerializer, GetUserInfoSerializer
 
+def save_avatar(instance: Users, avatar_file: any) -> None:
+    avatar = Image.open(avatar_file)
+    if avatar.format != 'JPEG':
+        return
+    avatar.thumbnail((200, 200), Image.Resampling.LANCZOS)
+    avatar_path = f'../../app/media/avatars/{instance.username}.jpg'
+    avatar.save(avatar_path)
+    instance.avatar = avatar_path.replace('../../app/media', '')
+    instance.save()
 
 class UsernameView(APIView):
     permission_classes = [IsAuthenticated]
@@ -56,30 +64,20 @@ class AvatarView(APIView):
             instance = Users.objects.get(username=request.user.username)
         except Users.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        message = {'avatar_url': instance.avatar.name}
+        message = {'avatar_url': instance.avatar}
         return Response(message, status=status.HTTP_200_OK)
 
-    def put(self:APIView, request: any) -> Response:
+    def put(self: APIView, request: any) -> Response:
         try:
-            instance = Users.objects.get(username=request.user.username)
+            instance = Users.objects.filter(username=request.user.username).first()
         except Users.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        instance.avatar = request.data['avatar']
-        instance.save()
-        message = {'avatar_url': instance.avatar.name}
+        if 'avatar' not in request.FILES:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        avatar_file = request.FILES['avatar']
+        save_avatar(instance, avatar_file)
+        message = {'avatar_url': instance.avatar}
         return Response(message, status=status.HTTP_200_OK)
-
-class GetAvatarView(APIView):
-    permission_classes = []
-
-    def get(self:APIView, request: any, username: str) -> FileResponse | Response:
-        path = Path(__file__).resolve().parent.parent.parent / 'avatars' / username
-        try:
-            img = open(path, 'rb')
-            response = FileResponse(img, status=status.HTTP_200_OK)
-            return response
-        except IOError:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class GetUserInfoView(APIView):
     permission_classes = [IsAuthenticated]

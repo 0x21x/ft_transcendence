@@ -38,9 +38,11 @@ export const redirect = async (url, withNavBar = false) => {
 };
 
 export const reload = async (withNavBar=false) => {
-    if (withNavBar)
-        await navbarRender(await loggedIn());
-    await router(await loggedIn());
+    const logged = await loggedIn();
+    if (withNavBar) {
+        await navbarRender(logged);
+    }
+    return await router(logged);
 };
 
 export const navbarReload = async () => {

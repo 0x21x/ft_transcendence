@@ -4,12 +4,13 @@ import { navbarRender, updateIcon } from './navbar.js';
 import { renderBody, renderHeader } from './render.js';
 import { WebSocketHandler } from './websockets.js';
 import { languageHandler } from './language.js';
+import { loaded } from './loader.js';
 import { loggedIn } from './tokens.js';
 import { themeHandler } from './theme.js';
 
+const body = document.getElementById('app');
 export const websocketsHandler = new WebSocketHandler();
 let logged = await loggedIn();
-const body = document.getElementById('app');
 let theme;
 let language;
 
@@ -47,7 +48,7 @@ export const router = async (logged) => {
     } if (language) {
         language.addEventListener('change', async () =>{
             languageHandler(language);
-            await router(logged);
+            return await router(logged);
         });
     }
 };
@@ -72,14 +73,16 @@ document.addEventListener('click', async e => {
         if (e.target.href === location.href)
             return;
         history.pushState({urlPath: e.target.href}, '', e.target.href);
-        await router(logged);
+        return await router(logged);
     }
 });
 
 if (document.getElementById('navbar').innerHTML === '') {
     await navbarRender(logged);
+    loaded();
 } if (body.innerHTML === '') {
     await router(logged);
+    loaded();
 }
 
 themeHandler(document.body, theme, true);

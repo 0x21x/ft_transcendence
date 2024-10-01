@@ -17,6 +17,9 @@ services:
         - action: sync+restart
           path: ./frontend/nginx.conf
           target: /etc/nginx/nginx.conf.template
+    volumes:
+      - avatars:/var/www/avatars
+    restart: on-failure
     depends_on:
         backend:
             condition: service_healthy
@@ -59,7 +62,7 @@ services:
         retries: 3
         start_period: 10s
     volumes:
-      - ${AVATARS_PATH}:/app/avatars/
+      - avatars:/app/media/avatars
     restart: on-failure
     depends_on:
       - postgres
@@ -80,7 +83,14 @@ services:
     image: redis:6.2.6-alpine
     expose:
       - ${REDIS_PORT}
+    volumes:
+      - ./backend/redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
 
 volumes:
   postgres:
+    driver: local
+  frontend:
+    driver: local
+  avatars:
     driver: local

@@ -1,7 +1,7 @@
-import { navbarReload, reload } from '../../engine/utils.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { getUsername } from './profile.js';
+import { reload } from '../../engine/utils.js';
 
 export const getAllFriendRequests = async (status=null) => {
     let response;
@@ -26,6 +26,16 @@ export const getAllFriendRequests = async (status=null) => {
     if (response.status !== 200)
         return null;
     return await response.json();
+};
+
+const refreshFriendIcons = async () => {
+    const friends = await getAllFriendRequests('waiting');
+    const friendsButton = document.getElementById('friendsButton');
+    if (friendsButton && friends === null) {
+        friendsButton.innerHTML = 'group';
+    } else if (friendsButton) {
+        friendsButton.innerHTML = 'notifications_unread';
+    }
 };
 
 const addFriend = async (username) => {
@@ -65,14 +75,14 @@ const renderPendingFriendships = async (div, data) => {
     for (let i = 0; i < requests.length; i++) {
 
         const friendInfo = await getUserInfo([requests[i].user_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
         const friendCard = document.createElement('div');
         friendCard.classList.add('col-md-3', 'friendCard', 'row');
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');
@@ -112,14 +122,14 @@ const renderRequestedFriendships = async (div, data) => {
     for (let i = 0; i < requests.length; i++) {
 
         const friendInfo = await getUserInfo([requests[i].friend_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
         const friendCard = document.createElement('div');
         friendCard.classList.add('col-md-3', 'friendCard', 'row');
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');
@@ -154,7 +164,7 @@ const renderAcceptedFriendships = async (div, data) => {
         const friend_username = requests[i].user_username === user_username ? requests[i].friend_username
             : requests[i].user_username;
         const friendInfo = await getUserInfo([friend_username]);
-        const avatarUrl = '/api' + friendInfo.avatar;
+        const avatarUrl = friendInfo.avatar;
 
 
         const friendCard = document.createElement('div');
@@ -162,7 +172,7 @@ const renderAcceptedFriendships = async (div, data) => {
 
         const col = document.createElement('div');
         col.classList.add('col', 'w-50');
-        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" height="60px">`;
+        col.innerHTML = `<img src="${avatarUrl}" alt="Avatar" class="rounded-circle" width="60px" height="60px">`;
         friendCard.appendChild(col);
 
         const col2 = document.createElement('div');
@@ -252,17 +262,14 @@ export const friends = async (render, div) => {
     await renderRequestedFriendships(document.getElementById('requestedFriendsRow'), data);
     await renderAcceptedFriendships(document.getElementById('friendsRow'), data);
 
-    await navbarReload();
-
     const buttonSelection = Object.values(document.getElementsByClassName('button'));
     buttonSelection.forEach((button) => {
         button.addEventListener('click', async () => {
             if (button.classList.contains('accept') || button.classList.contains('decline')) {
                 const friendUsername = button.getAttribute('data-friend-username');
                 await patchFriendship(friendUsername, button.classList.contains('accept') ? 'accept' : 'decline');
-                await renderAcceptedFriendships(document.getElementById('friendsRow'), data);
-                await renderPendingFriendships(document.getElementById('pendingFriendsRow'), data);
-                await renderRequestedFriendships(document.getElementById('requestedFriendsRow'), data);
+                await reload();
+                await refreshFriendIcons();
             }
         });
     });

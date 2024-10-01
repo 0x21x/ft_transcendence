@@ -9,7 +9,7 @@ const getAvatarUrl = async () => {
         },
     });
     avatar = await avatar.json();
-    return '/api/' + avatar.avatar_url;
+    return avatar.avatar_url;
 };
 
 export const loggedNavbar = async (render, div) => {

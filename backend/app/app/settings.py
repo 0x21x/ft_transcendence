@@ -35,16 +35,19 @@ CLIENT_ID = os.environ['CLIENT_ID']
 CLIENT_SECRET = os.environ['CLIENT_SECRET']
 REDIRECT_URI = os.environ['REDIRECT_URI']
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '0.0.0.0',
-    '10.18.247.242'
-]
+# OAuth Settings
+CLIENT_ID = os.environ['CLIENT_ID']
+CLIENT_SECRET = os.environ['CLIENT_SECRET']
+REDIRECT_URI = os.environ['REDIRECT_URI']
+
+ALLOWED_HOSTS = ['*']
+
 # ahead add also the address IP of the machine else the server will not be able to connect for other network devices
 
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost",
-]
+    'https://localhost',
+    'https://127.0.0.1',
+    'https://frontend',]
 
 CORS_ALLOW_HEADERS = [
     'content-type',
@@ -107,6 +110,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = 'app.urls'
 
@@ -188,6 +193,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

@@ -69,7 +69,7 @@ export const profile = async (render, div) => {
     const language = localStorage.getItem('language') || 'en';
     const data = getLanguageDict(language, 'profile');
     const userInfo = await getUserInfo([await getUsername()]);
-    const avatar_url = '/api' + userInfo.avatar;
+    const avatar_url = userInfo.avatar;
 
     render(div, `
         <style>

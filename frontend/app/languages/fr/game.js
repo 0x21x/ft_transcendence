@@ -9,5 +9,7 @@ export const data = {
   'player1': 'Joueur 1',
   'player2': 'Joueur 2',
   'status': 'Statut',
-  'inGame': 'EN JEU',
+  'inGame': 'En jeu',
+  'waitingPlayers': 'En attente de joueurs',
+  'startGame': 'C\'est l\'heure du combat !',
 };

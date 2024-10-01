@@ -33,13 +33,9 @@ RUN apk add --no-cache curl
 RUN mkdir -p /app
 ADD app /app
 WORKDIR /app
-RUN mkdir -p avatars
 
 COPY --from=build /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
 
-# UnRoot User
-RUN addgroup -S app && adduser -S app -G app
-RUN chown -R app:app /app
-USER app
+RUN mkdir -p /media/avatars && chmod -R 777 /media
 
 ENTRYPOINT ["/app/entrypoint.sh"]

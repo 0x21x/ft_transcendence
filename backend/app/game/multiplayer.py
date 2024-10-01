@@ -17,7 +17,10 @@ PLAYER2_KEY = {
     'right': 'up'
 }
 
-class GameNotFound(Exception):
+class GameNotFoundException(Exception):
+    pass
+
+class GameFullException(Exception):
     pass
 
 class MultiplayerPong:
@@ -38,7 +41,7 @@ class MultiplayerPong:
         if not game_name in self.games:
             await self.create_game(game_name)
         if len(self.games[game_name].players) == MAX_PLAYERS or player_name in self.games[game_name].players:
-            return
+            raise GameFullException()
         self.games[game_name].players[player_name] = 'player%d' % (len(self.games[game_name].players) + 1)
 
     def move_paddle(self: Any, game_name: str, player_name: str, direction: str) -> None:
@@ -109,19 +112,24 @@ class MultiplayerPong:
                     })
         return games
 
+    def game_full(self: Any, game_name: str) -> bool:
+        if not game_name in self.games:
+            raise GameNotFoundException()
+        return len(self.games[game_name].players) == MAX_PLAYERS
+
     def get_names(self: Any, game_name: str) -> list:
         if not game_name in self.games:
-            raise GameNotFound()
+            raise GameNotFoundException()
         return list(self.games[game_name].players.keys())
 
     def get_players(self: Any, game_name: str) -> dict:
         if not game_name in self.games:
-            raise GameNotFound()
+            raise GameNotFoundException()
         return self.games[game_name].players
 
     def get_game_status(self: Any, game_name: str) -> str:
         if not game_name in self.games:
-            raise GameNotFound()
+            raise GameNotFoundException()
         return self.games[game_name].game_state
 
     def all_game_status(self: Any) -> dict:
@@ -129,12 +137,12 @@ class MultiplayerPong:
 
     def get_game_state(self: Any, game_name: str) -> dict:
         if not game_name in self.games:
-            raise GameNotFound()
+            raise GameNotFoundException()
         return self.games[game_name].__dict__()
 
     def set_game_status(self: Any, game_name: str, status: str) -> None:
         if not game_name in self.games:
-            raise GameNotFound()
+            raise GameNotFoundException()
         self.games[game_name].game_state = status
 
     @classmethod
