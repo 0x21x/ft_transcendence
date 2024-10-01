@@ -84,6 +84,7 @@ class OAuthCallbackView(APIView):
             otp = None
         user = authenticate(request, login=login)
         if user is None:
+            print(f"Utilisateur {username} introuvable")
             return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
         if not user.check_password('password'):
             return Response({"message": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
@@ -92,6 +93,7 @@ class OAuthCallbackView(APIView):
         if otp and not check_otp(otp, user):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         login(request, user)
+        print(f"Utilisateur {username} connecté")
         response = Response(status=status.HTTP_200_OK)
         tokens = get_tokens_for_user(user)
         session = login_session(user)
