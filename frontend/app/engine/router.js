@@ -48,7 +48,7 @@ export const router = async (logged) => {
     } if (language) {
         language.addEventListener('change', async () =>{
             languageHandler(language);
-            await router(logged);
+            return await router(logged);
         });
     }
 };
@@ -73,7 +73,7 @@ document.addEventListener('click', async e => {
         if (e.target.href === location.href)
             return;
         history.pushState({urlPath: e.target.href}, '', e.target.href);
-        await router(logged);
+        return await router(logged);
     }
 });
 

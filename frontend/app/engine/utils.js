@@ -1,4 +1,3 @@
-import { languageHandler } from './language.js';
 import { loggedIn } from './tokens.js';
 import { navbarRender } from './navbar.js';
 import { renderHeader } from './render.js';
@@ -25,10 +24,10 @@ export const redirect = async (url) => {
 
 export const reload = async (withNavBar=false) => {
     const logged = await loggedIn();
-    // if (withNavBar) {
-    //     await navbarRender(logged);
-    // }
-    await router(logged);
+    if (withNavBar) {
+        await navbarRender(logged);
+    }
+    return await router(logged);
 };
 
 export const navbarReload = async () => {
