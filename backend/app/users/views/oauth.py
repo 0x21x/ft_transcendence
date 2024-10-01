@@ -58,16 +58,26 @@ class OAuthCallbackView(APIView):
         
         username = response_me.get('login')
         avatar = response_me['image']['link']
-        print(response_me)
+        print(f"username: {username}, avatar: {avatar}")
         
-        # return Response({"response_me": response_me}, status=status.HTTP_200_OK)
+        # return Response({"username": username, "avatar": avatar}, status=status.HTTP_200_OK)
         
-        user = User.objects.filter(username=username).exists()
-        if not user:
+        user_data = {'username': username, 'password': User.objects.make_random_password()}
+        
+        try:
+            user = Users.objects.get(username=username)
+            print(f"Utilisateur {username} déjà existant")
+        except Users.DoesNotExist:
+            user_data = {'username': username, 'password': User.objects.make_random_password()}
+            user = Users(**user_data)
+            print(f"Création de l'utilisateur avec le nom d'utilisateur {username}")
             user.save()
-            return Response({"message": f"New user created: {response_me['username']}"}, status=status.HTTP_201_CREATED)
+            
+            # return Response(user_data, status=status.HTTP_200_OK)
+
+        # user_data = {'username': username, 'password': User.objects.make_random_password()}
         
-        login = request.data['login']
+
         try:
             otp = request.data["otp"]
         except:
@@ -75,7 +85,7 @@ class OAuthCallbackView(APIView):
         user = authenticate(request, login=login)
         if user is None:
             return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
-        if not user.check_password(password):
+        if not user.check_password('password'):
             return Response({"message": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
         if user.otp_enabled == True is not None and not otp:
             return Response(status=status.HTTP_423_LOCKED)
