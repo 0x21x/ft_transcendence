@@ -19,7 +19,7 @@ User = get_user_model()
 
 token_url = "https://api.intra.42.fr/v2/oauth/token"
 user_info_url = "https://api.intra.42.fr/v2/me"
-                                                      
+#   https://cdn.intra.42.fr/users/5f6ca68cc02f7d9d0c57d486f70a3b62/stgerard.jpg                                      #  
 
 class OAuthCallbackView(APIView):
     permission_classes = []
@@ -67,33 +67,34 @@ class OAuthCallbackView(APIView):
         try:
             user = Users.objects.get(username=username)
             print(f"Utilisateur {username} déjà existant")
+
         except Users.DoesNotExist:
             user_data = {'username': username, 'password': User.objects.make_random_password()}
             user = Users(**user_data)
             print(f"Création de l'utilisateur avec le nom d'utilisateur {username}")
+            print(user_data)
             user.save()
             
             # return Response(user_data, status=status.HTTP_200_OK)
 
         # user_data = {'username': username, 'password': User.objects.make_random_password()}
-        
+
+
 
         try:
             otp = request.data["otp"]
         except:
             otp = None
-        user = authenticate(request, login=login)
-        if user is None:
-            print(f"Utilisateur {username} introuvable")
-            return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
-        if not user.check_password('password'):
-            return Response({"message": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
+        user_data = {'username': username, 'password': User.objects.make_random_password()}
+        print(user_data)
+        # user = authenticate(request, data=user_data)
+        
         if user.otp_enabled == True is not None and not otp:
             return Response(status=status.HTTP_423_LOCKED)
         if otp and not check_otp(otp, user):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         login(request, user)
-        print(f"Utilisateur {username} connecté")
+        print(f"Utilisateur {user} connecté")
         response = Response(status=status.HTTP_200_OK)
         tokens = get_tokens_for_user(user)
         session = login_session(user)
@@ -119,17 +120,7 @@ class OAuthCallbackView(APIView):
         return response
         
 
-        
-        # if User.objects.filter(username=username).exists():
-        #     user = User.objects.get(username=username)
-        #     refresh = RefreshToken.for_user(user)
-        #     return Response({
-        #         'refresh': str(refresh),
-        #         'access': str(refresh.access_token),
-        #     }, status=status.HTTP_200_OK)
-            
-              
-        
+               
         
         # print(f"Création de l'utilisateur avec le nom d'utilisateur {username}")
         # user_data = {'username': username, 'password': User.objects.make_random_password()}
