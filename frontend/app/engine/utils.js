@@ -1,7 +1,9 @@
+import { languageHandler } from './language.js';
 import { loggedIn } from './tokens.js';
 import { navbarRender } from './navbar.js';
 import { renderHeader } from './render.js';
 import { router } from './router.js';
+
 
 export const truncate = (text, length) => {
     if (text === undefined)
@@ -22,9 +24,11 @@ export const redirect = async (url) => {
 };
 
 export const reload = async (withNavBar=false) => {
-    if (withNavBar)
-        await navbarRender(await loggedIn());
-    await router(await loggedIn());
+    const logged = await loggedIn();
+    // if (withNavBar) {
+    //     await navbarRender(logged);
+    // }
+    await router(logged);
 };
 
 export const navbarReload = async () => {

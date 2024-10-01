@@ -1,7 +1,7 @@
-import { navbarReload, reload } from '../../engine/utils.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { getUsername } from './profile.js';
+import { reload } from '../../engine/utils.js';
 
 export const getAllFriendRequests = async (status=null) => {
     let response;
@@ -26,6 +26,16 @@ export const getAllFriendRequests = async (status=null) => {
     if (response.status !== 200)
         return null;
     return await response.json();
+};
+
+const refreshFriendIcons = async () => {
+    const friends = await getAllFriendRequests('waiting');
+    const friendsButton = document.getElementById('friendsButton');
+    if (friendsButton && friends === null) {
+        friendsButton.innerHTML = 'group';
+    } else if (friendsButton) {
+        friendsButton.innerHTML = 'notifications_unread';
+    }
 };
 
 const addFriend = async (username) => {
@@ -252,17 +262,14 @@ export const friends = async (render, div) => {
     await renderRequestedFriendships(document.getElementById('requestedFriendsRow'), data);
     await renderAcceptedFriendships(document.getElementById('friendsRow'), data);
 
-    await navbarReload();
-
     const buttonSelection = Object.values(document.getElementsByClassName('button'));
     buttonSelection.forEach((button) => {
         button.addEventListener('click', async () => {
             if (button.classList.contains('accept') || button.classList.contains('decline')) {
                 const friendUsername = button.getAttribute('data-friend-username');
                 await patchFriendship(friendUsername, button.classList.contains('accept') ? 'accept' : 'decline');
-                await renderAcceptedFriendships(document.getElementById('friendsRow'), data);
-                await renderPendingFriendships(document.getElementById('pendingFriendsRow'), data);
-                await renderRequestedFriendships(document.getElementById('requestedFriendsRow'), data);
+                await reload();
+                await refreshFriendIcons();
             }
         });
     });
