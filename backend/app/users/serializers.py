@@ -24,7 +24,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Users, validated_data: dict) -> Users:   # noqa: ANN101
         instance.username = validated_data.get('username', instance.username)
-        instance.set_password(validated_data.get('password', instance.password))
+        if 'password' in validated_data:
+            instance.set_password(validated_data.get('password', instance.password))
         instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.otp_enabled = validated_data.get('otp_enabled', instance.otp_enabled)
         instance.is_online = validated_data.get('is_online', instance.is_online)

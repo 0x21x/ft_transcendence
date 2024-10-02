@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 from django.contrib.auth import login
 from rest_framework import status
@@ -19,6 +20,19 @@ def save_avatar(instance: Users, avatar_file: any) -> None:
     instance.avatar = avatar_path.replace('../../app/media', '')
     instance.save()
 
+def rename_avatar(instance: Users, new_username: str) -> None:
+    if not instance.self_hosted_avatar:
+        return
+    old_avatar = instance.avatar
+    old_avatar_path = f'../../app/media/{old_avatar}'
+    new_avatar_path = f'../../app/media/avatars/{new_username}.jpg'
+    old_avatar = Image.open(old_avatar_path)
+    old_avatar.save(new_avatar_path)
+    if os.path.exists(old_avatar_path) and instance.avatar != '/avatars/default_avatar.jpg':
+        os.remove(old_avatar_path)
+    instance.avatar = new_avatar_path.replace('../../app/media', '')
+    instance.save()
+
 class UsernameView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -36,6 +50,7 @@ class UsernameView(APIView):
         user = UserSerializer(instance, data={'username': request.data['username']}, partial=True)
         if not user.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        rename_avatar(instance, request.data['username'])
         user.save()
         login(request, instance)
         message = {'username': user.validated_data['username']}
