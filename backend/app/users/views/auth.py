@@ -49,7 +49,7 @@ class LoginView(APIView):
             return Response({"message": "Invalid username"}, status=status.HTTP_404_NOT_FOUND)
         if not user.check_password(password):
             return Response({"message": "Invalid password"}, status=status.HTTP_401_UNAUTHORIZED)
-        if user.otp_enabled == True is not None and not otp:
+        if user.otp_enabled == True and not otp:
             return Response(status=status.HTTP_423_LOCKED)
         if otp and not check_otp(otp, user):
             return Response(status=status.HTTP_400_BAD_REQUEST)
