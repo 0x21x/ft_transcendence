@@ -8,6 +8,7 @@ class Users(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_online = models.BooleanField(default=False)
     avatar = models.CharField(max_length=255, default='/avatars/default_avatar.jpg')
+    self_hosted_avatar = models.BooleanField(default=True)
     otp_enabled = models.BooleanField(default=False)
     otp_secret = models.CharField(null=True, blank=True)
 
