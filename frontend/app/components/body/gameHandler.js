@@ -1,3 +1,4 @@
+import { error } from '../../engine/error.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { reload } from '../../engine/utils.js';
 import { websocketsHandler } from '../../engine/router.js';
@@ -68,13 +69,26 @@ export const gameHandler = (render, div) => {
         };
     });
     createGameButton.addEventListener('click', async () => {
-        await fetch('/api/games/', {
+        const response = await fetch('/api/games/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             credentials: 'include',
         });
+        if (response.status !== 201 && response.status !== 200) {
+            switch (response.status) {
+                case 400:
+                    error('Invalid request', 'warning');
+                    break;
+                case 409:
+                    error('Game already exists', 'warning');
+                    break;
+                default:
+                    error('Unknown error', 'warning');
+                    break;
+            }
+        }
     });
 };
 

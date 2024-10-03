@@ -1,4 +1,5 @@
-import { error } from './error.js';
+import { error } from '../../engine/error.js';
+import { error as errorHandler } from './error.js';
 import { getHistory } from './history.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { reload } from '../../engine/utils.js';
@@ -23,7 +24,7 @@ export const user = async (render, div, args) => {
     const data = getLanguageDict(language, 'profile');
     const userInfo = await getUserInfo(args);
     if (userInfo === null)
-        return error(render, div, 'User not found');
+        return errorHandler(render, div, 'User not found');
     const avatar_url = userInfo.avatar;
 
     render(div, `
@@ -111,8 +112,8 @@ export const user = async (render, div, args) => {
         default:
     }
     requestFriendButton.addEventListener('click', async () => {
-        if (requestFriendButton.classList.contains('invite'))
-            await fetch('/api/friendships/', {
+        if (requestFriendButton.classList.contains('invite')) {
+            const response = await fetch('/api/friendships/', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -120,8 +121,21 @@ export const user = async (render, div, args) => {
                 },
                 body: JSON.stringify({username: userInfo.username}),
             });
-        else if (requestFriendButton.classList.contains('decline'))
-            await fetch('/api/friendships/', {
+            if (response.status !== 200) {
+                switch (response.status) {
+                    case 400:
+                        error('Invalid request', 'warning');
+                        break;
+                    case 409:
+                        error('Already friends', 'warning');
+                        break;
+                    default:
+                        error('Unknown error', 'danger');
+                        break;
+                }
+            }
+        } else if (requestFriendButton.classList.contains('decline')) {
+            const response = await fetch('/api/friendships/', {
                 method: 'PATCH',
                 credentials: 'include',
                 headers: {
@@ -129,6 +143,17 @@ export const user = async (render, div, args) => {
                 },
                 body: JSON.stringify({username: userInfo.username, action: 'decline'}),
             });
+            if (response.status !== 200) {
+                switch (response.status) {
+                    case 400:
+                        error('Invalid request', 'warning');
+                        break;
+                    default:
+                        error('Unknown error', 'danger');
+                        break;
+                }
+            }
+        }
         return await reload(true);
     });
 };

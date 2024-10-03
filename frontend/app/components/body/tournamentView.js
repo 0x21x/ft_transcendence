@@ -1,4 +1,5 @@
 import { reload, truncate } from '../../engine/utils.js';
+import { error } from '../../engine/error.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUsername } from './profile.js';
 
@@ -11,10 +12,24 @@ const joinTournament = async (tournament_name) => {
         },
         body: JSON.stringify({'action': 'join'})
     });
+    await reload();
     if (response.status !== 200) {
-        return null;
+        switch (response.status) {
+            case 400:
+                error('Invalid request', 'warning');
+                break;
+            case 404:
+                error('Tournament not found', 'warning');
+                break;
+            case 409:
+                error('Tournament is already full', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
     }
-    return await reload();
+    return true;
 };
 
 const renderNotFullRow = (div, data) => {

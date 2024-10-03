@@ -1,3 +1,4 @@
+import { error } from '../../../engine/error.js';
 import { getLanguageDict } from '../../../engine/language.js';
 import { loginOTP } from '../otp/loginOTP.js';
 
@@ -17,8 +18,20 @@ export const loginRequest = async (username, password, render, div) => {
     });
     if (response.status === 423)
         return await loginOTP(render, div, username, password);
-    if (response.status !== 200)
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 404:
+                error('Invalid username or password', 'warning');
+                break;
+            case 401:
+                error('Invalid username or password', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
         return ;
+    }
     window.location.href = '/';
 };
 

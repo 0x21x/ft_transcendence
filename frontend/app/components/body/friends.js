@@ -1,3 +1,4 @@
+import { error } from '../../engine/error.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { getUsername } from './profile.js';
@@ -47,7 +48,24 @@ const addFriend = async (username) => {
         },
         body: JSON.stringify({username: username}),
     });
-    return response.status === 200;
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 400:
+                error('Invalid request', 'warning');
+                break;
+            case 404:
+                error('Invalid username', 'warning');
+                break;
+            case 409:
+                error('You\'re already friends', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
+        return false;
+    }
+    return true;
 };
 
 const patchFriendship = async (username, action) => {

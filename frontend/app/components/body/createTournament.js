@@ -1,4 +1,5 @@
 import { redirect, reload } from '../../engine/utils.js';
+import { error } from '../../engine/error.js';
 import { getLanguageDict } from '../../engine/language.js';
 
 export const createTournament = (render, div) => {
@@ -67,7 +68,19 @@ export const createTournament = (render, div) => {
                 }),
             });
             if (response.status !== 200) {
-                return await reload();
+                await reload();
+                switch (response.status) {
+                    case 400:
+                        error('Invalid name or number of players', 'warning');
+                        break;
+                    case 409:
+                        error('Error while creating tournament', 'danger');
+                        break;
+                    default:
+                        error('Unknown error', 'danger');
+                        break;
+                }
+                return;
             }
             return await redirect('/tournament/');
         }

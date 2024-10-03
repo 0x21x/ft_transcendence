@@ -1,3 +1,4 @@
+import { error } from '../../../engine/error.js';
 import { getLanguageDict } from '../../../engine/language.js';
 import { loginRequest } from './login.js';
 
@@ -14,9 +15,21 @@ const registerRequest = async (username, password, render, div) => {
         body: JSON.stringify(user),
         headers: {'Content-Type': 'application/json',}
     });
-    if (response.status === 200) {
-        return await loginRequest(username, password, render, div);
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 400:
+                error('Invalid username or password', 'warning');
+                break;
+            case 409:
+                error('Username already exists', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
+        return ;
     }
+    return await loginRequest(username, password, render, div);
 };
 
 export const register = (render, div) => {

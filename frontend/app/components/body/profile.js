@@ -1,3 +1,4 @@
+import { error } from '../../engine/error.js';
 import { getLanguageDict } from '../../engine/language.js';
 import { getUserInfo } from './user.js';
 import { logoutOTP } from './otp/logoutOTP.js';
@@ -13,7 +14,24 @@ const uploadAvatar = async (avatar) => {
         credentials: 'include',
         body: formData,
     });
-    return response.status === 200;
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 404:
+                error('Invalid user', 'warning');
+                break;
+            case 400:
+                error('Invalid avatar', 'warning');
+                break;
+            case 413:
+                error('Avatar too big', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
+        return false;
+    }
+    return true;
 };
 
 const setUsername = async (username) => {
@@ -25,7 +43,24 @@ const setUsername = async (username) => {
         },
         body: JSON.stringify({username: username}),
     });
-    return response.status === 200;
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 400:
+                error('Invalid username', 'warning');
+                break;
+            case 404:
+                error('Invalid user', 'warning');
+                break;
+            case 409:
+                error('Username already exists', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
+        return false;
+    }
+    return true;
 };
 
 const setPassword = async (oldPass, newPass) => {
@@ -37,7 +72,24 @@ const setPassword = async (oldPass, newPass) => {
         },
         body: JSON.stringify({old_password: oldPass, new_password: newPass}),
     });
-    return response.status === 200;
+    if (response.status !== 200) {
+        switch (response.status) {
+            case 404:
+                error('Invalid user', 'warning');
+                break;
+            case 401:
+                error('Invalid password old password', 'warning');
+                break;
+            case 400:
+                error('Invalid password new password', 'warning');
+                break;
+            default:
+                error('Unknown error', 'danger');
+                break;
+        }
+        return ;
+    }
+    return true;
 };
 
 export const getUsername = async () => {
