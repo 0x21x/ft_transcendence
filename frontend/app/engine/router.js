@@ -2,7 +2,8 @@ import { a, routes } from './routes.js';
 import { getPathArgs, isAMatch } from './utils.js';
 import { navbarRender, updateIcon } from './navbar.js';
 import { renderBody, renderHeader } from './render.js';
-import { WebSocketHandler} from './websockets.js';
+import { WebSocketHandler } from './websockets.js';
+import { addErrorContainer } from './error.js';
 import { languageHandler } from './language.js';
 import { loaded } from './loader.js';
 import { loggedIn } from './tokens.js';
@@ -37,6 +38,7 @@ export const router = async (logged) => {
     websocketsHandler.check(match);
     await renderHeader();
     await renderBody(body, match);
+    addErrorContainer(body);
     theme = document.querySelector('input[name=themeSwitcher]');
     language = document.getElementById('languageSwitcher');
 

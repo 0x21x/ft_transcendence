@@ -75,7 +75,13 @@
             outline: 0 !important;
             box-shadow: none !important;
         }
-
+        .container-error {
+            position: absolute;
+            z-index: 1000;
+            top: 15px;
+            right: 15px;
+            width: auto;
+        }
         .loader {
             margin: auto;
             margin-top: 45vh;
@@ -89,7 +95,6 @@
             background-size: calc(100%/3) 50%;
             animation: l3 1s infinite linear;
         }
-
         @keyframes l3 {
             20%{background-position:0%   0%, 50%  50%,100%  50%}
             40%{background-position:0% 100%, 50%   0%,100%  50%}
