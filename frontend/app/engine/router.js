@@ -1,5 +1,5 @@
 import { a, routes } from './routes.js';
-import { getPathArgs, isAMatch } from './utils.js';
+import {getPathArgs, isAMatch} from './utils.js';
 import { navbarRender, updateIcon } from './navbar.js';
 import { renderBody, renderHeader } from './render.js';
 import { WebSocketHandler } from './websockets.js';
@@ -42,16 +42,18 @@ export const router = async (logged) => {
     theme = document.querySelector('input[name=themeSwitcher]');
     language = document.getElementById('languageSwitcher');
 
+    const languageFunc = async () => {
+        languageHandler(language);
+        language.removeEventListener('change', languageFunc);
+        return await router(logged);
+    };
     if (theme) {
         theme.addEventListener('change', () =>{
             themeHandler(document.body, theme);
             updateIcon();
         });
     } if (language) {
-        language.addEventListener('change', async () =>{
-            languageHandler(language);
-            return await router(logged);
-        });
+        language.addEventListener('change', languageFunc);
     }
 };
 
