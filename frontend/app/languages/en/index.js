@@ -1,4 +1,5 @@
 import { data as auth } from './auth.js';
+import { data as error } from './error.js';
 import { data as game } from './game.js';
 import { data as history } from './history.js';
 import { data as navbar } from './navbar.js';
@@ -15,5 +16,6 @@ export const data = {
     'otp': otp,
     'profile': profile,
     'tournament': tournament,
-    'welcome': welcome
+    'welcome': welcome,
+    'error': error
 };

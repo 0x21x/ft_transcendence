@@ -16,13 +16,15 @@ const dictionary = [
     {'name': 'otp', 'en': en.otp, 'fr': fr.otp, 'es': es.otp},
     {'name': 'profile', 'en': en.profile, 'fr': fr.profile, 'es': es.profile},
     {'name': 'tournament', 'en': en.tournament, 'fr': fr.tournament, 'es': es.tournament},
-    {'name': 'welcome', 'en': en.welcome, 'fr': fr.welcome, 'es': es.welcome}
+    {'name': 'welcome', 'en': en.welcome, 'fr': fr.welcome, 'es': es.welcome},
+    {'name': 'error', 'en': en.error, 'fr': fr.error, 'es': es.error}
 ];
 
-export const getLanguageDict = (language, dictName) => {
-    if (!dictName || dictionary.find(dict => dict.name === dictName) === undefined) { return null; }
+export const getLanguageDict = (language, dictName, customDict=[]) => {
+    const Dict = customDict.length > 0 ? customDict : dictionary;
+    if (!dictName || Dict.find(dict => dict.name === dictName) === undefined) { return null; }
     if (!language || ['en', 'fr', 'es'].indexOf(language) === -1) { return null; }
-    return dictionary.find(dict => dict.name === dictName)[language];
+    return Dict.find(dict => dict.name === dictName)[language];
 };
 
 export const languageHandler = (event, loading=false) => {

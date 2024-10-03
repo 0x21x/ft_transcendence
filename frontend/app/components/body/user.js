@@ -127,7 +127,7 @@ export const user = async (render, div, args) => {
                         error('Invalid request', 'warning');
                         break;
                     case 409:
-                        error('Already friends', 'warning');
+                        error('You\'re already friends', 'warning');
                         break;
                     default:
                         error('Unknown error', 'danger');
