@@ -94,7 +94,7 @@ export const user = async (render, div, args) => {
     }
     const table = document.getElementById('table');
     const winrate = await getHistory(table, userInfo.username);
-    if (winrate)
+    if (winrate !== undefined)
         document.getElementById('titleWinRate').style = 'display: block';
         document.getElementById('titleWinRate').innerText = `${data.winRate}: ${winrate}%`;
     const requestFriendButton = document.getElementById('requestFriendButton');
