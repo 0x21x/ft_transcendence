@@ -102,7 +102,10 @@ class GetUserInfoView(APIView):
             instance = Users.objects.get(username=username)
         except Users.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        user = GetUserInfoSerializer(instance, context={'request': request})
+        if self.request.user.username != username:
+            user = GetUserInfoSerializer(instance, context={'request': request})
+        else:
+            user = UserSerializer(instance)
         return Response(user.data, status=status.HTTP_200_OK)
 
 class PasswordView(APIView):

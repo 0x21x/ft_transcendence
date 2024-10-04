@@ -76,6 +76,7 @@ export const user = async (render, div, args) => {
             </table>
         </div>
     `);
+
     const status = document.getElementById('status');
     switch (userInfo.status) {
         case 'online':
@@ -88,6 +89,7 @@ export const user = async (render, div, args) => {
             status.innerText = `🔴 ${data.offline}`;
             break;
         default:
+            status.style.display = 'none';
             break;
     }
     const table = document.getElementById('table');
@@ -110,6 +112,7 @@ export const user = async (render, div, args) => {
             requestFriendButton.classList.add('decline');
             break;
         default:
+            requestFriendButton.style.display = 'none';
     }
     requestFriendButton.addEventListener('click', async () => {
         if (requestFriendButton.classList.contains('invite')) {
