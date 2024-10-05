@@ -3,5 +3,6 @@ export const data = {
   'enterOTP': 'Entrer l\'OTP',
   'login': 'Se connecter',
   'removeOTP': 'Enlever l\'OTP',
-  'password': 'Mot de passe'
+  'password': 'Mot de passe',
+  'optQrCode': 'OTP QR Code',
 };

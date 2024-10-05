@@ -29,7 +29,8 @@ class RegisterOTPView(APIView):
         user.otp_secret = pyotp.random_base32()
         user.otp_enabled = True
         user.save()
-        message = {'otp_secret': user.otp_secret}
+        qr_code_uri = pyotp.totp.TOTP(user.otp_secret).provisioning_uri(name=user.username, issuer_name='ft_transcendence')
+        message = {'qr_code_uri': qr_code_uri, 'otp_secret': user.otp_secret}
         return Response(message, status=status.HTTP_201_CREATED)
 
 class LogoutOTPView(APIView):

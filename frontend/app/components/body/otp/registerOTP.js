@@ -32,12 +32,13 @@ export const registerOTP = (render, div) => {
                 background-color: #228B22;
                 transition: background-color 0.2s;
             }
+            
         </style>
         <div class="registerOTPClass">
             <input type="password" id="passwordField" class="form-control" placeholder="${data.password}" required>
             <button class="btn button-green w-100" id="registerOTPButton">${data.setOTP}</button>
         </div>
-        <p id="secret_code"></p>
+        <div id="qrcodeDiv" style="display: none"></div>
     `);
 
     const registerOTPButton = document.getElementById('registerOTPButton');
@@ -48,6 +49,12 @@ export const registerOTP = (render, div) => {
             return ;
         const registerOTPClass = document.querySelector('.registerOTPClass');
         registerOTPClass.style.display = 'none';
-        document.getElementById('secret_code').innerHTML = `YOUR OTP CODE IS: ${otp.otp_secret}`;
+        const qrcodeDiv = document.getElementById('qrcodeDiv');
+        qrcodeDiv.style.display = 'block';
+        qrcodeDiv.innerHTML = `<p>${data.optQrCode}</p>`;
+        const encodedUri = encodeURIComponent(otp.qr_code_uri);
+        const qrcode = document.createElement('img');
+        qrcode.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=000000&bgcolor=FFFFFF&data=${encodedUri}`;
+        qrcodeDiv.appendChild(qrcode);
     });
 };
